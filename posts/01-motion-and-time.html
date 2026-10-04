@@ -788,34 +788,48 @@
           </div>
           <div class="split-controls-col">
             <div>
-              <div class="clock-card cyan" style="margin-bottom: 0.85rem;">
+              <div class="clock-card cyan" style="margin-bottom: 0.65rem;">
                 <div class="clock-meta">
-                  <span class="clock-label">Muon Internal Clock</span>
-                  <span class="clock-badge">τ₀ = 2.2 µs</span>
+                  <span class="clock-label">Einsteinian Muon (v = 0.999c)</span>
+                  <span class="clock-badge badge-einstein-rate">Dilated ×22.4</span>
                 </div>
-                <div class="clock-time readout-muon-clock" style="font-size: 1.5rem;">0.00 µs</div>
-                <p class="clock-subtext">Internal time elapsed since creation 10 km up.</p>
+                <div class="clock-time readout-muon-clock-einstein"
+                  style="font-size: 1.45rem; color: var(--color-time);">0.00 <span>µs</span></div>
+                <p class="clock-subtext readout-muon-sub-einstein">Ticks 22.4× slower: reaches sea level in only 1.49
+                  µs.</p>
               </div>
-              <div class="control-item" style="margin-bottom: 0.85rem;">
+              <div class="clock-card danger" style="margin-bottom: 0.75rem;">
+                <div class="clock-meta">
+                  <span class="clock-label">Newtonian Muon (Classical)</span>
+                  <span class="clock-badge badge-newton-rate">τ₀ = 2.2 µs Limit</span>
+                </div>
+                <div class="clock-time readout-muon-clock-newton"
+                  style="font-size: 1.45rem; color: var(--color-danger);">0.00 <span>µs</span></div>
+                <p class="clock-subtext readout-muon-sub-newton">Ticks at 100% rate: decays after only 660 m (2.2 µs).
+                </p>
+              </div>
+              <div class="control-item" style="margin-bottom: 0.75rem;">
                 <div class="control-header">
                   <span>Muon Descent Altitude</span>
-                  <span class="control-val amber">10 km → 0 km</span>
+                  <span class="control-val amber readout-muon-alt">10.0 km</span>
                 </div>
                 <input type="range" class="range-slider slider-altitude" min="0" max="10" step="0.1" value="10">
               </div>
-              <div class="control-item" style="margin-bottom: 0.85rem;">
-                <div class="control-header">
-                  <span>Physics Framework</span>
+              <div
+                style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                <div class="preset-chips">
+                  <button class="chip-btn chip-muon-preset active" data-alt="10">10 km (Creation)</button>
+                  <button class="chip-btn chip-muon-preset" data-alt="9.34">9.34 km (660m)</button>
+                  <button class="chip-btn chip-muon-preset" data-alt="0">0 km (Ground)</button>
                 </div>
-                <button class="btn-secondary btn-view-toggle"
-                  style="width: 100%; justify-content: center; padding: 0.65rem 0.8rem; margin-top: 0.25rem;">
-                  <span>Mode: </span><strong style="color:var(--color-time)">Einsteinian (Time Dilation ON)</strong>
+                <button class="btn-primary btn-play-muon" style="padding: 0.45rem 0.85rem; font-size: 0.8rem;">
+                  <span>▶</span><span>Auto Play</span>
                 </button>
               </div>
             </div>
-            <div class="toolbar-bottom" style="padding-top: 0.75rem;">
+            <div class="toolbar-bottom" style="padding-top: 0.5rem;">
               <div class="math-badge readout-muon-status" style="width: 100%; text-align: center;">
-                Descending safely through atmosphere...
+                Both muons created 10 km up. Drag slider or click Auto Play to start descent.
               </div>
             </div>
           </div>
@@ -836,13 +850,12 @@
       <h2>7. Expanding Our View: 3D Velocity Space (v_x1, v_x2, v_time)</h2>
       <p>
         Up to this point, our Velocity Space diagrams simplified spatial motion down to a single horizontal direction
-        (<span class="math-badge">v_space</span>). This was deliberate: it allowed us to clearly see the fundamental
+        (<span class="math-badge">v_space</span>). Doing so allowed us to clearly see the fundamental
         trade-off between speed in space and speed through time on a flat page.
       </p>
       <p>
-        In reality, of course, space is not a 1D track. We can walk East, run North, or travel diagonally in any
-        direction we please. How does nature calculate time dilation when you move simultaneously in multiple spatial
-        directions?
+        In reality, of course, space is not a 1D track. So let's generalize how nature calculates time dilation when you
+        move simultaneously in multiple spatial directions.
       </p>
 
       <h3>Steering in Multiple Directions: The Pythagorean Extension</h3>
@@ -881,17 +894,6 @@
           same finite
           reservoir of speed through time (<em>v</em>_time).</div>
       </div>
-
-      <h3>The 3D Geometry: From a Flat Arc to a Spherical Velocity Dome</h3>
-      <p>
-        In our earlier 2D diagrams, the cosmic speed limit formed a circular arc. When we add a second spatial
-        dimension, that circular arc sweeps out a full 360 degrees around the vertical Time axis.
-      </p>
-      <p>
-        The result is a magnificent <strong>3D spherical dome (hemisphere)</strong> of radius <span
-          class="math-badge">c</span>, sitting right on top of the <span class="math-badge">(v_x1, v_x2)</span> ground
-        plane:
-      </p>
 
       <!-- INTERACTIVE WIDGET 7: 3D VELOCITY DOME -->
       <div id="widget-3d-spacetime" class="interactive-artifact">
@@ -968,16 +970,6 @@
         symmetry.
       </p>
 
-      <h3>The Geometric Insight: The Universal Cosmic Dome</h3>
-      <p>
-        Why take this step into three dimensions?
-      </p>
-      <p>
-        In everyday life, we are free to steer in any direction across the ground. The 3D Velocity Dome reveals that
-        nature treats all spatial directions with unified geometric elegance. Motion across East (<span
-          class="math-badge">v_x1</span>) and motion across North (<span class="math-badge">v_x2</span>) combine via the
-        Pythagorean theorem into total spatial speed:
-      </p>
       <div class="formula-card">
         <div class="formula-card-header">
           <span class="formula-tag">The 3D Cosmic Speed Invariant</span>
@@ -1004,24 +996,6 @@
         4. When an object directs 100% of its speed into space (<span class="math-badge">v_space = c</span>), its
         vertical progress through time reaches zero—which is why photons experience no elapsed time.<br>
         5. In Velocity Space, light tilts a full <span class="math-badge">90°</span> horizontally.
-      </p>
-      <p>
-        This brings us to a crucial realization:
-      </p>
-      <p>
-        Our Velocity Space diagram is a <strong>speedometer</strong>: it reveals <em>how fast</em> an object is moving
-        through space versus time. But it is not a <em>map</em>: it does not show where anyone is located or what path
-        they follow through coordinate space.
-      </p>
-      <p>
-        <strong>The Big Question for Part 2:</strong> When we transition from this cosmic speedometer to an actual map
-        of the universe—plotting physical position <span class="math-badge">x</span> against coordinate time <span
-          class="math-badge">ct</span>—how does this 90° speed needle unfold into the famous 45° diagonal of the Cosmic
-        Light Cone?
-      </p>
-      <p>
-        In <strong>Part 2: The Cosmic Light Cone</strong>, we will bridge Velocity Space into Coordinate Spacetime, map
-        worldlines, and discover how cosmic events live inside or outside our human lifespan.
       </p>
 
       <!-- SERIES PAGER -->

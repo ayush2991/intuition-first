@@ -1865,33 +1865,105 @@
     window.addEventListener('resize', draw);
   }
 
-  // Widget 6: Atmospheric Muon Simulator
+  // Widget 6: Atmospheric Muon Simulator (Simultaneous Dual-Framework Comparison)
   function initWidgetMuon(containerId) {
     var container = document.getElementById(containerId);
     if (!container) return;
 
     var canvas = container.querySelector('canvas');
     var sliderAlt = container.querySelector('.slider-altitude');
-    var btnMode = container.querySelector('.btn-view-toggle');
-    var readoutClock = container.querySelector('.readout-muon-clock');
+    var btnPlay = container.querySelector('.btn-play-muon');
+    var presetChips = container.querySelectorAll('.chip-muon-preset');
+    var readoutAlt = container.querySelector('.readout-muon-alt');
+    var readoutClockEinstein = container.querySelector('.readout-muon-clock-einstein');
+    var readoutSubEinstein = container.querySelector('.readout-muon-sub-einstein');
+    var readoutClockNewton = container.querySelector('.readout-muon-clock-newton');
+    var readoutSubNewton = container.querySelector('.readout-muon-sub-newton');
     var readoutStatus = container.querySelector('.readout-muon-status');
 
     var altitudeKm = 10.0;
-    var isRelativistic = true;
+    var isPlaying = false;
+    var isVisible = true;
+    var animFrameId = null;
+    var lastTimestamp = 0;
+    var holdFramesAtEnd = 0;
 
     function update() {
       var distKm = 10.0 - altitudeKm;
+      // Earth frame journey time (v ≈ 0.999c ≈ 299,700 km/s -> (distKm / 300000) * 1e6 * 1.001)
       var earthMicrosec = (distKm / 300000) * 1e6 * 1.001;
-      var muonMicrosec = isRelativistic ? (earthMicrosec / 22.36) : earthMicrosec;
+      var einsteinMicrosec = earthMicrosec / 22.36;
+      var isNewtDead = distKm >= 0.66;
+      var newtMicrosec = isNewtDead ? 2.20 : earthMicrosec;
 
-      if (readoutClock) readoutClock.innerText = muonMicrosec.toFixed(2) + ' µs (Internal Clock)';
+      // Update slider & altitude readout
+      if (sliderAlt && document.activeElement !== sliderAlt) {
+        sliderAlt.value = altitudeKm;
+      }
+      if (readoutAlt) {
+        if (altitudeKm >= 9.95) {
+          readoutAlt.innerText = '10.0 km (Upper Atmosphere)';
+        } else if (altitudeKm <= 0.05) {
+          readoutAlt.innerText = '0.0 km (Sea Level Detectors)';
+        } else {
+          var descStr = distKm >= 1 ? distKm.toFixed(1) + ' km' : Math.round(distKm * 1000) + ' m';
+          readoutAlt.innerText = altitudeKm.toFixed(1) + ' km (' + descStr + ' descended)';
+        }
+      }
 
-      if (!isRelativistic && distKm >= 0.66) {
-        if (readoutStatus) readoutStatus.innerHTML = '<span style="color:var(--color-danger)">Muon Decayed! Survived only 0.66 km (660 meters).</span>';
-      } else if (altitudeKm <= 0.1) {
-        if (readoutStatus) readoutStatus.innerHTML = '<span style="color:var(--color-emerald)">Survived to Surface Detectors! (Relativistic)</span>';
-      } else {
-        if (readoutStatus) readoutStatus.innerHTML = 'Descending through atmosphere...';
+      // Einsteinian clock readouts
+      if (readoutClockEinstein) {
+        readoutClockEinstein.innerHTML = einsteinMicrosec.toFixed(2) + ' <span>µs</span>';
+      }
+      if (readoutSubEinstein) {
+        if (altitudeKm <= 0.05) {
+          readoutSubEinstein.innerHTML = '<strong style="color:var(--color-emerald)">Survived to Surface!</strong> Clock at 1.49 µs (< 2.2 µs limit).';
+        } else {
+          var remEinstein = Math.max(0, 2.2 - einsteinMicrosec);
+          readoutSubEinstein.innerText = 'Ticks 22.4× slower: ' + remEinstein.toFixed(2) + ' µs lifespan remaining.';
+        }
+      }
+
+      // Newtonian clock readouts
+      if (readoutClockNewton) {
+        if (isNewtDead) {
+          readoutClockNewton.innerHTML = '2.20 <span>µs (Decayed)</span>';
+        } else {
+          readoutClockNewton.innerHTML = newtMicrosec.toFixed(2) + ' <span>µs</span>';
+        }
+      }
+      if (readoutSubNewton) {
+        if (isNewtDead) {
+          readoutSubNewton.innerHTML = '💥 <strong style="color:var(--color-danger)">Decayed at 660 m</strong> into electron + neutrinos (e⁻ + ν).';
+        } else {
+          var remNewt = Math.max(0, 2.2 - newtMicrosec);
+          readoutSubNewton.innerText = 'Ticks at 100% rate: ' + remNewt.toFixed(2) + ' µs lifespan remaining.';
+        }
+      }
+
+      // Overall status message
+      if (readoutStatus) {
+        if (altitudeKm >= 9.95) {
+          readoutStatus.innerHTML = 'Both muons created 10 km up. Move slider or hit Auto Play to watch them descend.';
+        } else if (!isNewtDead) {
+          readoutStatus.innerHTML = 'Descending together: classical clock ticks 22.4× faster than the dilated relativistic clock.';
+        } else if (altitudeKm > 0.05) {
+          readoutStatus.innerHTML = '<span style="color:var(--color-danger)">💥 Classical muon decayed at 660 m into electron + neutrinos!</span> <span style="color:var(--color-time)">Relativistic muon continues plunging toward Earth.</span>';
+        } else {
+          readoutStatus.innerHTML = '<span style="color:var(--color-emerald)">Real-world proof: Relativistic muon detected on Earth with 0.71 µs of life to spare!</span>';
+        }
+      }
+
+      // Preset chips active state
+      if (presetChips && presetChips.length) {
+        presetChips.forEach(function (chip) {
+          var targetAlt = parseFloat(chip.getAttribute('data-alt'));
+          if (Math.abs(targetAlt - altitudeKm) < 0.2) {
+            chip.classList.add('active');
+          } else {
+            chip.classList.remove('active');
+          }
+        });
       }
 
       draw();
@@ -1903,28 +1975,41 @@
       var ctx = ret.ctx, width = ret.width, height = ret.height;
       ctx.clearRect(0, 0, width, height);
 
-      var isNarrow = width < 420;
-      var padLeft = isNarrow ? 56 : 90;
-      var padRight = isNarrow ? 18 : 30;
-      var topY = 35;
+      var isNarrow = width < 440;
+      var padLeft = isNarrow ? 62 : 98;
+      var padRight = isNarrow ? 18 : 32;
+      var topY = 46;
       var bottomY = height - 42;
       var trackH = bottomY - topY;
+      var colWidth = width - padLeft - padRight;
 
+      // Atmospheric background gradient
       var grad = ctx.createLinearGradient(0, topY, 0, bottomY);
       grad.addColorStop(0, c.muonAtmosphereTop);
       grad.addColorStop(1, c.muonAtmosphereBottom);
       ctx.fillStyle = grad;
-      ctx.fillRect(padLeft, topY, width - padLeft - padRight, trackH);
+      ctx.fillRect(padLeft, topY, colWidth, trackH);
 
-      drawLabelPill(ctx, isNarrow ? '10 km' : '10 km (Creation)', isNarrow ? 28 : 52, topY, {
+      // Atmospheric border
+      ctx.strokeStyle = c.gridLine;
+      ctx.lineWidth = 1;
+      ctx.strokeRect(padLeft, topY, colWidth, trackH);
+
+      // Left axis ticks & labels
+      drawLabelPill(ctx, isNarrow ? '10 km' : '10 km (Top)', isNarrow ? 30 : 50, topY, {
         textColor: c.axisLabel,
         font: 'bold 9px "JetBrains Mono", monospace'
       });
-      drawLabelPill(ctx, isNarrow ? '0 km' : '0 km (Sea Level)', isNarrow ? 28 : 52, bottomY, {
+      drawLabelPill(ctx, '5 km', isNarrow ? 30 : 50, topY + trackH * 0.5, {
+        textColor: c.subtleText,
+        font: '9px "JetBrains Mono", monospace'
+      });
+      drawLabelPill(ctx, isNarrow ? '0 km' : '0 km (Ground)', isNarrow ? 30 : 50, bottomY, {
         textColor: c.axisLabel,
         font: 'bold 9px "JetBrains Mono", monospace'
       });
 
+      // Classical limit line (660 m / 0.66 km from top)
       var decayY = topY + (0.66 / 10.0) * trackH;
       ctx.strokeStyle = c.dangerColor;
       ctx.lineWidth = 1.5;
@@ -1935,71 +2020,320 @@
       ctx.stroke();
       ctx.setLineDash([]);
 
-      drawLabelPill(ctx, isNarrow ? 'Limit (660m)' : 'Classical Limit (660m)', width - (isNarrow ? 55 : 90), decayY, {
+      drawLabelPill(ctx, isNarrow ? 'Limit 660m' : 'Classical Limit (660m)', width - padRight - 6, decayY, {
+        align: 'right',
         textColor: c.dangerColor,
         borderColor: c.dangerColor,
         font: isNarrow ? 'bold 9px "JetBrains Mono", monospace' : 'bold 10px "JetBrains Mono", monospace'
       });
 
-      var dist = 10.0 - altitudeKm;
-      var muonY = topY + (dist / 10.0) * trackH;
-      var muonX = padLeft + (width - padLeft - padRight) / 2;
-
-      var isDead = (!isRelativistic && dist >= 0.66);
-
-      ctx.strokeStyle = isDead ? c.axisLine : c.timeColor;
-      ctx.lineWidth = 2.5;
+      // Earth Surface Detectors platform at bottomY
+      ctx.fillStyle = c.timeColorSubtle;
+      ctx.fillRect(padLeft, bottomY, colWidth, 4);
+      ctx.strokeStyle = c.axisLine;
+      ctx.lineWidth = 1.5;
       ctx.beginPath();
-      ctx.moveTo(muonX, topY);
-      ctx.lineTo(muonX, muonY);
+      ctx.moveTo(padLeft - 6, bottomY);
+      ctx.lineTo(width - padRight + 6, bottomY);
       ctx.stroke();
 
-      if (isDead) {
-        // Crisp vector decay burst
-        ctx.strokeStyle = c.dangerColor;
-        ctx.lineWidth = 1.5;
-        for (var bi = 0; bi < 8; bi++) {
-          var bAng = (bi / 8) * Math.PI * 2;
+      drawLabelPill(ctx, isNarrow ? 'Surface Detectors' : 'Earth Surface Detectors (Sea Level)', padLeft + colWidth * 0.5, bottomY + 18, {
+        textColor: c.axisLabel,
+        font: 'bold 9px "JetBrains Mono", monospace'
+      });
+
+      // Lane coordinates
+      var lane1X = padLeft + colWidth * 0.28; // Newtonian
+      var lane2X = padLeft + colWidth * 0.72; // Einsteinian
+
+      // Column headers above topY
+      drawLabelPill(ctx, isNarrow ? 'Newtonian' : 'Newtonian (No Dilation)', lane1X, topY - 18, {
+        textColor: c.dangerColor,
+        borderColor: c.dangerColor,
+        font: isNarrow ? 'bold 9px "JetBrains Mono", monospace' : 'bold 10px "JetBrains Mono", monospace'
+      });
+      drawLabelPill(ctx, isNarrow ? 'Einsteinian' : 'Einsteinian (Relativistic)', lane2X, topY - 18, {
+        textColor: c.timeColor,
+        borderColor: c.timeColor,
+        font: isNarrow ? 'bold 9px "JetBrains Mono", monospace' : 'bold 10px "JetBrains Mono", monospace'
+      });
+
+      // Subtle vertical guide dashed tracks
+      ctx.strokeStyle = c.gridLine;
+      ctx.lineWidth = 1;
+      ctx.setLineDash([3, 4]);
+      ctx.beginPath();
+      ctx.moveTo(lane1X, topY);
+      ctx.lineTo(lane1X, bottomY);
+      ctx.moveTo(lane2X, topY);
+      ctx.lineTo(lane2X, bottomY);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      // Compute motion coordinates
+      var dist = 10.0 - altitudeKm;
+      var earthMicrosec = (dist / 300000) * 1e6 * 1.001;
+      var einsteinMicrosec = earthMicrosec / 22.36;
+      var isNewtDead = dist >= 0.66;
+      var newtDist = isNewtDead ? 0.66 : dist;
+      var newtY = topY + (newtDist / 10.0) * trackH;
+      var einsteinY = topY + (dist / 10.0) * trackH;
+
+      // === LANE 1: NEWTONIAN MUON ===
+      ctx.strokeStyle = c.dangerColor;
+      ctx.lineWidth = 2.5;
+      ctx.beginPath();
+      ctx.moveTo(lane1X, topY);
+      ctx.lineTo(lane1X, newtY);
+      ctx.stroke();
+
+      if (isNewtDead) {
+        // Faint dashed ghost trajectory showing where an undecayed particle would be
+        if (einsteinY > decayY + 6) {
+          ctx.strokeStyle = c.dangerColor;
+          ctx.lineWidth = 1.5;
+          ctx.setLineDash([3, 4]);
           ctx.beginPath();
-          ctx.moveTo(muonX + 4 * Math.cos(bAng), muonY + 4 * Math.sin(bAng));
-          ctx.lineTo(muonX + 11 * Math.cos(bAng), muonY + 11 * Math.sin(bAng));
+          ctx.moveTo(lane1X, decayY);
+          ctx.lineTo(lane1X, einsteinY);
           ctx.stroke();
+          ctx.setLineDash([]);
+
+          // Ghost particle marker at current altitude
+          ctx.strokeStyle = c.dangerColor;
+          ctx.lineWidth = 1.2;
+          ctx.beginPath();
+          ctx.arc(lane1X, einsteinY, 4, 0, Math.PI * 2);
+          ctx.stroke();
+
+          var ghostLabelY = isNarrow ? einsteinY - 14 : einsteinY;
+          var ghostLabelX = isNarrow ? lane1X : lane1X - 44;
+          drawLabelPill(ctx, isNarrow ? '❌ Vanished' : '❌ Vanished (0% survival)', ghostLabelX, ghostLabelY, {
+            textColor: c.dangerColor,
+            borderColor: c.dangerColor,
+            font: 'bold 9px "JetBrains Mono", monospace'
+          });
         }
-        drawGlowingDot(ctx, muonX, muonY, c.dangerColor, 4);
-        var deadLabelX = isNarrow ? muonX : muonX + 115;
-        var deadLabelY = isNarrow ? muonY - 18 : muonY;
-        drawLabelPill(ctx, isNarrow ? 'Decayed (e⁻ + ν)' : 'Decayed into electron + neutrinos', deadLabelX, deadLabelY, {
+
+        // --- DECAY PRODUCTS (ELECTRON + NEUTRINOS) SPRAYING OUT FROM 💥 ---
+        var decayAge = Math.min(1.0, (dist - 0.66) / 2.0);
+        var sprayLen = 14 + decayAge * 18;
+
+        // 1. Electron track (e⁻) diverging down-left with glowing dot
+        var eX = lane1X - sprayLen * 0.85;
+        var eY = decayY + sprayLen * 0.65;
+        ctx.strokeStyle = c.spaceColor;
+        ctx.lineWidth = 1.8;
+        ctx.setLineDash([3, 2]);
+        ctx.beginPath();
+        ctx.moveTo(lane1X - 6, decayY + 4);
+        ctx.lineTo(eX, eY);
+        ctx.stroke();
+        ctx.setLineDash([]);
+        drawGlowingDot(ctx, eX, eY, c.spaceColor, 3);
+
+        var eLabelX = isNarrow ? eX : eX - 32;
+        var eLabelY = isNarrow ? eY + 14 : eY;
+        drawLabelPill(ctx, 'e⁻ (electron)', eLabelX, eLabelY, {
+          textColor: c.spaceColor,
+          borderColor: c.spaceColor,
+          font: 'bold 9px "JetBrains Mono", monospace'
+        });
+
+        // 2. Neutrino tracks (ν) dispersing outward
+        var nu1X = lane1X - sprayLen * 0.7;
+        var nu1Y = decayY - sprayLen * 0.55;
+        ctx.strokeStyle = c.subtleText;
+        ctx.lineWidth = 1.2;
+        ctx.setLineDash([2, 3]);
+        ctx.beginPath();
+        ctx.moveTo(lane1X - 4, decayY - 4);
+        ctx.lineTo(nu1X, nu1Y);
+        ctx.stroke();
+        ctx.setLineDash([]);
+        drawGlowingDot(ctx, nu1X, nu1Y, c.subtleText, 2);
+
+        var nu2X = lane1X + sprayLen * 0.55;
+        var nu2Y = decayY + sprayLen * 0.45;
+        ctx.strokeStyle = c.subtleText;
+        ctx.lineWidth = 1.2;
+        ctx.setLineDash([2, 3]);
+        ctx.beginPath();
+        ctx.moveTo(lane1X + 4, decayY + 4);
+        ctx.lineTo(nu2X, nu2Y);
+        ctx.stroke();
+        ctx.setLineDash([]);
+        drawGlowingDot(ctx, nu2X, nu2Y, c.subtleText, 2);
+
+        var nuLabelX = isNarrow ? nu1X : nu1X - 22;
+        var nuLabelY = nu1Y - 10;
+        drawLabelPill(ctx, '2ν (neutrinos)', nuLabelX, nuLabelY, {
+          textColor: c.subtleText,
+          borderColor: c.gridLine,
+          font: '9px "JetBrains Mono", monospace'
+        });
+
+        // Radial explosion glow behind emoji
+        var burstGlow = ctx.createRadialGradient(lane1X, decayY, 2, lane1X, decayY, 20);
+        burstGlow.addColorStop(0, 'rgba(239, 68, 68, 0.45)');
+        burstGlow.addColorStop(1, 'rgba(239, 68, 68, 0)');
+        ctx.fillStyle = burstGlow;
+        ctx.beginPath();
+        ctx.arc(lane1X, decayY, 20, 0, Math.PI * 2);
+        ctx.fill();
+
+        // 💥 EXPLOSION EMOJI
+        ctx.save();
+        ctx.font = isNarrow ? '18px sans-serif' : '22px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('💥', lane1X, decayY);
+        ctx.restore();
+
+        // Main decay event pill
+        var decayPillX = isNarrow ? lane1X : lane1X + 50;
+        var decayPillY = isNarrow ? decayY - 20 : decayY;
+        drawLabelPill(ctx, isNarrow ? 'Decayed (e⁻ + ν)' : 'Decayed into e⁻ + neutrinos', decayPillX, decayPillY, {
           textColor: c.dangerColor,
           borderColor: c.dangerColor,
-          font: isNarrow ? 'bold 9px sans-serif' : 'bold 11px sans-serif'
+          font: isNarrow ? 'bold 9px sans-serif' : 'bold 10px sans-serif'
         });
       } else {
-        drawGlowingDot(ctx, muonX, muonY, c.timeColor, 6);
-        var muonLabelX = isNarrow ? muonX : muonX + 80;
-        var muonLabelY = isNarrow ? muonY - 16 : muonY;
-        drawLabelPill(ctx, 'Muon (Alt: ' + altitudeKm.toFixed(1) + ' km)', muonLabelX, muonLabelY, {
-          textColor: c.timeColor,
-          font: isNarrow ? 'bold 9px "JetBrains Mono", monospace' : 'bold 11px "JetBrains Mono", monospace'
+        drawGlowingDot(ctx, lane1X, newtY, c.dangerColor, 5);
+        var newtLabelX = isNarrow ? lane1X : lane1X - 44;
+        var newtLabelY = isNarrow ? Math.max(topY + 12, newtY - 14) : newtY;
+        drawLabelPill(ctx, isNarrow ? earthMicrosec.toFixed(2) + ' µs' : 'Classical: ' + earthMicrosec.toFixed(2) + ' µs', newtLabelX, newtLabelY, {
+          textColor: c.dangerColor,
+          borderColor: c.dangerColor,
+          font: 'bold 9px "JetBrains Mono", monospace'
         });
+      }
+
+      // === LANE 2: EINSTEINIAN MUON ===
+      ctx.strokeStyle = c.timeColor;
+      ctx.lineWidth = 2.5;
+      ctx.beginPath();
+      ctx.moveTo(lane2X, topY);
+      ctx.lineTo(lane2X, einsteinY);
+      ctx.stroke();
+
+      if (altitudeKm <= 0.05) {
+        // Surface hit pulse rings
+        ctx.strokeStyle = c.timeColor;
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.arc(lane2X, bottomY, 11, 0, Math.PI * 2);
+        ctx.stroke();
+        drawGlowingDot(ctx, lane2X, bottomY, c.timeColor, 6);
+
+        var hitLabelX = isNarrow ? lane2X : lane2X + 45;
+        drawLabelPill(ctx, isNarrow ? 'Hit! 1.49 µs' : 'Detected! (1.49 µs < 2.2 µs)', hitLabelX, bottomY - 14, {
+          textColor: c.timeColor,
+          borderColor: c.timeColor,
+          font: isNarrow ? 'bold 9px sans-serif' : 'bold 10px sans-serif'
+        });
+      } else {
+        drawGlowingDot(ctx, lane2X, einsteinY, c.timeColor, 6);
+        var einsteinLabelX = isNarrow ? lane2X : lane2X + 48;
+        var einsteinLabelY = isNarrow ? Math.max(topY + 12, einsteinY - 14) : einsteinY;
+        drawLabelPill(ctx, isNarrow ? einsteinMicrosec.toFixed(2) + ' µs' : 'Relativistic: ' + einsteinMicrosec.toFixed(2) + ' µs', einsteinLabelX, einsteinLabelY, {
+          textColor: c.timeColor,
+          borderColor: c.timeColor,
+          font: 'bold 9px "JetBrains Mono", monospace'
+        });
+      }
+    }
+
+    function stopLoop() {
+      if (animFrameId) {
+        cancelAnimationFrame(animFrameId);
+        animFrameId = null;
+      }
+    }
+
+    function startLoop() {
+      stopLoop();
+      lastTimestamp = performance.now();
+      function loop(timestamp) {
+        if (!isPlaying || !isVisible) {
+          animFrameId = null;
+          return;
+        }
+        var dt = (timestamp - lastTimestamp) / 1000;
+        lastTimestamp = timestamp;
+        if (dt > 0.1) dt = 0.033;
+
+        if (holdFramesAtEnd > 0) {
+          holdFramesAtEnd--;
+          if (holdFramesAtEnd === 0) {
+            altitudeKm = 10.0;
+          }
+        } else {
+          altitudeKm -= dt * 3.5;
+          if (altitudeKm <= 0) {
+            altitudeKm = 0;
+            holdFramesAtEnd = 40;
+          }
+        }
+
+        update();
+        animFrameId = requestAnimationFrame(loop);
+      }
+      animFrameId = requestAnimationFrame(loop);
+    }
+
+    function togglePlay() {
+      isPlaying = !isPlaying;
+      if (btnPlay) {
+        btnPlay.innerHTML = isPlaying
+          ? '<span>⏸</span><span>Pause</span>'
+          : '<span>▶</span><span>Auto Play</span>';
+      }
+      if (isPlaying) {
+        if (altitudeKm <= 0.05) altitudeKm = 10.0;
+        startLoop();
+      } else {
+        stopLoop();
       }
     }
 
     if (sliderAlt) {
       sliderAlt.addEventListener('input', function (e) {
+        if (isPlaying) {
+          isPlaying = false;
+          if (btnPlay) btnPlay.innerHTML = '<span>▶</span><span>Auto Play</span>';
+          stopLoop();
+        }
         altitudeKm = parseFloat(e.target.value);
         update();
       });
     }
 
-    if (btnMode) {
-      btnMode.addEventListener('click', function () {
-        isRelativistic = !isRelativistic;
-        btnMode.innerHTML = isRelativistic
-          ? '<span>Mode: </span><strong style="color:var(--color-time)">Einsteinian (Time Dilation ON)</strong>'
-          : '<span>Mode: </span><strong style="color:var(--color-danger)">Newtonian (Classical / No Dilation)</strong>';
-        update();
+    if (presetChips && presetChips.length) {
+      presetChips.forEach(function (chip) {
+        chip.addEventListener('click', function () {
+          if (isPlaying) {
+            isPlaying = false;
+            if (btnPlay) btnPlay.innerHTML = '<span>▶</span><span>Auto Play</span>';
+            stopLoop();
+          }
+          altitudeKm = parseFloat(chip.getAttribute('data-alt'));
+          update();
+        });
       });
     }
+
+    if (btnPlay) {
+      btnPlay.addEventListener('click', togglePlay);
+    }
+
+    observeSimulationVisibility(container, function () {
+      isVisible = true;
+      if (isPlaying) startLoop();
+    }, function () {
+      isVisible = false;
+      stopLoop();
+    });
 
     update();
     registerDraw(draw);

@@ -804,6 +804,11 @@ body {
   border-left: 3px solid var(--color-space);
 }
 
+.clock-card.danger {
+  border-color: var(--border-subtle);
+  border-left: 3px solid var(--color-danger);
+}
+
 .clock-meta {
   display: flex;
   align-items: center;
@@ -821,6 +826,7 @@ body {
 
 .clock-card.cyan .clock-label { color: var(--color-time); }
 .clock-card.amber .clock-label { color: var(--color-space); }
+.clock-card.danger .clock-label { color: var(--color-danger); }
 
 .clock-badge {
   font-family: var(--font-mono);
