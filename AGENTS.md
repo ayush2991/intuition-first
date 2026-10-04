@@ -87,21 +87,21 @@ When advancing from section $N$ to section $N+1$, never re-derive or re-explain 
 
 ---
 
-## 3. Semantic Physics & Editorial Color Palette
+## 3. Semantic Physics & Editorial Color Palette (Monograph Theme)
 
-Colors across the publication represent immutable physical concepts and editorial surfaces. Always pull colors dynamically from `UniverseSimulations.getThemeColors()` rather than hardcoding static hex codes into canvas scripts.
+Colors across the publication represent immutable physical concepts and editorial surfaces under the Monograph theme (Warm Archival Parchment / Scholarly Dark Archive). Always pull colors dynamically from `UniverseSimulations.getThemeColors()` rather than hardcoding static hex codes into canvas scripts.
 
-| Semantic Concept | Light Mode | Obsidian Dark Mode | Usage / Physical Meaning |
+| Semantic Concept | Light Mode (Warm Parchment) | Dark Mode (Scholarly Umber) | Usage / Physical Meaning |
 | :--- | :--- | :--- | :--- |
-| **Canvas Background** | `#fbfbf9` (`--bg-space`) | `#0d0f14` (`--bg-space`) | Main interactive canvas background |
-| **Card Surface** | `#ffffff` (`--bg-card`) | `#131720` (`--bg-card`) | Simulation card wrapper & controls |
-| **Card Subtle** | `#f6f6f2` (`--bg-card-subtle`) | `#090b0e` (`--bg-card-subtle`) | Readout dashboard cards, chip background |
-| **Time / Rest Frame** | `#0969da` | `#58a6ff` | Motion through time, Alice's rest frame, $ct$-axis |
-| **Space / Motion** | `#d95d18` | `#f0883e` | Spatial displacement, Bob's motion, $v_x$, coordinate distance |
-| **Cosmic Invariant ($c$)** | `#6e40c9` | `#bc8cff` | Invariant speed hypotenuse $c$, 45° light cone boundary |
-| **Light / Wavefronts** | `#b45309` | `#e3b341` | Outgoing photon wavefronts, beacon flashes, light signals |
-| **Sync / Agreement / Entropy** | `#0f766e` | `#3dd68c` | Simultaneous events, invariant intervals, information entropy |
-| **Forbidden / Causality Lag** | `#cf222e` | `#ff7b72` | Speeds exceeding $c$, causality disconnect, time lag |
+| **Canvas Background** | `#faf8f5` (`--bg-space`) | `#141311` (`--bg-space`) | Main interactive canvas background |
+| **Card Surface** | `#ffffff` (`--bg-card`) | `#1c1a17` (`--bg-card`) | Simulation card wrapper & controls |
+| **Card Subtle** | `#f4f1ea` (`--bg-card-subtle`) | `#181613` (`--bg-card-subtle`) | Readout dashboard cards, chip background |
+| **Time / Rest Frame** | `#1d4ed8` | `#60a5fa` | Motion through time, Alice's rest frame, $ct$-axis |
+| **Space / Motion** | `#c2410c` | `#fb923c` | Spatial displacement, Bob's motion, $v_x$, coordinate distance |
+| **Cosmic Invariant ($c$)** | `#6d28d9` | `#c084fc` | Invariant speed hypotenuse $c$, 45° light cone boundary |
+| **Light / Wavefronts** | `#b45309` | `#fbbf24` | Outgoing photon wavefronts, beacon flashes, light signals |
+| **Sync / Agreement / Entropy** | `#0f766e` | `#34d399` | Simultaneous events, invariant intervals, information entropy |
+| **Forbidden / Causality Lag** | `#b91c1c` | `#f87171` | Speeds exceeding $c$, causality disconnect, time lag |
 
 ---
 
@@ -229,10 +229,6 @@ Every interactive simulation follows a standardized visual hierarchy, tactile co
 
 ---
 
-## 7. Verification & Quality Checklist
+## 7. Planning & Workflow Rules
 
-Before completing changes or authoring new simulations, verify:
-- [ ] **Dual Theme Support**: Check both Light Mode (Warm Paper) and Dark Mode (Obsidian Cosmic) for contrast and color consistency.
-- [ ] **Responsive Breakpoints**: Test layout down to 360px width. Ensure label pills do not clip canvas edges and twin clocks remain side-by-side.
-- [ ] **Bidirectional Determinism**: Verify sliders and scrubbers update in real time without state accumulation or drift.
-- [ ] **Zero Console Errors**: Confirm pure vanilla JS execution with zero external runtime dependencies.
+- **No Verification Plans**: For this project, the user does NOT want verification. Do not include verification plans, verification steps, or verification plan sections in implementation plans and workflow documents. Keep plans strictly focused on the proposed changes and execution strategy.
