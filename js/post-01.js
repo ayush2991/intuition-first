@@ -513,7 +513,7 @@
       var scaleX = width - 75;
 
       drawGrid(ctx, ox, oy, width, height, 32);
-      drawAxes(ctx, ox, oy, width, height, 'Space Position x (m)', 'Elapsed Time t (s)');
+      drawAxes(ctx, ox, oy, width, height, 'Space Position x (m)', 'Ground Stopwatch t (s)');
 
       // Axis Ticks
       ctx.fillStyle = c.axisText || c.subtleText;
@@ -599,7 +599,7 @@
       var progress = animTime / 6.0;
 
       drawGrid(ctx, ox, oy, width, height, 32);
-      drawAxes(ctx, ox, oy, width, height, 'Space Speed (v_space)', 'Time Speed (v_time)');
+      drawAxes(ctx, ox, oy, width, height, 'Space Speed (v_space)', 'Wristwatch Rate (v_time)');
 
       // Axis speed marks at 50% V and 100% V
       ctx.fillStyle = c.axisText || c.subtleText;
@@ -1431,7 +1431,7 @@
       var arcMidA = -Math.PI / 4;
       var arcPillX = ox + radius * Math.cos(arcMidA);
       var arcPillY = oy + radius * Math.sin(arcMidA);
-      drawLabelPill(ctx, '|V| = 1.00 c (Speed Limit)', Math.min(width - 85, arcPillX + 35), arcPillY - 8, {
+      drawLabelPill(ctx, '|V| = 1.00 c (Cosmic Speed Limit)', Math.min(width - 85, arcPillX + 35), arcPillY - 8, {
         textColor: c.invariantColor,
         font: 'bold 9.5px "JetBrains Mono", monospace'
       });
@@ -1829,14 +1829,17 @@
       var activeColor = c.photonColor;
       if (mode === 'photon') {
         activeColor = c.photonColor;
+        if (particleCardLabel) particleCardLabel.innerText = 'Photon Watch';
         if (clockPhoton) clockPhoton.innerHTML = '0.000 <span>s</span>';
         if (statusNote) statusNote.innerText = 'Time is completely frozen. 100% of motion is across space.';
       } else if (mode === 'rocket') {
         activeColor = c.spaceColor;
+        if (particleCardLabel) particleCardLabel.innerText = 'Traveler Wristwatch';
         if (clockPhoton) clockPhoton.innerHTML = '3.000 <span>s</span>';
         if (statusNote) statusNote.innerText = 'Time moves at 50% normal rate (v_time = 0.500 c).';
       } else {
         activeColor = c.timeColor;
+        if (particleCardLabel) particleCardLabel.innerText = 'Observer Wristwatch';
         if (clockPhoton) clockPhoton.innerHTML = '6.000 <span>s</span>';
         if (statusNote) statusNote.innerText = 'Observer sitting motionless in space moves 100% through time.';
       }
@@ -2343,7 +2346,7 @@
 
       drawGlowingDot(ctx, pVectorTip.x, pVectorTip.y, c.invariantColor, 7);
 
-      drawLabelPill(ctx, 'Spacetime Velocity (|V| = c)', pVectorTip.x + 90, pVectorTip.y - 10, {
+      drawLabelPill(ctx, 'Total Cosmic Speed (|V| = c)', pVectorTip.x + 90, pVectorTip.y - 10, {
         textColor: c.invariantColor,
         font: 'bold 11px "Plus Jakarta Sans", sans-serif'
       });

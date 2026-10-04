@@ -103,14 +103,14 @@
         We can view this scenario through two complementary lenses:
       </p>
       <p>
-        • <strong>Position Space (The Map):</strong> Where the cars are located on the ground (<span
+        • <strong>The Position Map:</strong> Where the cars are located on the ground (<span
           class="math-badge">x₁, x₂</span>). As time passes, both cars travel outward from the origin along their
         tracks.<br>
-        • <strong>Velocity Space (The Speed Vectors):</strong> How each car’s fixed <span class="math-badge">60
-          mph</span>
-        speed is distributed into directional vectors (<span class="math-badge">V_East, V_North</span>). Because both
-        cars travel at a constant total speed, their velocity vectors both touch a circle of radius <span
-          class="math-badge">60 mph</span>.
+        • <strong>Velocity Space (The Speedometer):</strong> How each car’s fixed <span class="math-badge">60
+          mph</span> speed is distributed into directional vectors (<span class="math-badge">V_East, V_North</span>).
+        While the position map records <em>where</em> the cars are, Velocity Space acts like a visual speedometer: it reveals
+        <em>how fast</em> they are traveling in each direction. Because both cars travel at a constant total speed, their
+        velocity vectors both touch a circle of radius <span class="math-badge">60 mph</span>.
       </p>
 
       <!-- INTERACTIVE WIDGET 1: CARS (POSITION MAP & VELOCITY SPACE) -->
@@ -230,11 +230,10 @@
         lenses we used for the cars:
       </p>
       <p>
-        • <strong>Position Space:</strong> The horizontal axis marks spatial position (<span
-          class="math-badge">x</span>).
-        The vertical axis marks temporal position, i.e., elapsed time (<span class="math-badge">t</span>) on a
-        stationary ground clock.<br>
-        • <strong>Velocity Space:</strong> The horizontal axis represents <strong>Speed Through
+        • <strong>Position Over Time (The Spacetime Map):</strong> The horizontal axis marks spatial position (<span
+          class="math-badge">x</span>). The vertical axis marks elapsed time (<span class="math-badge">t</span>) recorded
+        on a stationary ground stopwatch.<br>
+        • <strong>Velocity Space (The Cosmic Speedometer):</strong> The horizontal axis represents <strong>Speed Through
           Space</strong> (<span class="math-badge">v_space</span>), measuring spatial displacement. The vertical axis
         represents <strong>Speed Through Time</strong> (<span class="math-badge">v_time</span>), measuring how fast an
         observer's <strong>personal wristwatch</strong> ticks forward into the future.
@@ -255,11 +254,11 @@
         when you remain pinned to a single point in space, you are in continuous, inescapable motion through time.
       </p>
       <p>
-        When you sit perfectly still, both the <strong>ground clock</strong> and your <strong>personal
+        When you sit perfectly still, both the <strong>ground stopwatch</strong> and your <strong>personal
           wristwatch</strong>
         agree: your personal wristwatch
         advances at its full,
-        uninhibited pace of exactly one personal second for every second recorded on the ground clock. In Velocity
+        uninhibited pace of exactly one personal second for every second recorded on the ground stopwatch. In Velocity
         Space, this means <strong>100% of your motion is directed straight up along the vertical Time axis</strong>.
       </p>
 
@@ -267,7 +266,7 @@
       <div id="widget-stationary" class="interactive-artifact artifact-wide">
         <div class="artifact-header">
           <div>
-            <div class="artifact-badge">SIMULATION 02 · POSITION MAP &amp; VELOCITY SPACE AT REST</div>
+            <div class="artifact-badge">SIMULATION 02 · POSITION OVER TIME &amp; VELOCITY SPACE (AT REST)</div>
           </div>
         </div>
         <div class="comparison-grid">
@@ -293,7 +292,7 @@
           <!-- Inline clock: label + reading on one line -->
           <div class="clock-card cyan"
             style="margin: 0; padding: 0.4rem 0.75rem; display: flex; align-items: center; gap: 0.65rem; white-space: nowrap; flex-shrink: 0;">
-            <span class="clock-label" style="font-size: 0.68rem;">Observer Wristwatch</span>
+            <span class="clock-label" style="font-size: 0.68rem;">Personal Wristwatch</span>
             <span class="clock-time clock-val" style="font-size: 1.1rem; line-height: 1;">3.50 <span>s</span></span>
             <span class="clock-badge">100% Rate</span>
           </div>
@@ -317,8 +316,9 @@
       </p>
       <p>
         An object sitting at rest with <span class="math-badge">v_space = 0</span> is not stationary in spacetime. In
-        the map on the left, it traces a steady upward path as time elapses. In Velocity Space on the right, its speed
-        needle points 100% vertically at full capacity. All of its motion is devoted to advancing into the future.
+        the position-over-time map on the left, it traces a steady upward path as time elapses. In Velocity Space on the
+        right, its speed needle points 100% vertically at full capacity. All of its motion is devoted to advancing into
+        the future.
       </p>
       <p>
         This leads naturally to our central question: if sitting still means spending all of your capacity traveling
@@ -380,7 +380,7 @@
       <div id="widget-tradeoff" class="interactive-artifact artifact-wide">
         <div class="artifact-header">
           <div>
-            <div class="artifact-badge">SIMULATION 03 · POSITION MAP &amp; VELOCITY SPACE IN MOTION</div>
+            <div class="artifact-badge">SIMULATION 03 · POSITION OVER TIME &amp; VELOCITY SPACE (IN MOTION)</div>
           </div>
         </div>
         <div class="comparison-grid">
@@ -460,7 +460,7 @@
           class="math-badge">θ = 90°</span>)?
       </p>
       <p>
-        In the map on the left, the traveler still moves forward through time on your ground stopwatch—after all, it
+        In the position-over-time map on the left, the traveler still moves forward through time on your ground stopwatch—after all, it
         still takes time to cross distance in your world. But in Velocity Space on the right, <span
           class="math-badge">v_time</span>
         has dropped to <strong>zero</strong>.
@@ -514,7 +514,7 @@
               <span class="clock-badge">100% Rate</span>
             </div>
             <div class="clock-time clock-earth">6.00 <span>s</span></div>
-            <p class="clock-subtext">Rest frame: 100% of cosmic speed is directed through time.</p>
+            <p class="clock-subtext">At rest on Earth: 100% of cosmic speed is directed through time.</p>
           </div>
           <div class="clock-card amber" style="margin: 0;">
             <div class="clock-meta">
@@ -540,7 +540,7 @@
             </div>
             <div class="control-item">
               <div class="control-header">
-                <span>Spacecraft Velocity (v_space)</span>
+                <span>Speed Through Space (v_space)</span>
                 <span class="control-val amber readout-speed">v = 0.866 c</span>
               </div>
               <input type="range" class="range-slider amber slider-speed" min="0" max="999" value="866">
@@ -635,17 +635,16 @@
             <div>
               <div class="clock-card cyan" style="margin-bottom: 0.6rem;">
                 <div class="clock-meta">
-                  <span class="clock-label">Earth Reference Time</span>
+                  <span class="clock-label">Earth Stopwatch (At Rest)</span>
                   <span class="clock-badge">Baseline</span>
                 </div>
                 <div class="clock-time">6.000 <span>s</span></div>
-                <p class="clock-subtext">Elapsed coordinate duration in resting frame.</p>
+                <p class="clock-subtext">Elapsed time for observer at rest on Earth.</p>
               </div>
               <div class="clock-card card-particle"
                 style="border-left: 3px solid var(--color-photon); margin-bottom: 0.85rem;">
                 <div class="clock-meta">
-                  <span class="clock-label particle-card-label" style="color:var(--color-photon);">Particle Onboard
-                    Clock</span>
+                  <span class="clock-label particle-card-label" style="color:var(--color-photon);">Traveler / Particle Watch</span>
                   <span class="clock-badge particle-card-badge">Status</span>
                 </div>
                 <div class="clock-time clock-photon" style="color:var(--color-photon);">0.000 <span>s</span></div>
