@@ -1050,6 +1050,31 @@ body {
   gap: 1.125rem;
 }
 
+/* Single-row controls strip: clock + slider + play button on one line.
+   Falls back to stacked column on mobile (≤ 640px). */
+.controls-strip {
+  flex-direction: row;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.65rem 1.25rem;
+}
+
+@media (max-width: 640px) {
+  .controls-strip {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.65rem;
+  }
+
+  .controls-strip .clock-card {
+    justify-content: space-between;
+  }
+
+  .controls-strip .btn-play {
+    align-self: flex-start;
+  }
+}
+
 .control-item {
   display: flex;
   flex-direction: column;
@@ -1182,7 +1207,6 @@ body {
   justify-content: space-between;
   gap: 0.75rem;
   padding-top: 0.75rem;
-  border-top: 1px solid var(--border-subtle);
 }
 
 .btn-primary {
@@ -1200,6 +1224,11 @@ body {
   cursor: pointer;
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.btn-play {
+  min-width: 7.5rem;
+  justify-content: center;
 }
 
 [data-theme="dark"] .btn-primary {

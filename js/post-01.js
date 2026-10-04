@@ -29,7 +29,7 @@
 
     var progress = 0.60;
     var angleDeg = 60;
-    var isPlaying = false;
+    var isPlaying = true;
     var lastTimestamp = null;
     var animFrame = null;
 
@@ -347,7 +347,6 @@
         textColor: c.timeColor,
         font: 'bold 11px "Plus Jakarta Sans", sans-serif'
       });
-      drawGlowingDot(ctx, ox, oy - radius, c.timeColor, 5);
 
       // Orange Car Velocity Vector (Tilted: vEast, vNorth)
       ctx.strokeStyle = c.spaceColor;
@@ -370,11 +369,10 @@
       // Label for Orange Vector
       var orangePillX = angleDeg < 5 ? ox + 55 : tipX + (angleDeg > 70 ? -15 : 30);
       var orangePillY = angleDeg < 5 ? oy - radius - 16 : tipY + (angleDeg > 70 ? -18 : 6);
-      drawLabelPill(ctx, 'V_Orange (' + Math.round(angleDeg) + '°)', orangePillX, orangePillY, {
+      drawLabelPill(ctx, 'V_Orange', orangePillX, orangePillY, {
         textColor: c.spaceColor,
         font: 'bold 11px "Plus Jakarta Sans", sans-serif'
       });
-      drawGlowingDot(ctx, tipX, tipY, c.spaceColor, 5);
     }
 
     function draw() {
@@ -388,7 +386,7 @@
       lastTimestamp = now;
 
       if (isPlaying) {
-        progress += dt * 0.25;
+        progress += dt * 0.125;
         if (progress > 1.0) progress = 0;
         if (sliderTime) sliderTime.value = progress * 1000;
         updateReadouts();
@@ -444,7 +442,9 @@
 
     updateReadouts();
     registerDraw(draw);
-    draw();
+    if (btnPlay) btnPlay.innerHTML = '<span>⏸</span><span>Pause</span>';
+    lastTimestamp = null;
+    animFrame = requestAnimationFrame(loop);
     window.addEventListener('resize', draw);
   }
 
@@ -461,7 +461,7 @@
     var valTimeLabel = container.querySelector('.val-time-label');
 
     var animTime = 3.5;
-    var isPlaying = false;
+    var isPlaying = true;
     var lastTimestamp = null;
     var animFrame = null;
 
@@ -639,12 +639,11 @@
       ctx.closePath();
       ctx.fill();
 
-      // Label for Observer Vector & glowing tip
-      drawLabelPill(ctx, 'V_Observer (100% of V)', ox - 35, tipY - 16, {
+      // Label for Observer Vector (placed to the right of the vector to avoid Y-axis label overlap)
+      drawLabelPill(ctx, 'V_Observer (100% of V)', ox + 12, tipY - 16, {
         textColor: c.timeColor,
         font: 'bold 11px "Plus Jakarta Sans", sans-serif'
       });
-      drawGlowingDot(ctx, ox, tipY, c.timeColor, 5.5);
     }
 
     function draw() {
@@ -692,7 +691,9 @@
 
     update();
     registerDraw(draw);
-    draw();
+    if (btnPlay) btnPlay.innerHTML = '<span>⏸</span><span>Pause</span>';
+    lastTimestamp = null;
+    animFrame = requestAnimationFrame(loop);
     window.addEventListener('resize', draw);
   }
 
@@ -1186,7 +1187,6 @@
         textColor: c.invariantColor,
         font: 'bold 11px "Plus Jakarta Sans", sans-serif'
       });
-      drawGlowingDot(ctx, tipX, tipY, c.invariantColor, 5.5);
     }
 
     function draw() {
@@ -1483,10 +1483,6 @@
       ctx.closePath();
       ctx.fill();
 
-      // Vector Tip Dots
-      drawGlowingDot(ctx, eTipX, eTipY, c.timeColor, 5.5);
-      drawGlowingDot(ctx, rTipX, rTipY, c.spaceColor, 5.5);
-
       // Twin Clock Rate Badges
       var earthPillText = 'Earth Stopwatch: 100% Rate (v = 0)';
       var rocketRatePercent = (vt * 100).toFixed(1);
@@ -1697,8 +1693,6 @@
       ctx.lineTo(tipX - 6 * Math.cos(arrowAng + 0.5), tipY - 6 * Math.sin(arrowAng + 0.5));
       ctx.closePath();
       ctx.fill();
-
-      drawGlowingDot(ctx, tipX, tipY, color, 6);
 
       if (mode === 'photon') {
         var photonLabelText = width < 420 ? 'Photon (v = c)' : 'Photon (v_space = c, v_time = 0)';

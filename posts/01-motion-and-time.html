@@ -108,8 +108,7 @@
       </p>
       <p>
         At first glance, space and time feel like completely separate domains. Space is the three-dimensional arena we
-        travel across, while time seems to be a steady, invisible river carrying everything forward at an unchanging
-        pace.
+        travel across, while time seems to tick forward at a fixed, unchanging rate for everyone.
         Why should shifting your position across the arena have anything to do with how fast your personal clock ticks?
       </p>
       <p>
@@ -153,7 +152,7 @@
           class="math-badge">60°</span> toward the <strong>East</strong> (away from North) along a diagonal.
       </p>
       <p>
-        To understand what is happening geometrically, we can view this scenario through two complementary lenses:
+        We can view this scenario through two complementary lenses:
       </p>
       <p>
         • <strong>Position Space (The Map):</strong> Where the cars are located on the ground (<span
@@ -211,7 +210,7 @@
             </div>
           </div>
           <div
-            style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 0.75rem; border-top: 1px solid var(--border-subtle); padding-top: 0.75rem;">
+            style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 0.75rem; padding-top: 0.75rem;">
             <div class="preset-chips">
               <button class="chip-btn chip-angle" data-angle="0">0° (North)</button>
               <button class="chip-btn chip-angle" data-angle="30">30°</button>
@@ -272,13 +271,15 @@
         What if we rethink those two axes entirely?
       </p>
       <p>
-        Instead of viewing that 2D grid as a simplified version of 3D space, imagine it as a simplified slice of
+        Instead of viewing that 2D grid as a simplified version of <strong>3D space</strong>, imagine it as a simplified
+        slice of
         <strong>4D spacetime</strong>.
       </p>
       <p>
-        Suppose we keep one dimension of space along the horizontal axis—say, the East–West direction (<span
-          class="math-badge">x</span>)—and, for a moment, experimentally treat <strong>time</strong> (<span
-          class="math-badge">t</span>) as just another dimension along the vertical, standing perpendicular to space in
+        For our next illustration, let's keep one dimension of space along the horizontal axis—say, the East–West
+        direction (<span class="math-badge">x</span>)—and, for a moment, experimentally treat <strong>time</strong>
+        (<span class="math-badge">t</span>) as just another dimension along the vertical, standing perpendicular to
+        space in
         the exact same way North stood perpendicular to East.
       </p>
       <p>
@@ -287,8 +288,8 @@
       </p>
       <p>
         • <strong>Position Over Time (The Spacetime Map):</strong> The horizontal axis marks spatial position (<span
-          class="math-badge">x</span>). The vertical axis marks elapsed time (<span
-          class="math-badge">t</span>) on a stationary ground clock.<br>
+          class="math-badge">x</span>). The vertical axis marks elapsed time (<span class="math-badge">t</span>) on a
+        stationary ground clock.<br>
         • <strong>Velocity Space (The Speedometer):</strong> The horizontal axis represents <strong>Speed Through
           Space</strong> (<span class="math-badge">v_space</span>), measuring spatial displacement. The vertical axis
         represents <strong>Speed Through Time</strong> (<span class="math-badge">v_time</span>), measuring how fast an
@@ -303,7 +304,7 @@
         space, you are completely stationary.
       </p>
       <p>
-        Yet you are clearly not frozen in reality.
+        But you are clearly not frozen in reality.
       </p>
       <p>
         Second by second, your wristwatch advances. Every moment carries you steadily forward into the future. Even
@@ -341,37 +342,25 @@
           </div>
         </div>
         <!-- Controls -->
-        <div class="artifact-controls"
-          style="padding: 1rem 1.25rem; display: flex; flex-direction: column; gap: 0.85rem;">
-          <div
-            style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; align-items: center;">
-            <div class="clock-card cyan" style="margin: 0;">
-              <div class="clock-meta">
-                <span class="clock-label">Observer Wristwatch (At Rest)</span>
-                <span class="clock-badge">100% Rate</span>
-              </div>
-              <div class="clock-time clock-val">3.50 <span>s</span></div>
-              <p class="clock-subtext">Every second on the watch is steady progress forward along the Time axis.</p>
-            </div>
-            <div class="control-item">
-              <div class="control-header">
-                <span>Scrub Passage of Time</span>
-                <span class="control-val cyan val-time-label">3.50 s</span>
-              </div>
-              <input type="range" class="range-slider slider-time" min="0" max="1000" value="583">
-            </div>
+        <div class="artifact-controls controls-strip">
+          <!-- Inline clock: label + reading on one line -->
+          <div class="clock-card cyan" style="margin: 0; padding: 0.4rem 0.75rem; display: flex; align-items: center; gap: 0.65rem; white-space: nowrap; flex-shrink: 0;">
+            <span class="clock-label" style="font-size: 0.68rem;">Observer Wristwatch</span>
+            <span class="clock-time clock-val" style="font-size: 1.1rem; line-height: 1;">3.50 <span>s</span></span>
+            <span class="clock-badge">100% Rate</span>
           </div>
-          <div
-            style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 0.75rem; border-top: 1px solid var(--border-subtle); padding-top: 0.75rem;">
-            <div class="toolbar-bottom" style="padding: 0;">
-              <button class="btn-primary btn-play">
-                <span>▶</span><span>Auto Play</span>
-              </button>
+          <!-- Slider -->
+          <div class="control-item" style="flex: 1; min-width: 160px;">
+            <div class="control-header">
+              <span>Scrub Passage of Time</span>
+              <span class="control-val cyan val-time-label">3.50 s</span>
             </div>
-            <div class="math-badge">
-              v_space = <strong>0</strong> | v_time = <strong>100% of V</strong>
-            </div>
+            <input type="range" class="range-slider slider-time" min="0" max="1000" value="583">
           </div>
+          <!-- Play button -->
+          <button class="btn-primary btn-play" style="flex-shrink: 0;">
+            <span>▶</span><span>Auto Play</span>
+          </button>
         </div>
       </div>
 
@@ -395,10 +384,12 @@
         Now, let us bring back the rule from our two cars and apply it to the cosmos:
       </p>
       <p>
-        <strong>What if every object in the universe travels through spacetime at the exact same, unchanging total speed, V?</strong>
+        <strong>What if every object in the universe travels through spacetime at the exact same, unchanging total
+          speed, V?</strong>
       </p>
       <p>
-        To see what this means, imagine you stand on the ground holding a <strong>stopwatch</strong>, watching a traveler
+        To see what this means, imagine you stand on the ground holding a <strong>stopwatch</strong>, watching a
+        traveler
         dash past you down a track wearing a <strong>wristwatch</strong>.
       </p>
       <p>
@@ -429,10 +420,12 @@
       </p>
       <p>
         Now comes the fascinating part. If the traveler's <em>total</em> speed through space and time combined is locked
-        to <span class="math-badge">V</span>, what happens to their personal wristwatch as they speed up across the ground?
+        to <span class="math-badge">V</span>, what happens to their personal wristwatch as they speed up across the
+        ground?
       </p>
       <p>
-        Try it in <strong>Simulation 03</strong> below. Drag the speed slider to the right and watch the needle in Velocity Space:
+        Try it in <strong>Simulation 03</strong> below. Drag the speed slider to the right and watch the needle in
+        Velocity Space:
       </p>
 
       <!-- INTERACTIVE WIDGET 3: TRADEOFF (DUAL-VIEW) -->
@@ -511,20 +504,23 @@
         <div class="formula-body">
           <em>v</em>_time = √( <em>V</em>² − <em>v</em>_space² )
         </div>
-        <div class="formula-note">When total speed is fixed, moving faster through space directly drains your speed through time.</div>
+        <div class="formula-note">When total speed is fixed, moving faster through space directly drains your speed
+          through time.</div>
       </div>
       <p>
-        Now look at the extreme limit: what happens when you slide speed all the way to <strong>100%</strong> (<span class="math-badge">θ = 90°</span>)?
+        Now look at the extreme limit: what happens when you slide speed all the way to <strong>100%</strong> (<span
+          class="math-badge">θ = 90°</span>)?
       </p>
       <p>
         In the map on the left, the traveler still moves forward through time on your ground stopwatch—after all, it
-        still takes time to cross distance in your world. But in Velocity Space on the right, <span class="math-badge">v_time</span>
+        still takes time to cross distance in your world. But in Velocity Space on the right, <span
+          class="math-badge">v_time</span>
         has dropped to <strong>zero</strong>.
       </p>
       <p>
         The traveler is diverting 100% of their cosmic speed into space. There is nothing left over to push them forward
         through time. While seconds continue ticking normally on your ground stopwatch, <strong>the traveler's personal
-        wristwatch has frozen completely.</strong>
+          wristwatch has frozen completely.</strong>
       </p>
 
       <!-- SECTION 4 -->
@@ -545,8 +541,9 @@
       </p>
       <p>
         Because this geometric trade-off is physically real, a traveler moving rapidly through space does not merely
-        tilt an abstract needle on a diagram—<strong>their physical body and personal clocks genuinely experience fewer ticking
-        seconds</strong> compared to someone who stayed behind on Earth.
+        tilt an abstract needle on a diagram—<strong>their physical body and personal clocks genuinely experience fewer
+          ticking
+          seconds</strong> compared to someone who stayed behind on Earth.
       </p>
       <p>
         What does this look like on real instruments? In <strong>Simulation 04</strong> below, we pair the Velocity
@@ -738,7 +735,9 @@
         <div class="formula-body">
           <em>v</em>_time = √( <em>c</em>² − <em>c</em>² ) = 0
         </div>
-        <div class="formula-note">Its motion through time drops to zero. While light takes coordinate time to cross distance in our reference frame, the photon's personal onboard clock experiences zero elapsed time across the entire cosmos.</div>
+        <div class="formula-note">Its motion through time drops to zero. While light takes coordinate time to cross
+          distance in our reference frame, the photon's personal onboard clock experiences zero elapsed time across the
+          entire cosmos.</div>
       </div>
       <p>
         Just as a car on a 2D plane cannot travel "more than 100% East" (which would require an impossible angle greater

@@ -125,9 +125,9 @@ Every interactive simulation follows a standardized visual hierarchy, tactile co
 |  [OPTIONAL READOUT DASHBOARD] (Only when derived metrics cannot fit in canvas)    |
 |    [ Gamma: 2.00 ]   [ Delta-t: 0.866 s ]                                         |
 +-----------------------------------------------------------------------------------+
-|  [INTERACTIVE CONTROLS & TIMELINE]                                                |
-|    [ ▶ Auto Play / ⏸ Pause ]   [ Preset Chips: 0°, 30°, 60°, 90° ]               |
-|    Slider with live value badge: Speed (v/c) / Angle (θ) / Time (t) / Prob (p)     |
+|  [SINGLE-ROW CONTROLS STRIP]  ← All controls on ONE horizontal line              |
+|    [ Clock Label  3.50s  Badge ]  [ Slider label ··· val ]  [ ▶ Auto Play ]      |
+|                                   [ ══════ slider ══════ ]                        |
 +-----------------------------------------------------------------------------------+
 ```
 
@@ -139,6 +139,18 @@ Every interactive simulation follows a standardized visual hierarchy, tactile co
 5. **Edge Clamping for Label Pills**: Always clamp pill coordinates (`Math.min(width - padRight, Math.max(padLeft, x))`) so floating annotations never clip outside viewport boundaries on narrow screens.
 6. **Tabular Numerals**: Numeric metrics and readouts must use monospace fonts with tabular numbers (`JetBrains Mono` / `tnum`) to eliminate layout jitter during live updates.
 7. **Cognitive Ergonomics & Single Locus of Truth**: Keep live annotations directly on the canvas elements and slider headers. Eliminate auxiliary telemetry grids unless tracking non-spatial derived invariants.
+8. **Vector Tip Convention — Arrowheads vs Glowing Dots**:
+   - **Velocity Space canvases** (`.canvas-vel`): Terminate every vector with a filled triangular **arrowhead**. Do NOT draw a `drawGlowingDot` at the vector tip — the arrowhead is the sole terminator. Draw arrowheads *after* any other elements so they are never painted over.
+   - **Position Map canvases** (`.canvas-map`): Use `drawGlowingDot` at the tip to mark the current position of a physical object (car, observer, etc.). Do NOT add arrowheads — position traces are paths, not free vectors.
+9. **Single-Row Controls Strip — Maximum Compactness**: The `.artifact-controls` panel must collapse all interactive elements into **one horizontal line**. Never stack controls into multiple rows when a single row suffices.
+   - **Use the `.controls-strip` modifier class** alongside `.artifact-controls` — do NOT use inline `flex-direction: row` since inline styles have no media query support and will overflow on mobile.
+   - **Desktop (> 640px)**: `.controls-strip` enforces `flex-direction: row; align-items: center; gap: 1rem; padding: 0.65rem 1.25rem` — all items on one line.
+   - **Mobile (≤ 640px)**: `.controls-strip` automatically switches to `flex-direction: column; align-items: stretch` so items stack cleanly without horizontal overflow.
+   - **Clock reading inline**: Label, live time value, and rate badge all on one line inside the clock card — no stacked rows. Use `display: flex; align-items: center; gap: 0.65rem` on the card, `font-size: 1.1rem` for the time value.
+   - **Slider fills remaining space**: `flex: 1; min-width: 160px` so it expands to fill the gap between the clock card and the play button.
+   - **Play button pinned right**: `flex-shrink: 0` keeps it from collapsing.
+   - **Drop redundant text**: Remove `clock-subtext` paragraphs and any math badges that duplicate what is already annotated on the canvas.
+   - **Reference implementation**: `widget-stationary` (`posts/01-motion-and-time.html`, `#widget-stationary`).
 
 ---
 
