@@ -14,6 +14,9 @@
   var drawLabelPill = function (ctx, txt, x, y, opts) { sim.drawLabelPill(ctx, txt, x, y, opts); };
   var drawGlowingDot = function (ctx, x, y, c, r) { sim.drawGlowingDot(ctx, x, y, c, r); };
   var drawConstraintArc = function (ctx, ox, oy, r, c) { sim.drawConstraintArc(ctx, ox, oy, r, c); };
+  var observeSimulationVisibility = function (c, onIn, onOut) {
+    return sim.observeSimulationVisibility ? sim.observeSimulationVisibility(c, onIn, onOut) : null;
+  };
 
   function initWidgetCars(containerId) {
     var container = document.getElementById(containerId);
@@ -30,6 +33,7 @@
     var progress = 0.60;
     var angleDeg = 60;
     var isPlaying = true;
+    var isVisible = true;
     var lastTimestamp = null;
     var animFrame = null;
 
@@ -380,21 +384,37 @@
       drawVel();
     }
 
+    function startLoop() {
+      if (!animFrame && isPlaying && isVisible) {
+        lastTimestamp = null;
+        animFrame = requestAnimationFrame(loop);
+      }
+    }
+
+    function stopLoop() {
+      if (animFrame) {
+        cancelAnimationFrame(animFrame);
+        animFrame = null;
+      }
+    }
+
     function loop(now) {
+      if (!isPlaying || !isVisible) {
+        animFrame = null;
+        return;
+      }
       if (!lastTimestamp) lastTimestamp = now;
       var dt = (now - lastTimestamp) / 1000;
       lastTimestamp = now;
+      if (dt > 0.2) dt = 0.2;
 
-      if (isPlaying) {
-        progress += dt * 0.125;
-        if (progress > 1.0) progress = 0;
-        if (sliderTime) sliderTime.value = progress * 1000;
-        updateReadouts();
-      }
+      progress += dt * 0.125;
+      if (progress > 1.0) progress = 0;
+      if (sliderTime) sliderTime.value = progress * 1000;
+      updateReadouts();
+
       draw();
-      if (isPlaying) {
-        animFrame = requestAnimationFrame(loop);
-      }
+      animFrame = requestAnimationFrame(loop);
     }
 
     var anglePresetChips = container.querySelectorAll('.chip-angle');
@@ -432,10 +452,9 @@
         isPlaying = !isPlaying;
         btnPlay.innerHTML = isPlaying ? '<span>⏸</span><span>Pause</span>' : '<span>▶</span><span>Auto Play</span>';
         if (isPlaying) {
-          lastTimestamp = null;
-          animFrame = requestAnimationFrame(loop);
-        } else if (animFrame) {
-          cancelAnimationFrame(animFrame);
+          startLoop();
+        } else {
+          stopLoop();
         }
       });
     }
@@ -443,8 +462,16 @@
     updateReadouts();
     registerDraw(draw);
     if (btnPlay) btnPlay.innerHTML = '<span>⏸</span><span>Pause</span>';
-    lastTimestamp = null;
-    animFrame = requestAnimationFrame(loop);
+    startLoop();
+
+    observeSimulationVisibility(container, function () {
+      isVisible = true;
+      if (isPlaying) startLoop();
+    }, function () {
+      isVisible = false;
+      stopLoop();
+    });
+
     window.addEventListener('resize', draw);
   }
 
@@ -462,6 +489,7 @@
 
     var animTime = 3.5;
     var isPlaying = true;
+    var isVisible = true;
     var lastTimestamp = null;
     var animFrame = null;
 
@@ -651,10 +679,29 @@
       drawVel();
     }
 
+    function startLoop() {
+      if (!animFrame && isPlaying && isVisible) {
+        lastTimestamp = null;
+        animFrame = requestAnimationFrame(loop);
+      }
+    }
+
+    function stopLoop() {
+      if (animFrame) {
+        cancelAnimationFrame(animFrame);
+        animFrame = null;
+      }
+    }
+
     function loop(now) {
+      if (!isPlaying || !isVisible) {
+        animFrame = null;
+        return;
+      }
       if (!lastTimestamp) lastTimestamp = now;
       var dt = (now - lastTimestamp) / 1000;
       lastTimestamp = now;
+      if (dt > 0.2) dt = 0.2;
 
       if (isPlaying) {
         animTime += dt * 1.5;
@@ -663,9 +710,7 @@
         update();
       }
       draw();
-      if (isPlaying) {
-        animFrame = requestAnimationFrame(loop);
-      }
+      animFrame = requestAnimationFrame(loop);
     }
 
     if (sliderTime) {
@@ -681,10 +726,9 @@
         isPlaying = !isPlaying;
         btnPlay.innerHTML = isPlaying ? '<span>⏸</span><span>Pause</span>' : '<span>▶</span><span>Auto Play</span>';
         if (isPlaying) {
-          lastTimestamp = null;
-          animFrame = requestAnimationFrame(loop);
-        } else if (animFrame) {
-          cancelAnimationFrame(animFrame);
+          startLoop();
+        } else {
+          stopLoop();
         }
       });
     }
@@ -692,8 +736,16 @@
     update();
     registerDraw(draw);
     if (btnPlay) btnPlay.innerHTML = '<span>⏸</span><span>Pause</span>';
-    lastTimestamp = null;
-    animFrame = requestAnimationFrame(loop);
+    startLoop();
+
+    observeSimulationVisibility(container, function () {
+      isVisible = true;
+      if (isPlaying) startLoop();
+    }, function () {
+      isVisible = false;
+      stopLoop();
+    });
+
     window.addEventListener('resize', draw);
   }
 
@@ -881,6 +933,7 @@
     var animTime = 3.5; // 0 to 6.0 s
     var speedFraction = 0.866; // 0 to 1.0
     var isPlaying = false;
+    var isVisible = true;
     var lastTimestamp = null;
     var animFrame = null;
 
@@ -1194,10 +1247,29 @@
       drawVel();
     }
 
+    function startLoop() {
+      if (!animFrame && isPlaying && isVisible) {
+        lastTimestamp = null;
+        animFrame = requestAnimationFrame(loop);
+      }
+    }
+
+    function stopLoop() {
+      if (animFrame) {
+        cancelAnimationFrame(animFrame);
+        animFrame = null;
+      }
+    }
+
     function loop(now) {
+      if (!isPlaying || !isVisible) {
+        animFrame = null;
+        return;
+      }
       if (!lastTimestamp) lastTimestamp = now;
       var dt = (now - lastTimestamp) / 1000;
       lastTimestamp = now;
+      if (dt > 0.2) dt = 0.2;
 
       if (isPlaying) {
         animTime += dt * 1.5;
@@ -1206,9 +1278,7 @@
         updateReadouts();
       }
       draw();
-      if (isPlaying) {
-        animFrame = requestAnimationFrame(loop);
-      }
+      animFrame = requestAnimationFrame(loop);
     }
 
     if (sliderTime) {
@@ -1244,10 +1314,9 @@
         isPlaying = !isPlaying;
         btnPlay.innerHTML = isPlaying ? '<span>⏸</span><span>Pause</span>' : '<span>▶</span><span>Auto Play</span>';
         if (isPlaying) {
-          lastTimestamp = null;
-          animFrame = requestAnimationFrame(loop);
-        } else if (animFrame) {
-          cancelAnimationFrame(animFrame);
+          startLoop();
+        } else {
+          stopLoop();
         }
       });
     }
@@ -1255,6 +1324,15 @@
     updateReadouts();
     registerDraw(draw);
     draw();
+
+    observeSimulationVisibility(container, function () {
+      isVisible = true;
+      if (isPlaying) startLoop();
+    }, function () {
+      isVisible = false;
+      stopLoop();
+    });
+
     window.addEventListener('resize', draw);
   }
 
@@ -1278,6 +1356,7 @@
     var speedFraction = 0.866;
     var animTime = 6.0; // 0 to 6.0 s
     var isPlaying = false;
+    var isVisible = true;
     var lastTimestamp = null;
     var animFrame = null;
 
@@ -1503,10 +1582,29 @@
       });
     }
 
+    function startLoop() {
+      if (!animFrame && isPlaying && isVisible) {
+        lastTimestamp = null;
+        animFrame = requestAnimationFrame(loop);
+      }
+    }
+
+    function stopLoop() {
+      if (animFrame) {
+        cancelAnimationFrame(animFrame);
+        animFrame = null;
+      }
+    }
+
     function loop(now) {
+      if (!isPlaying || !isVisible) {
+        animFrame = null;
+        return;
+      }
       if (!lastTimestamp) lastTimestamp = now;
       var dt = (now - lastTimestamp) / 1000;
       lastTimestamp = now;
+      if (dt > 0.2) dt = 0.2;
 
       if (isPlaying) {
         animTime += dt * 1.5;
@@ -1515,9 +1613,7 @@
         updateReadouts();
       }
       draw();
-      if (isPlaying) {
-        animFrame = requestAnimationFrame(loop);
-      }
+      animFrame = requestAnimationFrame(loop);
     }
 
     if (sliderTime) {
@@ -1553,10 +1649,9 @@
         isPlaying = !isPlaying;
         btnPlay.innerHTML = isPlaying ? '<span>⏸</span><span>Pause</span>' : '<span>▶</span><span>Auto Play</span>';
         if (isPlaying) {
-          lastTimestamp = null;
-          animFrame = requestAnimationFrame(loop);
-        } else if (animFrame) {
-          cancelAnimationFrame(animFrame);
+          startLoop();
+        } else {
+          stopLoop();
         }
       });
     }
@@ -1564,6 +1659,15 @@
     updateReadouts();
     registerDraw(draw);
     draw();
+
+    observeSimulationVisibility(container, function () {
+      isVisible = true;
+      if (isPlaying) startLoop();
+    }, function () {
+      isVisible = false;
+      stopLoop();
+    });
+
     window.addEventListener('resize', draw);
   }
 

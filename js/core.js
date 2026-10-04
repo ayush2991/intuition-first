@@ -67,13 +67,29 @@
     }
   }
 
+  function invalidateCanvasCaches() {
+    var canvases = document.querySelectorAll('canvas');
+    for (var i = 0; i < canvases.length; i++) {
+      canvases[i]._cachedRect = null;
+    }
+  }
+
   function setupRetinaCanvas(canvas) {
-    var rect = canvas.getBoundingClientRect();
+    var rect = canvas._cachedRect;
+    if (!rect) {
+      rect = canvas.getBoundingClientRect();
+      canvas._cachedRect = rect;
+    }
     var dpr = window.devicePixelRatio || 1;
-    canvas.width = rect.width * dpr;
-    canvas.height = rect.height * dpr;
+    var targetWidth = Math.round(rect.width * dpr);
+    var targetHeight = Math.round(rect.height * dpr);
+
+    if (canvas.width !== targetWidth || canvas.height !== targetHeight) {
+      canvas.width = targetWidth;
+      canvas.height = targetHeight;
+    }
     var ctx = canvas.getContext('2d');
-    ctx.scale(dpr, dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     return { ctx: ctx, width: rect.width, height: rect.height, dpr: dpr };
   }
 
@@ -258,6 +274,7 @@
   }
 
   function redrawAll() {
+    invalidateCanvasCaches();
     for (var i = 0; i < registeredDraws.length; i++) {
       try {
         registeredDraws[i]();
@@ -266,6 +283,30 @@
       }
     }
   }
+
+  function observeSimulationVisibility(container, onEnter, onLeave) {
+    if (!container) return null;
+    if (!('IntersectionObserver' in window)) {
+      if (onEnter) onEnter();
+      return null;
+    }
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          if (onEnter) onEnter();
+        } else {
+          if (onLeave) onLeave();
+        }
+      });
+    }, {
+      rootMargin: '120px 0px 120px 0px',
+      threshold: 0
+    });
+    observer.observe(container);
+    return observer;
+  }
+
+  window.addEventListener('resize', invalidateCanvasCaches);
 
   // ==========================================================================
   // 2. Theme Manager (Monograph Theme · Automatic Device Mode Detection)
@@ -573,6 +614,8 @@
   window.UniverseSimulations.SERIES_ARTICLES = SERIES_ARTICLES;
   window.UniverseSimulations.getThemeColors = getThemeColors;
   window.UniverseSimulations.setupRetinaCanvas = setupRetinaCanvas;
+  window.UniverseSimulations.invalidateCanvasCaches = invalidateCanvasCaches;
+  window.UniverseSimulations.observeSimulationVisibility = observeSimulationVisibility;
   window.UniverseSimulations.drawLabelPill = drawLabelPill;
   window.UniverseSimulations.drawGrid = drawGrid;
   window.UniverseSimulations.drawAxes = drawAxes;
