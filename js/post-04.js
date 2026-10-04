@@ -14,6 +14,9 @@
   var drawGrid = function (ctx, ox, oy, w, h, s) { sim.drawGrid(ctx, ox, oy, w, h, s); };
   var drawLabelPill = function (ctx, txt, x, y, opts) { sim.drawLabelPill(ctx, txt, x, y, opts); };
   var drawGlowingDot = function (ctx, x, y, c, r) { sim.drawGlowingDot(ctx, x, y, c, r); };
+  var observeSimulationVisibility = function (c, onIn, onOut) {
+    return sim.observeSimulationVisibility ? sim.observeSimulationVisibility(c, onIn, onOut) : null;
+  };
 
   // Natural logarithm helper for nats
   function natLog(val) {
@@ -42,6 +45,7 @@
     var tossHistory = []; // { outcome: 'H'|'T', prob: number, surprise: number }
     var maxHistory = 24;
     var isAutoPlaying = false;
+    var isVisible = true;
     var autoTimer = null;
     var coinSpinAngle = 0;
     var isSpinning = false;
@@ -249,20 +253,41 @@
       });
     }
 
+    function startAutoToss() {
+      if (!autoTimer && isAutoPlaying && isVisible) {
+        autoTimer = setInterval(doToss, 350);
+      }
+    }
+
+    function stopAutoToss() {
+      if (autoTimer) {
+        clearInterval(autoTimer);
+        autoTimer = null;
+      }
+    }
+
     if (btnAuto) {
       btnAuto.addEventListener('click', function () {
         isAutoPlaying = !isAutoPlaying;
         if (isAutoPlaying) {
           btnAuto.classList.add('active');
           btnAuto.innerHTML = '<span>⏸</span><span>Pause</span>';
-          autoTimer = setInterval(doToss, 350);
+          startAutoToss();
         } else {
           btnAuto.classList.remove('active');
           btnAuto.innerHTML = '<span>▶</span><span>Auto Flip</span>';
-          clearInterval(autoTimer);
+          stopAutoToss();
         }
       });
     }
+
+    observeSimulationVisibility(container, function () {
+      isVisible = true;
+      if (isAutoPlaying) startAutoToss();
+    }, function () {
+      isVisible = false;
+      stopAutoToss();
+    });
 
     // Initial setup with pre-populated history of certain heads
     for (var k = 0; k < 6; k++) {
@@ -478,6 +503,8 @@
 
     var pVal = 0.50; // Starts at peak chaos p = 0.50
     var isPlaying = false;
+    var isVisible = true;
+    var animFrameId = null;
     var animDir = 1;
     var animSpeed = 0.004;
 
@@ -656,35 +683,70 @@
       });
     });
 
+    function stopLoop() {
+      isPlaying = false;
+      if (animFrameId) {
+        cancelAnimationFrame(animFrameId);
+        animFrameId = null;
+      }
+      if (btnPlay) {
+        btnPlay.innerHTML = '<span>▶</span><span>Auto Sweep</span>';
+        btnPlay.classList.remove('active');
+      }
+    }
+
+    function runLoop() {
+      if (!animFrameId && isPlaying && isVisible) {
+        var lastTime = performance.now();
+        function tick(now) {
+          if (!isPlaying || !isVisible) {
+            animFrameId = null;
+            return;
+          }
+          var dt = (now - lastTime) / 1000;
+          lastTime = now;
+          if (dt > 0.2) dt = 0.2;
+          var nextP = pVal + animDir * animSpeed * (dt * 60);
+          if (nextP >= 1.0) {
+            nextP = 1.0;
+            animDir = -1;
+          } else if (nextP <= 0.0) {
+            nextP = 0.0;
+            animDir = 1;
+          }
+          updateP(nextP);
+          animFrameId = requestAnimationFrame(tick);
+        }
+        animFrameId = requestAnimationFrame(tick);
+      }
+    }
+
+    function startLoop() {
+      isPlaying = true;
+      if (btnPlay) {
+        btnPlay.innerHTML = '<span>⏸</span><span>Pause</span>';
+        btnPlay.classList.add('active');
+      }
+      runLoop();
+    }
+
     if (btnPlay) {
       btnPlay.addEventListener('click', function () {
-        isPlaying = !isPlaying;
-        if (isPlaying) {
-          btnPlay.innerHTML = '<span>⏸</span><span>Pause</span>';
-          btnPlay.classList.add('active');
-          var lastTime = performance.now();
-          function tick(now) {
-            if (!isPlaying) return;
-            var dt = (now - lastTime) / 1000;
-            lastTime = now;
-            var nextP = pVal + animDir * animSpeed * (dt * 60);
-            if (nextP >= 1.0) {
-              nextP = 1.0;
-              animDir = -1;
-            } else if (nextP <= 0.0) {
-              nextP = 0.0;
-              animDir = 1;
-            }
-            updateP(nextP);
-            requestAnimationFrame(tick);
-          }
-          requestAnimationFrame(tick);
-        } else {
-          btnPlay.innerHTML = '<span>▶</span><span>Auto Sweep</span>';
-          btnPlay.classList.remove('active');
-        }
+        if (isPlaying) stopLoop();
+        else startLoop();
       });
     }
+
+    observeSimulationVisibility(container, function () {
+      isVisible = true;
+      if (isPlaying) runLoop();
+    }, function () {
+      isVisible = false;
+      if (animFrameId) {
+        cancelAnimationFrame(animFrameId);
+        animFrameId = null;
+      }
+    });
 
     updateP(0.50);
     registerDraw(draw);

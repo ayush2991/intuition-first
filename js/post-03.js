@@ -14,6 +14,9 @@
   var drawLabelPill = function (ctx, txt, x, y, opts) { sim.drawLabelPill(ctx, txt, x, y, opts); };
   var drawGlowingDot = function (ctx, x, y, c, r) { sim.drawGlowingDot(ctx, x, y, c, r); };
   var drawConstraintArc = function (ctx, ox, oy, r, c) { sim.drawConstraintArc(ctx, ox, oy, r, c); };
+  var observeSimulationVisibility = function (c, onIn, onOut) {
+    return sim.observeSimulationVisibility ? sim.observeSimulationVisibility(c, onIn, onOut) : null;
+  };
 
   // Helper: 2D Stick Figure
   function drawStickFigure2D(ctx, x, y, color, scale) {
@@ -255,6 +258,8 @@
     var valTime = container.querySelector('.val-time');
 
     var isPlaying = false;
+    var isVisible = true;
+    var animFrameId = null;
     var timeVal = 3.0;
 
     var cam = setup3DCameraController(container, canvas, -35 * Math.PI / 180, 25 * Math.PI / 180, function () {
@@ -446,25 +451,62 @@
       });
     }
 
+    function stopLoop() {
+      isPlaying = false;
+      if (animFrameId) {
+        cancelAnimationFrame(animFrameId);
+        animFrameId = null;
+      }
+      if (btnPlay) {
+        btnPlay.innerHTML = '<span>▶</span><span>Auto Play</span>';
+      }
+    }
+
+    function runLoop() {
+      if (!animFrameId && isPlaying && isVisible) {
+        var lastTime = performance.now();
+        function loop(now) {
+          if (!isPlaying || !isVisible) {
+            animFrameId = null;
+            return;
+          }
+          var dt = (now - lastTime) / 1000;
+          lastTime = now;
+          if (dt > 0.2) dt = 0.2;
+          timeVal = (timeVal + dt * 1.5) % 6.0;
+          if (sliderTime) sliderTime.value = (timeVal / 6.0) * 600;
+          update();
+          animFrameId = requestAnimationFrame(loop);
+        }
+        animFrameId = requestAnimationFrame(loop);
+      }
+    }
+
+    function startLoop() {
+      isPlaying = true;
+      if (btnPlay) {
+        btnPlay.innerHTML = '<span>⏸</span><span>Pause</span>';
+      }
+      runLoop();
+    }
+
     if (btnPlay) {
       btnPlay.addEventListener('click', function () {
-        isPlaying = !isPlaying;
-        btnPlay.innerHTML = isPlaying ? '<span>⏸</span><span>Pause</span>' : '<span>▶</span><span>Auto Play</span>';
-        if (isPlaying) {
-          var lastTime = performance.now();
-          function loop(now) {
-            if (!isPlaying) return;
-            var dt = (now - lastTime) / 1000;
-            lastTime = now;
-            timeVal = (timeVal + dt * 1.5) % 6.0;
-            if (sliderTime) sliderTime.value = (timeVal / 6.0) * 600;
-            update();
-            requestAnimationFrame(loop);
-          }
-          requestAnimationFrame(loop);
-        }
+        if (isPlaying) stopLoop();
+        else startLoop();
       });
     }
+
+    observeSimulationVisibility(container, function () {
+      isVisible = true;
+      if (isPlaying) runLoop();
+    }, function () {
+      isVisible = false;
+      if (animFrameId) {
+        cancelAnimationFrame(animFrameId);
+        animFrameId = null;
+      }
+    });
 
     registerDraw(draw);
     window.addEventListener('resize', draw);
@@ -489,6 +531,8 @@
     var chipButtons = container.querySelectorAll('.chip-speed');
 
     var isPlaying = false;
+    var isVisible = true;
+    var animFrameId = null;
     var angleDeg = 60;
     var timeVal = 3.5;
 
@@ -700,25 +744,62 @@
       })(chipButtons[i]);
     }
 
+    function stopLoop() {
+      isPlaying = false;
+      if (animFrameId) {
+        cancelAnimationFrame(animFrameId);
+        animFrameId = null;
+      }
+      if (btnPlay) {
+        btnPlay.innerHTML = '<span>▶</span><span>Auto Play</span>';
+      }
+    }
+
+    function runLoop() {
+      if (!animFrameId && isPlaying && isVisible) {
+        var lastTime = performance.now();
+        function loop(now) {
+          if (!isPlaying || !isVisible) {
+            animFrameId = null;
+            return;
+          }
+          var dt = (now - lastTime) / 1000;
+          lastTime = now;
+          if (dt > 0.2) dt = 0.2;
+          timeVal = (timeVal + dt * 1.5) % 6.0;
+          if (sliderTime) sliderTime.value = (timeVal / 6.0) * 600;
+          update();
+          animFrameId = requestAnimationFrame(loop);
+        }
+        animFrameId = requestAnimationFrame(loop);
+      }
+    }
+
+    function startLoop() {
+      isPlaying = true;
+      if (btnPlay) {
+        btnPlay.innerHTML = '<span>⏸</span><span>Pause</span>';
+      }
+      runLoop();
+    }
+
     if (btnPlay) {
       btnPlay.addEventListener('click', function () {
-        isPlaying = !isPlaying;
-        btnPlay.innerHTML = isPlaying ? '<span>⏸</span><span>Pause</span>' : '<span>▶</span><span>Auto Play</span>';
-        if (isPlaying) {
-          var lastTime = performance.now();
-          function loop(now) {
-            if (!isPlaying) return;
-            var dt = (now - lastTime) / 1000;
-            lastTime = now;
-            timeVal = (timeVal + dt * 1.5) % 6.0;
-            if (sliderTime) sliderTime.value = (timeVal / 6.0) * 600;
-            update();
-            requestAnimationFrame(loop);
-          }
-          requestAnimationFrame(loop);
-        }
+        if (isPlaying) stopLoop();
+        else startLoop();
       });
     }
+
+    observeSimulationVisibility(container, function () {
+      isVisible = true;
+      if (isPlaying) runLoop();
+    }, function () {
+      isVisible = false;
+      if (animFrameId) {
+        cancelAnimationFrame(animFrameId);
+        animFrameId = null;
+      }
+    });
 
     registerDraw(draw);
     window.addEventListener('resize', draw);
@@ -740,6 +821,8 @@
 
     var timeVal = 0.0;
     var isPlaying = false;
+    var isVisible = true;
+    var animFrameId = null;
     var hitTime = 1.00;
 
     function update() {
@@ -897,25 +980,62 @@
       });
     }
 
+    function stopLoop() {
+      isPlaying = false;
+      if (animFrameId) {
+        cancelAnimationFrame(animFrameId);
+        animFrameId = null;
+      }
+      if (btnPlay) {
+        btnPlay.innerHTML = '<span>▶</span><span>Auto Play</span>';
+      }
+    }
+
+    function runLoop() {
+      if (!animFrameId && isPlaying && isVisible) {
+        var last = performance.now();
+        function loop(now) {
+          if (!isPlaying || !isVisible) {
+            animFrameId = null;
+            return;
+          }
+          var dt = (now - last) / 1000;
+          last = now;
+          if (dt > 0.2) dt = 0.2;
+          timeVal = (timeVal + dt * 0.75) % 1.50;
+          if (sliderTime) sliderTime.value = (timeVal / 1.50) * 1000;
+          update();
+          animFrameId = requestAnimationFrame(loop);
+        }
+        animFrameId = requestAnimationFrame(loop);
+      }
+    }
+
+    function startLoop() {
+      isPlaying = true;
+      if (btnPlay) {
+        btnPlay.innerHTML = '<span>⏸</span><span>Pause</span>';
+      }
+      runLoop();
+    }
+
     if (btnPlay) {
       btnPlay.addEventListener('click', function () {
-        isPlaying = !isPlaying;
-        btnPlay.innerHTML = isPlaying ? '<span>⏸</span><span>Pause</span>' : '<span>▶</span><span>Auto Play</span>';
-        if (isPlaying) {
-          var last = performance.now();
-          function loop(now) {
-            if (!isPlaying) return;
-            var dt = (now - last) / 1000;
-            last = now;
-            timeVal = (timeVal + dt * 0.75) % 1.50;
-            if (sliderTime) sliderTime.value = (timeVal / 1.50) * 1000;
-            update();
-            requestAnimationFrame(loop);
-          }
-          requestAnimationFrame(loop);
-        }
+        if (isPlaying) stopLoop();
+        else startLoop();
       });
     }
+
+    observeSimulationVisibility(container, function () {
+      isVisible = true;
+      if (isPlaying) runLoop();
+    }, function () {
+      isVisible = false;
+      if (animFrameId) {
+        cancelAnimationFrame(animFrameId);
+        animFrameId = null;
+      }
+    });
 
     registerDraw(draw);
     window.addEventListener('resize', draw);
@@ -940,6 +1060,8 @@
     var vFraction = 0.866; // default 60 deg, matching Part 1
     var timeVal = 0.0;
     var isPlaying = false;
+    var isVisible = true;
+    var animFrameId = null;
     var maxTime = 3.5;
 
     function getHitTimes() {
@@ -1128,25 +1250,62 @@
       })(chipSpeeds[s]);
     }
 
+    function stopLoop() {
+      isPlaying = false;
+      if (animFrameId) {
+        cancelAnimationFrame(animFrameId);
+        animFrameId = null;
+      }
+      if (btnPlay) {
+        btnPlay.innerHTML = '<span>▶</span><span>Auto Play</span>';
+      }
+    }
+
+    function runLoop() {
+      if (!animFrameId && isPlaying && isVisible) {
+        var last = performance.now();
+        function loop(now) {
+          if (!isPlaying || !isVisible) {
+            animFrameId = null;
+            return;
+          }
+          var dt = (now - last) / 1000;
+          last = now;
+          if (dt > 0.2) dt = 0.2;
+          timeVal = (timeVal + dt * 0.8) % maxTime;
+          if (sliderTime) sliderTime.value = (timeVal / maxTime) * 1000;
+          update();
+          animFrameId = requestAnimationFrame(loop);
+        }
+        animFrameId = requestAnimationFrame(loop);
+      }
+    }
+
+    function startLoop() {
+      isPlaying = true;
+      if (btnPlay) {
+        btnPlay.innerHTML = '<span>⏸</span><span>Pause</span>';
+      }
+      runLoop();
+    }
+
     if (btnPlay) {
       btnPlay.addEventListener('click', function () {
-        isPlaying = !isPlaying;
-        btnPlay.innerHTML = isPlaying ? '<span>⏸</span><span>Pause</span>' : '<span>▶</span><span>Auto Play</span>';
-        if (isPlaying) {
-          var last = performance.now();
-          function loop(now) {
-            if (!isPlaying) return;
-            var dt = (now - last) / 1000;
-            last = now;
-            timeVal = (timeVal + dt * 0.8) % maxTime;
-            if (sliderTime) sliderTime.value = (timeVal / maxTime) * 1000;
-            update();
-            requestAnimationFrame(loop);
-          }
-          requestAnimationFrame(loop);
-        }
+        if (isPlaying) stopLoop();
+        else startLoop();
       });
     }
+
+    observeSimulationVisibility(container, function () {
+      isVisible = true;
+      if (isPlaying) runLoop();
+    }, function () {
+      isVisible = false;
+      if (animFrameId) {
+        cancelAnimationFrame(animFrameId);
+        animFrameId = null;
+      }
+    });
 
     registerDraw(draw);
     window.addEventListener('resize', draw);
@@ -1434,6 +1593,8 @@
     var chipButtons = container.querySelectorAll('.chip-preset-contract');
 
     var isPlaying = false;
+    var isVisible = true;
+    var animFrameId = null;
     var angleDeg = 60; // θ in degrees
 
     function update() {
@@ -1809,32 +1970,69 @@
       })(chipButtons[i]);
     }
 
+    function stopLoop() {
+      isPlaying = false;
+      if (animFrameId) {
+        cancelAnimationFrame(animFrameId);
+        animFrameId = null;
+      }
+      if (btnPlay) {
+        btnPlay.innerHTML = '<span>▶</span><span>Auto Play</span>';
+      }
+    }
+
+    function runLoop() {
+      if (!animFrameId && isPlaying && isVisible) {
+        var last = performance.now();
+        var goingUp = true;
+        function loop(now) {
+          if (!isPlaying || !isVisible) {
+            animFrameId = null;
+            return;
+          }
+          var dt = (now - last) / 1000;
+          last = now;
+          if (dt > 0.2) dt = 0.2;
+          if (goingUp) {
+            angleDeg += dt * 25;
+            if (angleDeg >= 80) goingUp = false;
+          } else {
+            angleDeg -= dt * 25;
+            if (angleDeg <= 0) goingUp = true;
+          }
+          if (sliderSpeed) sliderSpeed.value = Math.round(angleDeg);
+          update();
+          animFrameId = requestAnimationFrame(loop);
+        }
+        animFrameId = requestAnimationFrame(loop);
+      }
+    }
+
+    function startLoop() {
+      isPlaying = true;
+      if (btnPlay) {
+        btnPlay.innerHTML = '<span>⏸</span><span>Pause</span>';
+      }
+      runLoop();
+    }
+
     if (btnPlay) {
       btnPlay.addEventListener('click', function () {
-        isPlaying = !isPlaying;
-        btnPlay.innerHTML = isPlaying ? '<span>⏸</span><span>Pause</span>' : '<span>▶</span><span>Auto Play</span>';
-        if (isPlaying) {
-          var last = performance.now();
-          var goingUp = true;
-          function loop(now) {
-            if (!isPlaying) return;
-            var dt = (now - last) / 1000;
-            last = now;
-            if (goingUp) {
-              angleDeg += dt * 25;
-              if (angleDeg >= 80) goingUp = false;
-            } else {
-              angleDeg -= dt * 25;
-              if (angleDeg <= 0) goingUp = true;
-            }
-            if (sliderSpeed) sliderSpeed.value = Math.round(angleDeg);
-            update();
-            requestAnimationFrame(loop);
-          }
-          requestAnimationFrame(loop);
-        }
+        if (isPlaying) stopLoop();
+        else startLoop();
       });
     }
+
+    observeSimulationVisibility(container, function () {
+      isVisible = true;
+      if (isPlaying) runLoop();
+    }, function () {
+      isVisible = false;
+      if (animFrameId) {
+        cancelAnimationFrame(animFrameId);
+        animFrameId = null;
+      }
+    });
 
     registerDraw(draw);
     window.addEventListener('resize', draw);
@@ -1863,6 +2061,8 @@
     var activeFrame = 'alice';
     var angleDeg = 60;
     var isPlaying = false;
+    var isVisible = true;
+    var animFrameId = null;
 
     function update() {
       var rad = angleDeg * Math.PI / 180;
@@ -2279,32 +2479,69 @@
       })(chipFrames[f]);
     }
 
+    function stopLoop() {
+      isPlaying = false;
+      if (animFrameId) {
+        cancelAnimationFrame(animFrameId);
+        animFrameId = null;
+      }
+      if (btnPlay) {
+        btnPlay.innerHTML = '<span>▶</span><span>Auto Play</span>';
+      }
+    }
+
+    function runLoop() {
+      if (!animFrameId && isPlaying && isVisible) {
+        var last = performance.now();
+        var goingUp = true;
+        function loop(now) {
+          if (!isPlaying || !isVisible) {
+            animFrameId = null;
+            return;
+          }
+          var dt = (now - last) / 1000;
+          last = now;
+          if (dt > 0.2) dt = 0.2;
+          if (goingUp) {
+            angleDeg += dt * 25;
+            if (angleDeg >= 80) goingUp = false;
+          } else {
+            angleDeg -= dt * 25;
+            if (angleDeg <= 0) goingUp = true;
+          }
+          if (sliderSpeed) sliderSpeed.value = Math.round(angleDeg);
+          update();
+          animFrameId = requestAnimationFrame(loop);
+        }
+        animFrameId = requestAnimationFrame(loop);
+      }
+    }
+
+    function startLoop() {
+      isPlaying = true;
+      if (btnPlay) {
+        btnPlay.innerHTML = '<span>⏸</span><span>Pause</span>';
+      }
+      runLoop();
+    }
+
     if (btnPlay) {
       btnPlay.addEventListener('click', function () {
-        isPlaying = !isPlaying;
-        btnPlay.innerHTML = isPlaying ? '<span>⏸</span><span>Pause</span>' : '<span>▶</span><span>Auto Play</span>';
-        if (isPlaying) {
-          var last = performance.now();
-          var goingUp = true;
-          function loop(now) {
-            if (!isPlaying) return;
-            var dt = (now - last) / 1000;
-            last = now;
-            if (goingUp) {
-              angleDeg += dt * 25;
-              if (angleDeg >= 80) goingUp = false;
-            } else {
-              angleDeg -= dt * 25;
-              if (angleDeg <= 0) goingUp = true;
-            }
-            if (sliderSpeed) sliderSpeed.value = Math.round(angleDeg);
-            update();
-            requestAnimationFrame(loop);
-          }
-          requestAnimationFrame(loop);
-        }
+        if (isPlaying) stopLoop();
+        else startLoop();
       });
     }
+
+    observeSimulationVisibility(container, function () {
+      isVisible = true;
+      if (isPlaying) runLoop();
+    }, function () {
+      isVisible = false;
+      if (animFrameId) {
+        cancelAnimationFrame(animFrameId);
+        animFrameId = null;
+      }
+    });
 
     registerDraw(draw);
     window.addEventListener('resize', draw);
@@ -2330,6 +2567,8 @@
     var activeView = 'earth';
     var descentProgress = 0.50;
     var isPlaying = false;
+    var isVisible = true;
+    var animFrameId = null;
 
     function update() {
       var fullDistKm = activeView === 'earth' ? 10.0 : 0.447;
@@ -2418,25 +2657,62 @@
       })(chipViews[v]);
     }
 
+    function stopLoop() {
+      isPlaying = false;
+      if (animFrameId) {
+        cancelAnimationFrame(animFrameId);
+        animFrameId = null;
+      }
+      if (btnPlay) {
+        btnPlay.innerHTML = '<span>▶</span><span>Auto Play</span>';
+      }
+    }
+
+    function runLoop() {
+      if (!animFrameId && isPlaying && isVisible) {
+        var last = performance.now();
+        function loop(now) {
+          if (!isPlaying || !isVisible) {
+            animFrameId = null;
+            return;
+          }
+          var dt = (now - last) / 1000;
+          last = now;
+          if (dt > 0.2) dt = 0.2;
+          descentProgress = (descentProgress + dt * 0.35) % 1.0;
+          if (sliderAltitude) sliderAltitude.value = Math.round(descentProgress * 1000);
+          update();
+          animFrameId = requestAnimationFrame(loop);
+        }
+        animFrameId = requestAnimationFrame(loop);
+      }
+    }
+
+    function startLoop() {
+      isPlaying = true;
+      if (btnPlay) {
+        btnPlay.innerHTML = '<span>⏸</span><span>Pause</span>';
+      }
+      runLoop();
+    }
+
     if (btnPlay) {
       btnPlay.addEventListener('click', function () {
-        isPlaying = !isPlaying;
-        btnPlay.innerHTML = isPlaying ? '<span>⏸</span><span>Pause</span>' : '<span>▶</span><span>Auto Play</span>';
-        if (isPlaying) {
-          var last = performance.now();
-          function loop(now) {
-            if (!isPlaying) return;
-            var dt = (now - last) / 1000;
-            last = now;
-            descentProgress = (descentProgress + dt * 0.35) % 1.0;
-            if (sliderAltitude) sliderAltitude.value = Math.round(descentProgress * 1000);
-            update();
-            requestAnimationFrame(loop);
-          }
-          requestAnimationFrame(loop);
-        }
+        if (isPlaying) stopLoop();
+        else startLoop();
       });
     }
+
+    observeSimulationVisibility(container, function () {
+      isVisible = true;
+      if (isPlaying) runLoop();
+    }, function () {
+      isVisible = false;
+      if (animFrameId) {
+        cancelAnimationFrame(animFrameId);
+        animFrameId = null;
+      }
+    });
 
     registerDraw(draw);
     window.addEventListener('resize', draw);

@@ -14,6 +14,9 @@
   var drawLabelPill = function (ctx, txt, x, y, opts) { sim.drawLabelPill(ctx, txt, x, y, opts); };
   var drawGlowingDot = function (ctx, x, y, c, r) { sim.drawGlowingDot(ctx, x, y, c, r); };
   var drawConstraintArc = function (ctx, ox, oy, r, c) { sim.drawConstraintArc(ctx, ox, oy, r, c); };
+  var observeSimulationVisibility = function (c, onIn, onOut) {
+    return sim.observeSimulationVisibility ? sim.observeSimulationVisibility(c, onIn, onOut) : null;
+  };
 
   function initWidgetDualSpeedSpacetime(containerId) {
     var container = document.getElementById(containerId);
@@ -29,6 +32,7 @@
 
     var thetaDeg = parseFloat(sliderTheta ? sliderTheta.value : 0) || 0;
     var isPlaying = false;
+    var isVisible = true;
     var playAnimId = null;
     var playDirection = 1;
 
@@ -402,9 +406,39 @@
 
     function stopPlay() {
       isPlaying = false;
-      if (playAnimId) cancelAnimationFrame(playAnimId);
+      if (playAnimId) {
+        cancelAnimationFrame(playAnimId);
+        playAnimId = null;
+      }
       if (btnPlay) {
         btnPlay.innerHTML = '<span>▶</span><span>Auto Sweep</span>';
+      }
+    }
+
+    function runLoop() {
+      if (!playAnimId && isPlaying && isVisible) {
+        var lastTime = performance.now();
+        function step(now) {
+          if (!isPlaying || !isVisible) {
+            playAnimId = null;
+            return;
+          }
+          var dt = (now - lastTime) / 1000;
+          lastTime = now;
+          if (dt > 0.2) dt = 0.2;
+
+          thetaDeg += playDirection * dt * 18;
+          if (thetaDeg >= 90) {
+            thetaDeg = 90;
+            playDirection = -1;
+          } else if (thetaDeg <= 0) {
+            thetaDeg = 0;
+            playDirection = 1;
+          }
+          renderAll();
+          playAnimId = requestAnimationFrame(step);
+        }
+        playAnimId = requestAnimationFrame(step);
       }
     }
 
@@ -413,25 +447,7 @@
       if (btnPlay) {
         btnPlay.innerHTML = '<span>⏸</span><span>Pause</span>';
       }
-      var lastTime = performance.now();
-
-      function step(now) {
-        if (!isPlaying) return;
-        var dt = (now - lastTime) / 1000;
-        lastTime = now;
-
-        thetaDeg += playDirection * dt * 18;
-        if (thetaDeg >= 90) {
-          thetaDeg = 90;
-          playDirection = -1;
-        } else if (thetaDeg <= 0) {
-          thetaDeg = 0;
-          playDirection = 1;
-        }
-        renderAll();
-        playAnimId = requestAnimationFrame(step);
-      }
-      playAnimId = requestAnimationFrame(step);
+      runLoop();
     }
 
     if (btnPlay) {
@@ -440,6 +456,17 @@
         else startPlay();
       });
     }
+
+    observeSimulationVisibility(container, function () {
+      isVisible = true;
+      if (isPlaying) runLoop();
+    }, function () {
+      isVisible = false;
+      if (playAnimId) {
+        cancelAnimationFrame(playAnimId);
+        playAnimId = null;
+      }
+    });
 
     registerDraw(renderAll);
     window.addEventListener('resize', renderAll);
@@ -1220,6 +1247,7 @@
     ];
 
     var isPlaying = false;
+    var isVisible = true;
     var animFrameId = null;
     var maxLifespan = 80;
     var maxRadarDist = 106; // Zoomed-in coordinate radius: Alkaid (104 ly) sits comfortably at the perimeter
@@ -1617,10 +1645,40 @@
 
     function stopAnimation() {
       isPlaying = false;
-      if (animFrameId) cancelAnimationFrame(animFrameId);
+      if (animFrameId) {
+        cancelAnimationFrame(animFrameId);
+        animFrameId = null;
+      }
       btnsAutoAge.forEach(function (btn) {
         btn.innerHTML = '<span>▶</span><span>Simulate Lifespan</span>';
       });
+    }
+
+    function runAnimation() {
+      if (!animFrameId && isPlaying && isVisible) {
+        var lastTime = performance.now();
+        function step(now) {
+          if (!isPlaying || !isVisible) {
+            animFrameId = null;
+            return;
+          }
+          var dt = (now - lastTime) / 1000;
+          lastTime = now;
+          if (dt > 0.2) dt = 0.2;
+
+          currentAge += dt * 10; // 10 years per second
+          if (currentAge >= maxLifespan) {
+            currentAge = maxLifespan;
+            renderAll();
+            stopAnimation();
+            return;
+          }
+
+          renderAll();
+          animFrameId = requestAnimationFrame(step);
+        }
+        animFrameId = requestAnimationFrame(step);
+      }
     }
 
     function startAnimation() {
@@ -1628,26 +1686,7 @@
       btnsAutoAge.forEach(function (btn) {
         btn.innerHTML = '<span>⏸</span><span>Pause</span>';
       });
-      var lastTime = performance.now();
-
-      function step(now) {
-        if (!isPlaying) return;
-        var dt = (now - lastTime) / 1000;
-        lastTime = now;
-
-        currentAge += dt * 10; // 10 years per second
-        if (currentAge >= maxLifespan) {
-          currentAge = maxLifespan;
-          renderAll();
-          stopAnimation();
-          return;
-        }
-
-        renderAll();
-        animFrameId = requestAnimationFrame(step);
-      }
-
-      animFrameId = requestAnimationFrame(step);
+      runAnimation();
     }
 
     btnsAutoAge.forEach(function (btn) {
@@ -1659,6 +1698,17 @@
           startAnimation();
         }
       });
+    });
+
+    observeSimulationVisibility(container, function () {
+      isVisible = true;
+      if (isPlaying) runAnimation();
+    }, function () {
+      isVisible = false;
+      if (animFrameId) {
+        cancelAnimationFrame(animFrameId);
+        animFrameId = null;
+      }
     });
 
     registerDraw(renderAll);
