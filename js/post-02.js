@@ -151,7 +151,15 @@
       ctx.lineTo(tipX, tipY);
       ctx.stroke();
 
-      drawGlowingDot(ctx, tipX, tipY, colors.photonColor, 6);
+      // Filled triangular arrowhead for Velocity Space vector (Rule 4.8)
+      var arrowAng = Math.atan2(tipY - oy, tipX - ox);
+      ctx.fillStyle = colors.photonColor;
+      ctx.beginPath();
+      ctx.moveTo(tipX + 6 * Math.cos(arrowAng), tipY + 6 * Math.sin(arrowAng));
+      ctx.lineTo(tipX - 7 * Math.cos(arrowAng - 0.48), tipY - 7 * Math.sin(arrowAng - 0.48));
+      ctx.lineTo(tipX - 7 * Math.cos(arrowAng + 0.48), tipY - 7 * Math.sin(arrowAng + 0.48));
+      ctx.closePath();
+      ctx.fill();
 
       ctx.fillStyle = colors.pillBg;
       ctx.strokeStyle = colors.pillBorder;
@@ -769,7 +777,16 @@
       ctx.moveTo(lOx, lOy);
       ctx.lineTo(tipX, tipY);
       ctx.stroke();
-      drawGlowingDot(ctx, tipX, tipY, c.photonColor, 3.5);
+
+      // Filled triangular arrowhead for Velocity Space vector (Rule 4.8)
+      var lArrowAng = Math.atan2(tipY - lOy, tipX - lOx);
+      ctx.fillStyle = c.photonColor;
+      ctx.beginPath();
+      ctx.moveTo(tipX + 4.5 * Math.cos(lArrowAng), tipY + 4.5 * Math.sin(lArrowAng));
+      ctx.lineTo(tipX - 5.5 * Math.cos(lArrowAng - 0.5), tipY - 5.5 * Math.sin(lArrowAng - 0.5));
+      ctx.lineTo(tipX - 5.5 * Math.cos(lArrowAng + 0.5), tipY - 5.5 * Math.sin(lArrowAng + 0.5));
+      ctx.closePath();
+      ctx.fill();
 
       // Mini Header Left
       ctx.font = '700 8px "JetBrains Mono", monospace';
