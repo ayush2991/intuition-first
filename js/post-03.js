@@ -1335,10 +1335,11 @@
 
     function update() {
       var tiltDeg = (Math.atan(vFraction) * 180) / Math.PI;
+      var thetaDeg = (Math.asin(Math.min(1, vFraction)) * 180) / Math.PI;
       var deltaT = vFraction * 2.0;
 
       if (readoutSpeed) readoutSpeed.innerText = 'v = ' + vFraction.toFixed(3) + ' c';
-      if (readoutTilt) readoutTilt.innerText = 'Tilted by θ = ' + tiltDeg.toFixed(1) + '°';
+      if (readoutTilt) readoutTilt.innerText = 'Tilt φ = ' + tiltDeg.toFixed(1) + '° (θ = ' + thetaDeg.toFixed(0) + '°)';
       if (readoutDesync) readoutDesync.innerHTML = 'Δt = ' + deltaT.toFixed(2) + ' <span>s</span>';
       if (readoutDesyncText) {
         if (vFraction === 0) {
@@ -1505,6 +1506,7 @@
 
     registerDraw(draw);
     window.addEventListener('resize', draw);
+    observeSimulationVisibility(container, function () { draw(); }, null);
     update();
   }
 
