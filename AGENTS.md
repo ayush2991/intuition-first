@@ -10,9 +10,9 @@
   - Design system specification: [`DESIGN_SYSTEM.md`](file:///usr/local/google/home/aayushagarwal/projects/intuition-first/DESIGN_SYSTEM.md) (authoritative for tokens, styles, and UI components)
   - Global styles: [`css/style.css`](file:///usr/local/google/home/aayushagarwal/projects/intuition-first/css/style.css)
   - Shared runtime utilities & theme engine: [`js/core.js`](file:///usr/local/google/home/aayushagarwal/projects/intuition-first/js/core.js)
-  - Modular essay simulation engines: `js/post-01.js`, `js/post-02.js`, `js/post-03.js`, `js/post-04.js`, etc.
+  - Modular essay simulation engines: `js/post-01.js`, `js/post-02.js`, `js/post-03.js`, `js/post-04.js`, `js/post-05.js`, `js/post-06.js`, etc.
   - Landing hub: [`index.html`](file:///usr/local/google/home/aayushagarwal/projects/intuition-first/index.html)
-  - Longform essays: `posts/01-motion-and-time.html`, `posts/02-light-cone.html`, `posts/03-spacetime-loaf.html`, `posts/04-understanding-entropy.html`
+  - Longform essays: `posts/01-motion-and-time.html`, `posts/02-light-cone.html`, `posts/03-spacetime-loaf.html`, `posts/04-understanding-entropy.html`, `posts/05-cross-entropy.html`, `posts/06-moving-average.html`
 
 ---
 
@@ -25,6 +25,7 @@ Every article teaches **bottom-up**: mathematical formulas arrive as natural des
 - **Perspective**: Shared first-person plural (*"we"*, *"let us"*, *"our"*) for geometric exploration, paired with direct second-person experiential setups (*"sitting in your chair right now"*).
 - **Pure Constructive Elevation**: Never disparage standard textbooks, curricula, or other educators. The beauty of geometry stands on its own merits.
 - **Cadence Over Fragmentation (The 2–3 Sentence Rule)**: Avoid single-sentence paragraphs. Group connected thoughts into cohesive, rhythmic paragraphs of 2 to 4 sentences.
+- **No Staccato Drama or Fragmented Rhetoric**: Avoid short, dramatic declarations, one-word punchlines, and punchy rhetorical setups (e.g., strictly avoid `"<fact>. Nothing. Why?"`, `"Why? Because..."`, or isolated single-question paragraphs). Prohibit exclamation marks in prose. Develop ideas through calm, continuous, expository sentences.
 - **Concrete Physical Instruments Over Abstract Labels**: Always anchor frames to tangible instruments:
   - *"Alice's ground stopwatch"* instead of *"stationary observer coordinate time"*.
   - *"the traveler's personal wristwatch"* instead of *"proper time $\tau$"*.

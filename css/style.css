@@ -1529,6 +1529,27 @@ body {
   color: var(--color-emerald);
 }
 
+/* Series 3 Palette: Time Series & Stochastic Systems */
+.series-theme-timeseries .series-group-tag {
+  color: var(--color-space);
+}
+.series-theme-timeseries .card-num {
+  color: var(--color-space);
+}
+.series-theme-timeseries .series-card:hover {
+  border-color: rgba(194, 65, 12, 0.4);
+}
+.series-theme-timeseries .series-card::before {
+  background: var(--color-space);
+}
+.series-theme-timeseries .card-tag.accent-timeseries {
+  color: var(--color-space);
+  border-color: rgba(194, 65, 12, 0.2);
+}
+.series-theme-timeseries .card-cta {
+  color: var(--color-space);
+}
+
 .card-status-badge {
   display: inline-flex;
   align-items: center;

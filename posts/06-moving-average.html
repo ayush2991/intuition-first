@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Echoes in Time: The Intuition Behind Moving-Average Models · Intuition First</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <meta name="description"
+    content="Why do some systems remember their past while others forget in an instant? Discover how random shocks, corporate vesting schedules, and finite memory windows carve the shape of moving-average processes.">
+  <script>
+    (function () {
+      var isDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+    })();
+  </script>
+</head>
+
+<body>
+  <div class="reading-progress-bar" id="reading-progress"></div>
+
+  <!-- Top Navigation -->
+  <nav class="site-nav">
+    <div class="site-nav-inner">
+      <a href="../index.html" class="brand-link">
+        <div class="brand-badge">IF</div>
+        <div>
+          <span class="brand-title">INTUITION FIRST</span>
+          <span class="brand-tag">ESSAYS</span>
+        </div>
+      </a>
+      <div class="nav-links">
+        <a href="../index.html">← All Series</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Article Body -->
+  <main class="wide-reading-container">
+
+    <!-- Article Header -->
+    <header class="article-header">
+      <div class="category-tag">Series 02 · Information &amp; Statistics</div>
+      <h1 class="article-title">Echoes in Time: The Intuition Behind Moving-Average Models</h1>
+      <p class="article-subtitle">
+        Why do some systems remember their past while others forget in an instant? Discover how random shocks,
+        corporate vesting schedules, and finite memory windows carve the shape of moving-average processes.
+      </p>
+      <div class="article-meta">
+        <span>By Aayush Agarwal</span>
+        <span>•</span>
+        <span>Interactive Explorable</span>
+        <span>•</span>
+        <span>12 min read</span>
+      </div>
+    </header>
+
+    <!-- Editorial Prose -->
+    <article class="editorial-prose">
+
+      <!-- Prerequisite Callout Card -->
+      <div class="insight-callout">
+        <h4>Prerequisite</h4>
+        <p>
+          Basic arithmetic and a comfort with weighted averages. If you have ever watched water ripples fade away after a
+          pebble hits a pond, you already possess the physical intuition needed to understand moving-average processes.
+        </p>
+      </div>
+
+      <p>
+        In time series analysis, few concepts generate as much confusion as the <strong>moving-average model</strong>—the
+        <span class="math-badge">MA(q)</span> term sitting at the heart of classical forecasting and ARIMA architectures.
+        A student hearing the phrase naturally thinks of a <em>rolling mean</em>: taking yesterday's temperature, today's
+        temperature, and tomorrow's temperature, and calculating their running average to smooth out a jagged line.
+      </p>
+
+      <p>
+        Yet in statistics, a moving-average model does not smooth historical observations at all. Instead, it describes a
+        system pushed around by sudden, random external disturbances—known as <strong>shocks</strong>—whose effects linger
+        for a fixed number of days, months, or years before disappearing forever.
+      </p>
+
+      <p>
+        To understand this mechanism clearly, let us step away from abstract equations and enter an everyday corporate
+        setting: an employee tracking their unvested stock options over time.
+      </p>
+
+      <!-- SECTION 1 -->
+      <h2>1. The Four-Year Vesting Ledger</h2>
+
+      <p>
+        Imagine you join a company today and are awarded 100 shares of stock. Let us label this first year as
+        <span class="math-badge">Y1</span> and denote your initial award as <span class="math-badge">A(1) = 100</span>.
+      </p>
+
+      <p>
+        The company attaches a standard four-year vesting schedule: starting the following year, exactly 25% of the shares
+        awarded vest each year until none remain locked. On the day you receive the grant, all 100 shares are unvested.
+        One year later, 25 shares vest, leaving 75 unvested; two years later, 50 remain; three years later, 25 remain; and
+        by the fifth year, the grant has completely vested.
+      </p>
+
+      <p>
+        Now suppose your employer awards you 100 fresh shares every single year: <span class="math-badge">A(2) = 100</span>,
+        <span class="math-badge">A(3) = 100</span>, and so forth. Each new award follows the exact same four-year vesting
+        schedule. How does your total inventory of unvested shares, <span class="math-badge">U(t)</span>, evolve over time?
+      </p>
+
+      <div style="margin: 1.5rem 0; overflow-x: auto;">
+        <table style="width: 100%; max-width: 680px; margin: 0 auto; border-collapse: collapse; font-size: 0.9rem;">
+          <thead>
+            <tr style="border-bottom: 2px solid var(--border-medium); background: var(--bg-card-subtle);">
+              <th style="padding: 0.65rem 0.8rem; text-align: left;">Award</th>
+              <th style="padding: 0.65rem 0.8rem; text-align: center;">Y1</th>
+              <th style="padding: 0.65rem 0.8rem; text-align: center;">Y2</th>
+              <th style="padding: 0.65rem 0.8rem; text-align: center;">Y3</th>
+              <th style="padding: 0.65rem 0.8rem; text-align: center;">Y4</th>
+              <th style="padding: 0.65rem 0.8rem; text-align: center;">Y5</th>
+              <th style="padding: 0.65rem 0.8rem; text-align: center;">Y6</th>
+              <th style="padding: 0.65rem 0.8rem; text-align: center;">Y7</th>
+              <th style="padding: 0.65rem 0.8rem; text-align: center;">Y8</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom: 1px solid var(--border-subtle);">
+              <td style="padding: 0.5rem 0.8rem; font-weight: 600;">A(1)</td>
+              <td style="padding: 0.5rem 0.8rem; text-align: center;">100</td>
+              <td style="padding: 0.5rem 0.8rem; text-align: center;">75</td>
+              <td style="padding: 0.5rem 0.8rem; text-align: center;">50</td>
+              <td style="padding: 0.5rem 0.8rem; text-align: center;">25</td>
+              <td style="padding: 0.5rem 0.8rem; text-align: center; color: var(--text-faint);">0</td>
+              <td style="padding: 0.5rem 0.8rem; text-align: center;">—</td>
+              <td style="padding: 0.5rem 0.8rem; text-align: center;">—</td>
+              <td style="padding: 0.5rem 0.8rem; text-align: center;">—</td>
+            </tr>
+            <tr style="border-bottom: 1px solid var(--border-subtle);">
+              <td style="padding: 0.5rem 0.8rem; font-weight: 600;">A(2)</td>
+              <td style="padding: 0.5rem 0.8rem; text-align: center;">—</td>
+              <td style="padding: 0.5rem 0.8rem; text-align: center;">100</td>
+              <td style="padding: 0.5rem 0.8rem; text-align: center;">75</td>
+              <td style="padding: 0.5rem 0.8rem; text-align: center;">50</td>
+              <td style="padding: 0.5rem 0.8rem; text-align: center;">25</td>
+              <td style="padding: 0.5rem 0.8rem; text-align: center; color: var(--text-faint);">0</td>
+              <td style="padding: 0.5rem 0.8rem; text-align: center;">—</td>
+              <td style="padding: 0.5rem 0.8rem; text-align: center;">—</td>
+            </tr>
+            <tr style="border-bottom: 1px solid var(--border-subtle);">
+              <td style="padding: 0.5rem 0.8rem; font-weight: 600;">A(3)</td>
+              <td style="padding: 0.5rem 0.8rem; text-align: center;">—</td>
+              <td style="padding: 0.5rem 0.8rem; text-align: center;">—</td>
+              <td style="padding: 0.5rem 0.8rem; text-align: center;">100</td>
+              <td style="padding: 0.5rem 0.8rem; text-align: center;">75</td>
+              <td style="padding: 0.5rem 0.8rem; text-align: center;">50</td>
+              <td style="padding: 0.5rem 0.8rem; text-align: center;">25</td>
+              <td style="padding: 0.5rem 0.8rem; text-align: center; color: var(--text-faint);">0</td>
+              <td style="padding: 0.5rem 0.8rem; text-align: center;">—</td>
+            </tr>
+            <tr style="border-bottom: 1px solid var(--border-subtle);">
+              <td style="padding: 0.5rem 0.8rem; font-weight: 600;">A(4)</td>
+              <td style="padding: 0.5rem 0.8rem; text-align: center;">—</td>
+              <td style="padding: 0.5rem 0.8rem; text-align: center;">—</td>
+              <td style="padding: 0.5rem 0.8rem; text-align: center;">—</td>
+              <td style="padding: 0.5rem 0.8rem; text-align: center;">100</td>
+              <td style="padding: 0.5rem 0.8rem; text-align: center;">75</td>
+              <td style="padding: 0.5rem 0.8rem; text-align: center;">50</td>
+              <td style="padding: 0.5rem 0.8rem; text-align: center;">25</td>
+              <td style="padding: 0.5rem 0.8rem; text-align: center; color: var(--text-faint);">0</td>
+            </tr>
+            <tr style="border-bottom: 1px solid var(--border-subtle);">
+              <td style="padding: 0.5rem 0.8rem; font-weight: 600;">A(5)</td>
+              <td style="padding: 0.5rem 0.8rem; text-align: center;">—</td>
+              <td style="padding: 0.5rem 0.8rem; text-align: center;">—</td>
+              <td style="padding: 0.5rem 0.8rem; text-align: center;">—</td>
+              <td style="padding: 0.5rem 0.8rem; text-align: center;">—</td>
+              <td style="padding: 0.5rem 0.8rem; text-align: center;">100</td>
+              <td style="padding: 0.5rem 0.8rem; text-align: center;">75</td>
+              <td style="padding: 0.5rem 0.8rem; text-align: center;">50</td>
+              <td style="padding: 0.5rem 0.8rem; text-align: center;">25</td>
+            </tr>
+            <tr style="border-bottom: 1px solid var(--border-subtle);">
+              <td style="padding: 0.5rem 0.8rem; font-weight: 600;">A(6)</td>
+              <td style="padding: 0.5rem 0.8rem; text-align: center;">—</td>
+              <td style="padding: 0.5rem 0.8rem; text-align: center;">—</td>
+              <td style="padding: 0.5rem 0.8rem; text-align: center;">—</td>
+              <td style="padding: 0.5rem 0.8rem; text-align: center;">—</td>
+              <td style="padding: 0.5rem 0.8rem; text-align: center;">—</td>
+              <td style="padding: 0.5rem 0.8rem; text-align: center;">100</td>
+              <td style="padding: 0.5rem 0.8rem; text-align: center;">75</td>
+              <td style="padding: 0.5rem 0.8rem; text-align: center;">50</td>
+            </tr>
+            <tr style="border-bottom: 2px solid var(--border-medium); background: var(--bg-card-subtle);">
+              <td style="padding: 0.65rem 0.8rem; font-weight: 700; color: var(--color-time);">Total U(t)</td>
+              <td style="padding: 0.65rem 0.8rem; text-align: center; font-weight: 700;">100</td>
+              <td style="padding: 0.65rem 0.8rem; text-align: center; font-weight: 700;">175</td>
+              <td style="padding: 0.65rem 0.8rem; text-align: center; font-weight: 700;">225</td>
+              <td style="padding: 0.65rem 0.8rem; text-align: center; font-weight: 700; color: var(--color-emerald);">250</td>
+              <td style="padding: 0.65rem 0.8rem; text-align: center; font-weight: 700; color: var(--color-emerald);">250</td>
+              <td style="padding: 0.65rem 0.8rem; text-align: center; font-weight: 700; color: var(--color-emerald);">250</td>
+              <td style="padding: 0.65rem 0.8rem; text-align: center; font-weight: 700; color: var(--color-emerald);">250</td>
+              <td style="padding: 0.65rem 0.8rem; text-align: center; font-weight: 700; color: var(--color-emerald);">250</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>
+        During the first four years, the total number of unvested shares climbs steadily from 100 in Y1, to 175 in Y2,
+        to 225 in Y3, and reaches 250 in Y4, reflecting the accumulation of successive awards during the transient ramp-up phase.
+      </p>
+
+      <p>
+        From Year 5 onward, the inventory stabilizes permanently at 250 shares because the arrival of 100 newly awarded
+        shares is exactly balanced by the vesting of 25 shares from each of the four preceding grants (<span
+        class="math-badge">25 + 25 + 25 + 25 = 100</span>). This steady balance between incoming grants and mature expirations
+        maintains equilibrium indefinitely.
+      </p>
+
+      <p>
+        Test this accumulation dynamically in the interactive simulation below. Scrub through the years or adjust the
+        baseline award to see how equilibrium locks into place:
+      </p>
+
+      <!-- INTERACTIVE WIDGET 1: VESTING RAMP -->
+      <div id="widget-vesting-ramp" class="interactive-artifact artifact-wide">
+        <div class="artifact-header">
+          <div>
+            <div class="artifact-badge">SIMULATION 01 · VESTING WATERFALL &amp; RAMP-UP</div>
+            <div class="artifact-title">The Accumulation of Unvested Equity</div>
+            <div class="artifact-desc">Step through years 1 to 10 to observe how stacked grant cohorts ramp up into a
+              permanent steady-state equilibrium.</div>
+          </div>
+        </div>
+        <div class="artifact-split">
+          <div class="split-canvas-col">
+            <canvas style="height: 380px;"></canvas>
+          </div>
+          <div class="split-controls-col">
+            <div>
+              <div class="clock-card" style="margin-bottom: 0.85rem; border-left: 3px solid var(--color-time);">
+                <div class="clock-meta">
+                  <span class="clock-label">Active Ledger Status</span>
+                  <span class="clock-badge readout-ramp-badge">Ramping Up</span>
+                </div>
+                <div class="clock-time readout-total-unvested" style="font-size: 1.45rem; color: var(--color-time);">
+                  250 shares
+                </div>
+                <p class="clock-subtext">Current Year: <strong class="readout-current-year" style="color:var(--text-primary);">Y4</strong> · Equilibrium Target: <strong class="readout-equilibrium-target" style="color:var(--color-emerald);">250 shares</strong></p>
+              </div>
+
+              <div class="control-item" style="margin-bottom: 0.75rem;">
+                <div class="control-header">
+                  <span>Time Step (Years):</span>
+                  <span class="control-val val-year" style="color: var(--color-time);">Year 4</span>
+                </div>
+                <input type="range" class="range-slider slider-year" min="1" max="10" step="1" value="4" />
+              </div>
+
+              <div class="control-item" style="margin-bottom: 0.75rem;">
+                <div class="control-header">
+                  <span>Annual Grant Size C:</span>
+                  <span class="control-val val-grant" style="color: var(--color-space);">100 shares</span>
+                </div>
+                <input type="range" class="range-slider slider-grant" min="50" max="200" step="10" value="100" />
+              </div>
+
+              <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
+                <button type="button" class="btn-primary btn-play" style="flex: 1;">
+                  <span>▶</span><span>Auto Play</span>
+                </button>
+                <button type="button" class="btn-secondary btn-reset">Reset</button>
+              </div>
+
+              <div style="background: var(--bg-card-subtle); border: 1px solid var(--border-subtle); border-radius: 6px; padding: 0.75rem;">
+                <div style="font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin-bottom: 0.4rem;">
+                  Contributing Grant Cohorts
+                </div>
+                <div class="readout-cohorts-list"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <p>
+        On any given year <span class="math-badge">t ≥ 4</span>, your total unvested inventory is governed by the current
+        award plus the remaining portions of the three most recent awards:
+      </p>
+
+      <!-- FORMULA CARD 1: EQUILIBRIUM LEDGER -->
+      <div class="formula-card">
+        <div class="formula-card-header">
+          <span class="formula-tag">The Unvested Equity Formula</span>
+        </div>
+        <div class="formula-body">
+          <em>U</em>(<em>t</em>) = <em>A</em>(<em>t</em>) + 0.75 · <em>A</em>(<em>t</em> − 1) + 0.50 · <em>A</em>(<em>t</em> − 2) + 0.25 · <em>A</em>(<em>t</em> − 3)
+        </div>
+        <div class="formula-note">
+          When annual awards are constant at <em>C</em>: <em>U</em>(<em>t</em>) = <em>C</em> + 0.75<em>C</em> + 0.50<em>C</em> + 0.25<em>C</em> = 2.5 · <em>C</em>.
+        </div>
+      </div>
+
+      <p>
+        Notice the key structural feature: grants from year <span class="math-badge">t − 4</span> or earlier have zero
+        weight. They are entirely vested and have disappeared from the system. The inventory maintains a
+        <strong>memory window of exactly three past years</strong>.
+      </p>
+
+      <!-- SECTION 2 -->
+      <h2>2. The Ripple of an Isolated Shock</h2>
+
+      <p>
+        Now let us introduce a disturbance—what economists and statisticians call a <strong>shock</strong>.
+      </p>
+
+      <p>
+        Consider what occurs if an unexpected budget freeze in Year 9 reduces the grant to only 20 shares (<span
+        class="math-badge">A(9) = 20</span>), while awards in all preceding and subsequent years remain at the standard 100 shares.
+        Because the 100 shares maturing from earlier awards are replenished by only 20 incoming shares, an immediate deficit
+        of 80 shares opens in the ledger, lowering total unvested holdings from the baseline equilibrium of 250 down to <span
+        class="math-badge">250 − 80 = 170</span> shares.
+      </p>
+
+      <p>
+        Although normal grants resume in Year 10, the consequence of that single reduced grant continues to ripple through
+        subsequent ledgers according to its vesting schedule. In Year 10, the remaining unvested portion of the Year 9 grant
+        is carried forward at 75% (<span class="math-badge">0.75 × 20 = 15</span> shares instead of the usual 75), leaving an
+        effective deficit of 60 shares and a portfolio total of <span class="math-badge">250 − 60 = 190</span>. This lingering
+        deficit contracts to 40 shares in Year 11 (<span class="math-badge">U(11) = 210</span>) and 20 shares in Year 12 (<span
+        class="math-badge">U(12) = 230</span>).
+      </p>
+
+      <p>
+        By Year 13, all shares awarded during the Year 9 grant have fully matured and cleared the ledger. Because that cohort
+        no longer contributes to the unvested balance, the deficit vanishes entirely and the portfolio restores itself to the
+        original equilibrium of 250 shares.
+      </p>
+
+      <!-- INTERACTIVE WIDGET 2: IMPULSE RESPONSE -->
+      <div id="widget-impulse-response" class="interactive-artifact artifact-wide">
+        <div class="artifact-header">
+          <div>
+            <div class="artifact-badge">SIMULATION 02 · IMPULSE RESPONSE &amp; FINITE MEMORY</div>
+            <div class="artifact-title">The Ripple of an Isolated Shock</div>
+            <div class="artifact-desc">Inject a deficit or windfall in Year 9. Observe how the impulse reverberates for
+              exactly four years before dissipating completely.</div>
+          </div>
+        </div>
+        <div class="comparison-grid">
+          <div class="canvas-col">
+            <div class="canvas-col-header">
+              <span>ANNUAL STOCK AWARDS A(t)</span>
+              <span class="canvas-col-tag">Input Stream</span>
+            </div>
+            <canvas class="canvas-awards" style="height: 300px;"></canvas>
+          </div>
+          <div class="canvas-col">
+            <div class="canvas-col-header">
+              <span>UNVESTED INVENTORY U(t)</span>
+              <span class="canvas-col-tag">Output Process</span>
+            </div>
+            <canvas class="canvas-portfolio" style="height: 300px;"></canvas>
+          </div>
+        </div>
+        <div class="artifact-controls-deck">
+          <div class="controls-strip">
+            <div class="twin-clocks-panel" style="flex-shrink: 0; border-top: none; padding: 0; background: transparent;">
+              <div class="clock-card" style="padding: 0.5rem 0.75rem;">
+                <div class="clock-meta"><span class="clock-label">Shock Magnitude</span></div>
+                <div class="clock-time readout-shock-delta" style="font-size: 1.2rem; color: var(--color-danger);">-80 shares</div>
+              </div>
+              <div class="clock-card" style="padding: 0.5rem 0.75rem;">
+                <div class="clock-meta"><span class="clock-label">Active Memory Window</span></div>
+                <div class="clock-time readout-active-window" style="font-size: 0.82rem; font-family: var(--font-mono); color: var(--color-space);">Y9 – Y12</div>
+              </div>
+            </div>
+            <div class="control-item" style="flex: 1;">
+              <div class="control-header">
+                <span>Year 9 Stock Award A(9):</span>
+                <span class="control-val val-shock" style="color: var(--color-danger);">20 shares (-80)</span>
+              </div>
+              <input type="range" class="range-slider slider-shock" min="0" max="200" step="10" value="20" />
+            </div>
+          </div>
+          <div class="controls-preset-row">
+            <div class="preset-chips">
+              <span class="preset-label">Presets:</span>
+              <button type="button" class="chip chip-shock active" data-val="20">Deficit Shock (20)</button>
+              <button type="button" class="chip chip-shock" data-val="0">Zero Award (0)</button>
+              <button type="button" class="chip chip-shock" data-val="180">Windfall Bonus (180)</button>
+              <button type="button" class="chip chip-shock" data-val="100">Baseline (100)</button>
+            </div>
+            <div class="preset-invariant-tag">Memory Cutoff: q = 3 lags</div>
+          </div>
+        </div>
+      </div>
+
+      <p>
+        This illustrates the fundamental property of a moving-average system: <strong>finite memory</strong>.
+        Unlike an autoregressive process—where an event echoes infinitely through recursive feedback like sound in a
+        hall of mirrors—a moving-average process completely flushes out the shock once the memory window has passed.
+      </p>
+
+      <!-- SECTION 3 -->
+      <h2>3. Swimming in a Stream of Shocks</h2>
+
+      <p>
+        In the real world, grants are rarely identical constants interrupted by a single dramatic accident.
+        Economic environments are constantly fluctuating. Every quarter or year brings random market windfalls,
+        unexpected budget cuts, or performance variations.
+      </p>
+
+      <p>
+        Suppose that each year's award is composed of a baseline amount <span class="math-badge">C = 100</span> plus a
+        random shock <span class="math-badge">ε(t)</span> sampled from a Gaussian (Normal) distribution with mean zero
+        and standard deviation <span class="math-badge">σ = 20</span>:
+      </p>
+
+      <div class="formula-card">
+        <div class="formula-card-header">
+          <span class="formula-tag">Stochastic Award Process</span>
+        </div>
+        <div class="formula-body">
+          <em>A</em>(<em>t</em>) = <em>C</em> + <em>ε</em>(<em>t</em>), &nbsp;&nbsp;&nbsp; where &nbsp; <em>ε</em>(<em>t</em>) ∼ 𝒩(0, <em>σ</em>)
+        </div>
+        <div class="formula-note">
+          Each shock <em>ε</em>(<em>t</em>) is sampled independently with zero expectation: E[<em>ε</em>(<em>t</em>)] = 0.
+        </div>
+      </div>
+
+      <p>
+        Substituting this stochastic award stream into our unvested shares formula for any year <span class="math-badge">t ≥ 4</span>:
+      </p>
+
+      <div class="formula-card">
+        <div class="formula-card-header">
+          <span class="formula-tag">Decomposition into Mean and Shocks</span>
+        </div>
+        <div class="formula-body">
+          <em>U</em>(<em>t</em>) = 2.5 · <em>C</em> + <em>ε</em>(<em>t</em>) + 0.75 · <em>ε</em>(<em>t</em> − 1) + 0.50 · <em>ε</em>(<em>t</em> − 2) + 0.25 · <em>ε</em>(<em>t</em> − 3)
+        </div>
+        <div class="formula-note">
+          Setting <em>μ</em> = 2.5 · <em>C</em> = 250, the portfolio fluctuates around <em>μ</em> by a weighted average of recent shocks.
+        </div>
+      </div>
+
+      <p>
+        Let us observe four vital facts about this equation:
+      </p>
+
+      <ul>
+        <li>
+          <strong>Centered at a constant mean:</strong> The expected value is <span class="math-badge">E[U(t)] = μ = 250</span>.
+          Because each shock has an expected value of zero, the inventory constantly gravitates around this anchor.
+        </li>
+        <li>
+          <strong>Perturbed by the newest shock:</strong> At every time step <span class="math-badge">t</span>, the system
+          receives a fresh impulse <span class="math-badge">ε(t)</span> with full weight 1.0.
+        </li>
+        <li>
+          <strong>Shaped by recent memory:</strong> The current state depends directly on shocks from the recent past:
+          <span class="math-badge">ε(t − 1)</span>, <span class="math-badge">ε(t − 2)</span>, and <span class="math-badge">ε(t − 3)</span>.
+        </li>
+        <li>
+          <strong>Total amnesia beyond the window:</strong> Shocks from <span class="math-badge">t − 4</span> or earlier
+          have zero coefficient. They exert zero influence on current reality.
+        </li>
+      </ul>
+
+      <p>
+        Explore a live realization of this stream below. Notice how unvested shares <span class="math-badge">U(t)</span>
+        look considerably smoother than the noisy awards <span class="math-badge">A(t)</span> because the four-year ledger
+        acts as a weighted damper:
+      </p>
+
+      <!-- INTERACTIVE WIDGET 3: STOCHASTIC STREAM -->
+      <div id="widget-stochastic-stream" class="interactive-artifact artifact-wide">
+        <div class="artifact-header">
+          <div>
+            <div class="artifact-badge">SIMULATION 03 · STOCHASTIC STREAM SIMULATOR</div>
+            <div class="artifact-title">Gaussian White Noise Shocks Over Time</div>
+            <div class="artifact-desc">Sample random shocks ε(t) ~ 𝒩(0, σ). Compare the raw award perturbations against
+              the smooth moving-average unvested portfolio.</div>
+          </div>
+        </div>
+        <div class="artifact-split">
+          <div class="split-canvas-col">
+            <canvas style="height: 420px;"></canvas>
+          </div>
+          <div class="split-controls-col">
+            <div>
+              <div class="clock-card" style="margin-bottom: 0.85rem; border-left: 3px solid var(--color-emerald);">
+                <div class="clock-meta">
+                  <span class="clock-label">Portfolio Statistics</span>
+                  <span class="clock-badge">Steady-State</span>
+                </div>
+                <div class="clock-time readout-sample-mean" style="font-size: 1.35rem; color: var(--color-emerald);">249.4 sh</div>
+                <p class="clock-subtext">Sample Std: <strong class="readout-sample-std" style="color:var(--text-primary);">27.4 sh</strong> · Theory Std: <strong class="readout-theoretical-std" style="color:var(--color-time);">27.4 sh</strong></p>
+              </div>
+
+              <div class="control-item" style="margin-bottom: 0.75rem;">
+                <div class="control-header">
+                  <span>Baseline Award C:</span>
+                  <span class="control-val val-baseline-c" style="color: var(--color-danger);">100</span>
+                </div>
+                <input type="range" class="range-slider slider-baseline-c" min="60" max="140" step="5" value="100" />
+              </div>
+
+              <div class="control-item" style="margin-bottom: 0.75rem;">
+                <div class="control-header">
+                  <span>Shock Volatility σ:</span>
+                  <span class="control-val val-sigma" style="color: var(--color-space);">20</span>
+                </div>
+                <input type="range" class="range-slider slider-sigma" min="5" max="35" step="1" value="20" />
+              </div>
+
+              <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 1rem;">
+                <button type="button" class="btn-primary btn-reseed">🎲 Re-roll Shocks</button>
+                <button type="button" class="btn-secondary btn-toggle-transient">Hide Initial Ramp-Up (t &lt; 4)</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <p>
+        In statistical analysis, we are almost always interested in the behavior of systems after the initial ramp-up
+        period has passed. Factories have been running for years, currencies have traded for decades, and stock portfolios
+        have matured. When we drop the transient setup points (<span class="math-badge">t &lt; 4</span>), the remaining
+        series is in a state of <strong>stationarity</strong>.
+      </p>
+
+      <!-- SECTION 4 -->
+      <h2>4. The Invariant Geometry of MA(q)</h2>
+
+      <p>
+        What we have just built from scratch is an <strong>order-3 moving-average model</strong>, universally denoted
+        as <span class="math-badge">MA(3)</span>.
+      </p>
+
+      <p>
+        In general, a moving-average model of order <span class="math-badge">q</span> expresses a time series as a constant
+        mean <span class="math-badge">μ</span>, plus the current shock, plus a linear combination of the previous
+        <span class="math-badge">q</span> shocks:
+      </p>
+
+      <!-- FORMULA CARD 2: GENERAL MA(Q) -->
+      <div class="formula-card">
+        <div class="formula-card-header">
+          <span class="formula-tag">The Mathematical Definition of MA(q)</span>
+        </div>
+        <div class="formula-body">
+          <em>X</em><sub><em>t</em></sub> = <em>μ</em> + <em>ε</em><sub><em>t</em></sub> + <em>θ</em><sub>1</sub><em>ε</em><sub><em>t</em>−1</sub> + <em>θ</em><sub>2</sub><em>ε</em><sub><em>t</em>−2</sub> + ⋯ + <em>θ</em><sub><em>q</em></sub><em>ε</em><sub><em>t</em>−<em>q</em></sub> = <em>μ</em> + <em>ε</em><sub><em>t</em></sub> + ∑<sub><em>i</em>=1</sub><sup><em>q</em></sup> <em>θ</em><sub><em>i</em></sub> <em>ε</em><sub><em>t</em>−<em>i</em></sub>
+        </div>
+        <div class="formula-note">
+          Where <em>ε</em><sub><em>t</em></sub> is white noise with variance <em>σ</em><sup>2</sup>, and {<em>θ</em><sub>1</sub>, …, <em>θ</em><sub><em>q</em></sub>} are fixed parameters.
+        </div>
+      </div>
+
+      <p>
+        In our corporate stock ledger, our parameters were dictated by the vesting schedule:
+        <span class="math-badge">θ₁ = 0.75</span>, <span class="math-badge">θ₂ = 0.50</span>, and
+        <span class="math-badge">θ₃ = 0.25</span>, with <span class="math-badge">q = 3</span>.
+      </p>
+
+      <div class="insight-callout">
+        <h4>The Distinction Between Models and Smoothing Filters</h4>
+        <p>
+          The terminology can initially seem ambiguous, as a moving-average model does not compute a running average of
+          observed data points.
+        </p>
+        <p>
+          In signal processing and descriptive statistics, a <strong>moving-average filter</strong> computes a rolling average
+          of historical observations <span class="math-badge">X_t</span> to attenuate high-frequency noise:
+          <span class="math-badge">Y_t = (X_t + X_{t-1} + …) / k</span>.
+        </p>
+        <p>
+          In contrast, an <strong>MA(q) model</strong> describes a generative mechanism driven by a moving linear combination
+          of <em>unobservable random shocks</em> <span class="math-badge">ε_t</span>. The averaging process moves across the
+          temporal sequence of external disturbances rather than the recorded series itself.
+        </p>
+      </div>
+
+      <!-- SECTION 5 -->
+      <h2>5. The Diagnostic Fingerprint: Autocorrelation Cutoff</h2>
+
+      <p>
+        In observational data, time series rarely announce their underlying generating mechanism directly.
+        Distinguishing an <span class="math-badge">MA(q)</span> process from an autoregressive or random walk model relies
+        on the <strong>Autocorrelation Function (ACF)</strong>, which measures the correlation between observations
+        separated by a lag of <span class="math-badge">k</span> time steps: <span class="math-badge">ρ(k) = Corr(X_t, X_{t-k})</span>.
+      </p>
+
+      <p>
+        Examining the overlap of shock terms across different time horizons reveals why this metric is diagnostic:
+      </p>
+
+      <ul>
+        <li>
+          For <span class="math-badge">k = 1</span>, both terms share the shocks <span class="math-badge">ε(t-1)</span>,
+          <span class="math-badge">ε(t-2)</span>, and <span class="math-badge">ε(t-3)</span>. Because they share common
+          disturbances, they are positively correlated: <span class="math-badge">ρ(1) &gt; 0</span>.
+        </li>
+        <li>
+          For <span class="math-badge">k = 2</span>, they still share <span class="math-badge">ε(t-2)</span> and
+          <span class="math-badge">ε(t-3)</span>, maintaining correlation: <span class="math-badge">ρ(2) &gt; 0</span>.
+        </li>
+        <li>
+          For <span class="math-badge">k = 3</span>, they share only a single shock, <span class="math-badge">ε(t-3)</span>:
+          <span class="math-badge">ρ(3) &gt; 0</span>.
+        </li>
+        <li>
+          For <span class="math-badge">k ≥ 4</span>, the shock windows contain no shared terms: <span class="math-badge">X_t</span>
+          depends on shocks <span class="math-badge">{t, t-1, t-2, t-3}</span>, while <span class="math-badge">X_{t-4}</span>
+          depends on shocks <span class="math-badge">{t-4, t-5, t-6, t-7}</span>. Because all shocks are sampled independently,
+          their correlation is strictly zero.
+        </li>
+      </ul>
+
+      <p>
+        This property gives <span class="math-badge">MA(q)</span> models their distinct diagnostic fingerprint:
+        <strong>the theoretical autocorrelation drops to zero for all lags greater than q</strong>.
+        While autoregressive processes exhibit tails that decay asymptotically, a moving-average process terminates with a
+        sharp cutoff.
+      </p>
+
+      <!-- INTERACTIVE WIDGET 4: MA SANDBOX -->
+      <div id="widget-ma-sandbox" class="interactive-artifact artifact-wide">
+        <div class="artifact-header">
+          <div>
+            <div class="artifact-badge">SIMULATION 04 · THE MA(q) SANDBOX &amp; ACF FINGERPRINT</div>
+            <div class="artifact-title">Order Identification Through Autocorrelation</div>
+            <div class="artifact-desc">Switch between MA orders and adjust weights θ. Watch the sample ACF lollipop bars
+              plunge into the noise floor immediately after lag q.</div>
+          </div>
+        </div>
+        <div class="comparison-grid">
+          <div class="canvas-col">
+            <div class="canvas-col-header">
+              <span>TIME SERIES REALIZATION X_t</span>
+              <span class="canvas-col-tag">N = 80 Steps</span>
+            </div>
+            <canvas class="canvas-ma-series" style="height: 320px;"></canvas>
+          </div>
+          <div class="canvas-col">
+            <div class="canvas-col-header">
+              <span>AUTOCORRELATION FUNCTION (ACF)</span>
+              <span class="canvas-col-tag">Sample vs Theoretical</span>
+            </div>
+            <canvas class="canvas-ma-acf" style="height: 320px;"></canvas>
+          </div>
+        </div>
+        <div class="artifact-controls-deck">
+          <div class="controls-strip">
+            <div class="twin-clocks-panel" style="flex-shrink: 0; border-top: none; padding: 0; background: transparent;">
+              <div class="clock-card" style="padding: 0.5rem 0.75rem;">
+                <div class="clock-meta"><span class="clock-label">Active Model</span></div>
+                <div class="clock-time readout-ma-order" style="font-size: 1.25rem; color: var(--color-time);">MA(3)</div>
+              </div>
+              <div class="clock-card" style="padding: 0.5rem 0.75rem;">
+                <div class="clock-meta"><span class="clock-label">Diagnostic Cutoff</span></div>
+                <div class="clock-time readout-cutoff-lag" style="font-size: 0.85rem; font-family: var(--font-mono); color: var(--color-danger);">Lag k = 3</div>
+              </div>
+            </div>
+            <div style="flex: 1; display: flex; flex-direction: column; gap: 0.4rem;">
+              <div class="control-item">
+                <div class="control-header">
+                  <span>Weight θ₁ (Lag 1):</span>
+                  <span class="control-val val-theta1" style="color: var(--color-space);">0.75</span>
+                </div>
+                <input type="range" class="range-slider slider-theta1" min="-1" max="1" step="0.05" value="0.75" />
+              </div>
+              <div class="control-item row-theta2">
+                <div class="control-header">
+                  <span>Weight θ₂ (Lag 2):</span>
+                  <span class="control-val val-theta2" style="color: var(--color-space);">0.50</span>
+                </div>
+                <input type="range" class="range-slider slider-theta2" min="-1" max="1" step="0.05" value="0.50" />
+              </div>
+              <div class="control-item row-theta3">
+                <div class="control-header">
+                  <span>Weight θ₃ (Lag 3):</span>
+                  <span class="control-val val-theta3" style="color: var(--color-space);">0.25</span>
+                </div>
+                <input type="range" class="range-slider slider-theta3" min="-1" max="1" step="0.05" value="0.25" />
+              </div>
+              <div class="control-item row-theta4" style="display: none;">
+                <div class="control-header">
+                  <span>Weight θ₄ (Lag 4):</span>
+                  <span class="control-val val-theta4" style="color: var(--color-space);">0.20</span>
+                </div>
+                <input type="range" class="range-slider slider-theta4" min="-1" max="1" step="0.05" value="0.20" />
+              </div>
+            </div>
+            <div style="flex-shrink: 0; display: flex; align-items: center;">
+              <button type="button" class="btn-primary btn-regenerate-ma">New Sample</button>
+            </div>
+          </div>
+          <div class="controls-preset-row">
+            <div class="preset-chips">
+              <span class="preset-label">Model Presets:</span>
+              <button type="button" class="chip chip-order" data-order="1">MA(1)</button>
+              <button type="button" class="chip chip-order" data-order="2">MA(2)</button>
+              <button type="button" class="chip chip-order active" data-order="3">MA(3) [Stock Ledger]</button>
+              <button type="button" class="chip chip-order" data-order="4">MA(4)</button>
+            </div>
+            <div class="preset-invariant-tag">ACF Cuts Off at Lag q</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 6 -->
+      <h2>6. Puzzles of Memory and Time</h2>
+
+      <p>
+        Moving-average models reveal that a system does not need a boundless, infinite memory to produce rich,
+        correlated dynamics. A simple, finite window of lingering shocks creates temporal coherence that mimics
+        memory while guaranteeing that every ancient disturbance is eventually washed away.
+      </p>
+
+      <!-- FOOD FOR THOUGHT CALLOUT (MANDATORY INVARIANT) -->
+      <div class="insight-callout">
+        <h4>Food for Thought: Three Cosmic Puzzles of Moving-Average Models</h4>
+        <p>Before we move forward, consider three subtle puzzles that emerge when we push the mathematics of moving averages to its boundaries:</p>
+        <p>
+          <strong>1. The Ghost in the Data (The Problem of Unobservable Shocks):</strong><br>
+          In an autoregressive model, <span class="math-badge">X_t</span> depends on past measurements <span class="math-badge">X_{t-1}</span>,
+          which are recorded and visible in your spreadsheet. But in an <span class="math-badge">MA(q)</span> model,
+          the shocks <span class="math-badge">ε_t</span> are never directly observed—we only see the final composite sum
+          <span class="math-badge">X_t</span>. How can maximum likelihood estimators accurately calculate the parameters
+          <span class="math-badge">θ_i</span> for disturbances that were never directly measured?
+        </p>
+        <p>
+          <strong>2. The Invertibility Boundary (The Echoing Past):</strong><br>
+          Consider an <span class="math-badge">MA(1)</span> process with parameter <span class="math-badge">θ = 0.5</span>
+          versus another with parameter <span class="math-badge">θ = 2.0</span>. Mathematically, both produce the
+          <em>exact same autocorrelation function</em>: <span class="math-badge">ρ(1) = 0.4</span>. Yet only the first model
+          can be "inverted" into an autoregressive series where past observations uniquely predict the current shock.
+          Why does physical causality force statisticians to reject models whose roots lie inside the unit circle?
+        </p>
+        <p>
+          <strong>3. Wold's Grand Synthesis (The Universal Moving Average):</strong><br>
+          In 1938, the Swedish mathematician Herman Wold proved a monumental theorem: <em>every</em> covariance-stationary
+          time series—no matter how intricate, whether weather patterns or financial assets—can be decomposed into a
+          deterministic trend plus an infinite moving average of uncorrelated innovations:
+          <span class="math-badge">X_t = μ + ∑_{j=0}^∞ ψ_j ε_{t-j}</span>.
+          Does this mean that all memory in stationary physical systems is fundamentally nothing more than the fading ripples of past shocks?
+        </p>
+      </div>
+
+      <!-- SERIES PAGER -->
+      <div class="series-pager">
+        <a href="05-cross-entropy.html" class="btn-secondary">← Part 2: Understanding Cross-Entropy</a>
+        <a href="../index.html" class="btn-primary">Series Hub: Explore All Essays →</a>
+      </div>
+
+      <!-- AUTHOR BIO -->
+      <div class="article-author">
+        <div class="brand-badge">IF</div>
+        <div>
+          <h4>Aayush Agarwal</h4>
+          <p>
+            Exploring physics, mathematics, and machine learning through intuitive visual geometry and explorable interactive
+            simulations.
+          </p>
+        </div>
+      </div>
+    </article>
+  </main>
+
+  <!-- Site Footer -->
+  <footer class="site-footer">
+    <div class="wide-container">
+      <p>
+        <strong>Intuition First</strong> · An Explorable Science &amp; Mathematics Series by Aayush Agarwal
+      </p>
+      <p style="margin-top: 0.5rem">
+        <a href="../index.html">Series Home</a> ·
+        <a href="01-motion-and-time.html">Part 1: Borrowed Seconds</a> ·
+        <a href="02-light-cone.html">Part 2: The Boundaries of Causality</a> ·
+        <a href="03-spacetime-loaf.html">Part 3: The Angle of “Now”</a> ·
+        <a href="04-understanding-entropy.html">Series 2: Surprise &amp; Entropy</a> ·
+        <a href="05-cross-entropy.html">Cross-Entropy</a> ·
+        <a href="06-moving-average.html">Moving-Average Models</a> ·
+        <a href="https://github.com/ayush2991/intuition-first" target="_blank" rel="noopener">GitHub</a>
+      </p>
+    </div>
+  </footer>
+
+  <!-- Universal Scripts -->
+  <script src="../js/core.js"></script>
+  <script src="../js/post-06.js"></script>
+</body>
+
+</html>
