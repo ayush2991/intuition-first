@@ -926,7 +926,7 @@
       tag: 'Spacetime Geometry',
       filename: '02-light-cone.html',
       readTime: '12 min',
-      status: 'coming-soon'
+      status: 'live'
     },
     {
       seriesId: 'relativity',
@@ -938,7 +938,7 @@
       subtitle: 'There is no cosmic master clock: how motion angles your slice through spacetime to reshape length.',
       tag: 'Simultaneity & Length',
       filename: '03-spacetime-loaf.html',
-      readTime: '14 min',
+      readTime: 'Coming Soon',
       status: 'coming-soon'
     },
     {
@@ -951,7 +951,7 @@
       subtitle: 'From coin flips to lost books: how quantifying surprise turns entropy into an intuitive measure of uncertainty.',
       tag: 'Information & Entropy',
       filename: '04-understanding-entropy.html',
-      readTime: '8 min',
+      readTime: 'Coming Soon',
       status: 'coming-soon'
     },
     {

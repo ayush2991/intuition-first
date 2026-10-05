@@ -36,14 +36,14 @@ Rather than front-loading heavy algebra, dry formulas, or detached textbook defi
 - **Live Explorable**: [`posts/02-light-cone.html`](./posts/02-light-cone.html)
 - Visualizing why 90° in velocity space becomes 45° in coordinate spacetime, expanding circles of light, the 3D Light Cone, and your 80-year cosmic horizon.
 
-#### [Part 3: The Spacetime Loaf & Length Contraction](./posts/03-spacetime-loaf.html)
-- **Live Explorable**: [`posts/03-spacetime-loaf.html`](./posts/03-spacetime-loaf.html)
+#### Part 3: The Spacetime Loaf & Length Contraction (Coming Soon)
+- **Status**: Coming Soon
 - Oblique simultaneity slicing through 4D spacetime, moving rulers shortening, and atmospheric muons from both reference frames.
 
 ### Series 02: Information & Entropy — The Order of the Universe
 
-#### [Part 1: An Intuitive Guide To Entropy](./posts/04-understanding-entropy.html)
-- **Live Explorable**: [`posts/04-understanding-entropy.html`](./posts/04-understanding-entropy.html)
+#### Part 1: An Intuitive Guide To Entropy (Coming Soon)
+- **Status**: Coming Soon
 - Predictability spectrum, logarithmic surprise curve ($S(p) = -\log_2(p)$), Shannon entropy ($H(p)$), and microstates vs macrostates.
 
 ---
