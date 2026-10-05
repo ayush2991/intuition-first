@@ -1,882 +1,1429 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>The Cosmic Light Cone: Mapping Space & Time · Intuition First</title>
+    <link rel="stylesheet" href="../css/style.css" />
+    <meta
+      name="description"
+      content="Mapping the boundaries of cause and effect: how flashes of light carve spacetime into what can touch your life and what lies forever out of reach."
+    />
+    <script>
+      (function () {
+        var isDark =
+          window.matchMedia &&
+          window.matchMedia("(prefers-color-scheme: dark)").matches;
+        document.documentElement.setAttribute(
+          "data-theme",
+          isDark ? "dark" : "light",
+        );
+      })();
+    </script>
+  </head>
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>The Cosmic Light Cone: Mapping Space & Time · Intuition First</title>
-  <link rel="stylesheet" href="../css/style.css">
-  <meta name="description"
-    content="Mapping the boundaries of cause and effect: how flashes of light carve spacetime into what can touch your life and what lies forever out of reach.">
-  <script>
-    (function () {
-      var isDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-      document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
-    })();
-  </script>
-</head>
+  <body>
+    <div class="reading-progress-bar" id="reading-progress"></div>
 
-<body>
-  <div class="reading-progress-bar" id="reading-progress"></div>
-
-  <!-- Top Navigation -->
-  <nav class="site-nav">
-    <div class="site-nav-inner">
-      <a href="../index.html" class="brand-link">
-        <div class="brand-badge">IF</div>
-        <div>
-          <span class="brand-title">INTUITION FIRST</span>
-          <span class="brand-tag">ESSAYS</span>
-        </div>
-      </a>
-      <div class="nav-links">
-        <a href="../index.html">← All Series</a>
-      </div>
-    </div>
-  </nav>
-
-  <!-- Main Article Body with Wide Container for Side-by-Side Visuals -->
-  <main class="wide-reading-container">
-    <!-- Article Header -->
-    <header class="article-header">
-      <div class="category-tag">Part 02 · Special Relativity</div>
-      <h1 class="article-title">The Cosmic Light Cone: Mapping Space &amp; Time</h1>
-      <p class="article-subtitle">
-        Mapping the boundaries of cause and effect: how flashes of light carve spacetime into what can touch your life
-        and what lies forever out of reach.
-      </p>
-      <div class="article-meta">
-        <span>By Aayush Agarwal</span>
-        <span>•</span>
-        <span>Interactive Explorable</span>
-        <span>•</span>
-        <span>10 min read</span>
-      </div>
-    </header>
-
-    <!-- Editorial Prose -->
-    <article class="editorial-prose">
-      <p>
-        In <a href="01-motion-and-time.html"
-          style="color:var(--color-time); font-weight:600; text-decoration:underline;">Part 1</a>, we saw that sitting
-        still in space devotes 100% of your motion to time, and any spatial speed is borrowed from that cosmic reservoir.
-        Velocity Space gave us an intuitive speedometer for the cosmos (<span class="math-badge">v_space</span> vs
-        <span class="math-badge">v_time</span>)—explaining why clocks slow down, how motion trades off, and why photons
-        never age.
-      </p>
-      <p>
-        That speedometer tells us how velocity is partitioned and how fast someone's personal wristwatch ticks. But it
-        does not tell us where anyone actually is or where they can go.
-      </p>
-      <p>
-        The natural next question is: <strong>can we draw an actual map?</strong>
-      </p>
-      <p>
-        Not just a graph of speeds, but a coordinate record showing where each traveler is at every moment of cosmic
-        history. The continuous path a traveler traces through such a map is called their <strong>worldline</strong>: a
-        thread woven through space and time recording their position at every instant of their journey.
-      </p>
-
-      <!-- SECTION 1 -->
-      <h2 id="interactive-bridge">1. The 45° Boundary</h2>
-      <p>
-        To draw a map combining space and time, we hit an immediate obstacle: space is measured in meters, but time is
-        measured in seconds. Think of how we talk about distance in everyday speech—like saying "Boston is three hours
-        away," implicitly multiplying time by speed to express distance.
-      </p>
-      <p>
-        Relativity simply flips this habit. By multiplying time (<span class="math-badge">t</span>) by our cosmic
-        invariant speed (<span class="math-badge">c</span>), we convert time into distance (<span
-          class="math-badge">ct</span>, in light-seconds or light-years). Now both axes speak the exact same physical
-        language, allowing our units to match up seamlessly.
-      </p>
-      <p>
-        With our axes calibrated in compatible units—position <span class="math-badge">x</span> horizontally and <span
-          class="math-badge">ct</span> vertically—let us plant two boundary markers before exploring the space between
-        them.
-      </p>
-      <p>
-        The first boundary is <strong>Alice</strong>, who stays perfectly at rest at position <span
-          class="math-badge">x = 0</span>. She never moves through space—every unit of her cosmic velocity flows purely
-        forward through time. Her worldline in this map is a straight <strong>vertical line</strong>: she climbs steadily
-        upward through time while her position in space never budges. This is one extreme: zero spatial motion, maximum
-        aging.
-      </p>
-      <p>
-        The other extreme is the <strong>photon</strong>. Diverting 100% of cosmic velocity into space leaves nothing for
-        time. Its worldline cannot be vertical, since that would mean standing still in space. But what path does it
-        actually make?
-      </p>
-      <p>
-        Because our vertical axis is measured in units of <span class="math-badge">ct</span>, light travels exactly 1
-        light-second of space in 1 light-second of time (<span class="math-badge">Δx / Δ(ct) = 1</span>). A rise of 1 unit
-        corresponds to a run of 1 unit. Therefore, light traces a <strong>1:1 path—an exact 45° diagonal</strong>!
-      </p>
-      <p>
-        This is the other extreme: maximum spatial speed, zero aging. Any worldline tilted steeper than 45° from the
-        vertical would require covering more distance than light can travel in that time—moving faster than light—which
-        nature forbids.
-      </p>
-      <p>
-        Between Alice's vertical line and the photon's 45° diagonal lies all of physics for massive objects.
-        <strong>Bob</strong> is that general case. He is free to move at any speed from rest up to—but never reaching—<span
-          class="math-badge">c</span>. His worldline will always sit inside the wedge between the two extremes.
-      </p>
-      <p>
-        To connect our two visual lenses, we track motion using two distinct angles:
-      </p>
-      <ul>
-        <li>
-          <strong>On the left (Velocity Space):</strong> The needle's angle <span class="math-badge">θ</span> (theta)
-          measures how much of Bob's fixed cosmic speed is diverted into space: <span class="math-badge">v_space = c · sin
-            θ</span>.
-        </li>
-        <li>
-          <strong>On the right (Coordinate Spacetime):</strong> The angle <span class="math-badge">φ</span> (phi)
-          measures the resulting geometric tilt of Bob's worldline away from the vertical time axis.
-        </li>
-      </ul>
-      <p>
-        Use the slider below to steer Bob's speed angle <span class="math-badge">θ</span> and watch how the map's tilt angle
-        <span class="math-badge">φ</span> responds:
-      </p>
-
-      <!-- WIDGET 1: SIDE-BY-SIDE BRIDGE -->
-      <div id="widget-dual-bridge" class="interactive-artifact artifact-wide">
-        <div class="artifact-header">
+    <!-- Top Navigation -->
+    <nav class="site-nav">
+      <div class="site-nav-inner">
+        <a href="../index.html" class="brand-link">
+          <div class="brand-badge">IF</div>
           <div>
-            <div class="artifact-badge">SIMULATION 01 · DUAL-VIEW BRIDGE: VELOCITY SPACE &amp; SPACETIME</div>
+            <span class="brand-title">INTUITION FIRST</span>
+            <span class="brand-tag">ESSAYS</span>
           </div>
-        </div>
-        <div class="comparison-grid">
-          <!-- Left Column: Part 1 Speed Circle -->
-          <div class="canvas-col">
-            <div class="canvas-col-header">
-              <span>VELOCITY SPACE</span>
-              <span class="canvas-col-tag">v_space vs v_time</span>
-            </div>
-            <canvas class="canvas-speed"></canvas>
-          </div>
-          <!-- Right Column: Part 2 Spacetime Diagram -->
-          <div class="canvas-col">
-            <div class="canvas-col-header">
-              <span>COORDINATE SPACETIME</span>
-              <span class="canvas-col-tag">Position x vs Time ct</span>
-            </div>
-            <canvas class="canvas-spacetime"></canvas>
-          </div>
-        </div>
-        <!-- Controls Deck -->
-        <div class="artifact-controls artifact-controls-deck">
-          <div class="controls-strip">
-            <div class="clock-card amber clock-theta-status-card">
-              <span class="clock-label">Speed Angle</span>
-              <span class="clock-time val-theta-reading">0.0<span>°</span></span>
-              <span class="clock-badge badge-theta-status">v = 0.00c</span>
-            </div>
-            <div class="control-item">
-              <div class="control-header">
-                <span>Speed Angle θ (0° → 90°)</span>
-                <span class="control-val amber val-theta-label">Tilt φ: 0.0°</span>
-              </div>
-              <input type="range" class="range-slider amber slider-theta" min="0" max="90" step="0.5" value="0">
-            </div>
-            <button class="btn-primary btn-play">
-              <span>▶</span><span>Auto Sweep</span>
-            </button>
-          </div>
-
-          <div class="controls-preset-row">
-            <div class="preset-chips">
-              <button class="chip-btn preset-btn active" data-theta="0">0° (At Rest)</button>
-              <button class="chip-btn preset-btn" data-theta="30">30° (v = 0.50c)</button>
-              <button class="chip-btn preset-btn" data-theta="60">60° (v = 0.866c)</button>
-              <button class="chip-btn preset-btn" data-theta="90">90° (Pure Light c)</button>
-            </div>
-            <span class="preset-tag">
-              Geometric Bridge: tan φ = sin θ
-            </span>
-          </div>
+        </a>
+        <div class="nav-links">
+          <a href="../index.html">← All Series</a>
         </div>
       </div>
+    </nav>
 
-      <!-- KEY PRESET OBSERVATIONS -->
-      <h3>The Four Milestones</h3>
-      <p>
-        On our spacetime map, the vertical axis measures elapsed time (<span class="math-badge">ct</span>) recorded on
-        Alice's stationary ground stopwatch, while the horizontal axis measures distance (<span
-          class="math-badge">x</span>).
-      </p>
-      <p>
-        Notice the small cross-ticks drawn along Bob's worldline. Each tick marks <strong>one second ticking on Bob's
-          personal wristwatch</strong>. In physics, the time measured by an observer's own carried watch is called their
-        <strong>proper time</strong> (derived from the Latin <em>proprius</em>, meaning "one's own"—the time
-        experienced by your own body, heartbeats, and personal clocks, denoted by the Greek letter <span
-          class="math-badge">τ</span>, tau).
-      </p>
-      <p>
-        The tilt angle <span class="math-badge">φ</span> of Bob's worldline away from the vertical is simply determined
-        by the ratio of horizontal distance covered to vertical ground time elapsed: <span class="math-badge">tan φ =
-          run / rise = x / (ct)</span>. Because spatial velocity is <span class="math-badge">v_x = c · sin θ</span>,
-        nature links the two worlds with an exact geometric bridge:
-      </p>
-
-      <div class="formula-card">
-        <div class="formula-card-header">
-          <span class="formula-tag">The Geometric Bridge</span>
-        </div>
-        <div class="formula-body">
-          tan <em>φ</em> = Δ<em>x</em> / (<em>c</em> · Δ<em>t</em>) = <em>v</em>_x / <em>c</em> = sin <em>θ</em>
-        </div>
-        <div class="formula-note">Spatial speed on the speedometer governs the slope of the worldline: tan <em>φ</em> =
-          sin <em>θ</em> &nbsp;⟹&nbsp; <em>φ</em> = arctan(sin <em>θ</em>).</div>
-      </div>
-
-      <!-- WIDGET 1c: 2x2 SYNTHESIS GRID -->
-      <div id="widget-synthesis-grid" class="interactive-artifact">
-        <div class="artifact-header">
-          <div>
-            <div class="artifact-badge">ILLUSTRATION 01c · THE FOUR MILESTONES: SPEED SPACE TO SPACETIME</div>
-          </div>
-        </div>
-        <div class="canvas-viewport" style="padding: 1rem;">
-          <div class="synthesis-grid">
-            <!-- Panel 1: At Rest -->
-            <div class="synthesis-panel-card">
-              <div class="synthesis-panel-header">
-                <span class="synthesis-panel-title">1. Stationary Observer</span>
-                <span class="synthesis-panel-tag">θ = 0° · v = 0</span>
-              </div>
-              <div class="synthesis-canvas-wrap">
-                <canvas data-preset="0"></canvas>
-              </div>
-              <div class="synthesis-panel-footer">
-                <span>Worldline: <strong>Vertical (φ = 0°)</strong></span>
-                <span>Aging: <strong>100% Rate</strong></span>
-              </div>
-            </div>
-
-            <!-- Panel 2: Sub-light Cruising -->
-            <div class="synthesis-panel-card">
-              <div class="synthesis-panel-header">
-                <span class="synthesis-panel-title">2. Sub-Light Cruising</span>
-                <span class="synthesis-panel-tag">θ = 30° · v = 0.50c</span>
-              </div>
-              <div class="synthesis-canvas-wrap">
-                <canvas data-preset="30"></canvas>
-              </div>
-              <div class="synthesis-panel-footer">
-                <span>Worldline: <strong>Mild Tilt (φ = 26.6°)</strong></span>
-                <span>Aging: <strong>86.6% Rate</strong></span>
-              </div>
-            </div>
-
-            <!-- Panel 3: Ultra-Relativistic -->
-            <div class="synthesis-panel-card">
-              <div class="synthesis-panel-header">
-                <span class="synthesis-panel-title">3. Relativistic Cruise</span>
-                <span class="synthesis-panel-tag">θ = 60° · v = 0.866c</span>
-              </div>
-              <div class="synthesis-canvas-wrap">
-                <canvas data-preset="60"></canvas>
-              </div>
-              <div class="synthesis-panel-footer">
-                <span>Worldline: <strong>Steep Tilt (φ = 40.9°)</strong></span>
-                <span>Aging: <strong>50.0% Rate (Half)</strong></span>
-              </div>
-            </div>
-
-            <!-- Panel 4: The Photon Bound -->
-            <div class="synthesis-panel-card">
-              <div class="synthesis-panel-header">
-                <span class="synthesis-panel-title">4. The Photon Bound</span>
-                <span class="synthesis-panel-tag">θ = 90° · v = c</span>
-              </div>
-              <div class="synthesis-canvas-wrap">
-                <canvas data-preset="90"></canvas>
-              </div>
-              <div class="synthesis-panel-footer">
-                <span>Worldline: <strong>Boundary (φ = 45.0°)</strong></span>
-                <span>Aging: <strong>0% (Frozen)</strong></span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <p>
-        Comparing these four milestones side by side clarifies why the geometry behaves as it does:
-      </p>
-      <ul>
-        <li>
-          <strong>1. At Rest (<span class="math-badge">θ = 0°</span>)</strong>: Bob stands still beside Alice. In 1 second,
-          he covers 0 distance in space (<span class="math-badge">run = 0</span>, <span class="math-badge">rise =
-            1</span>). His tilt is <span class="math-badge">tan φ = 0 / 1 = 0</span>, giving an angle of <strong><span
-              class="math-badge">φ = 0°</span></strong>. His worldline points straight up, and his proper time ticks in
-          exact lockstep with Alice's ground stopwatch (1 second for 1 second).
-        </li>
-        <li>
-          <strong>2. Sub-light Cruising (<span class="math-badge">θ = 30°</span>)</strong>: At 30° on the speed circle,
-          Bob directs half of light speed into space: <span class="math-badge">v = c · sin(30°) = 0.50c</span>. For
-          every 1 light-second of time that rises vertically (<span class="math-badge">rise = 1.0</span>), Bob travels
-          0.5 light-seconds horizontally (<span class="math-badge">run = 0.5</span>). The tilt from the vertical is <span
-            class="math-badge">tan φ = 0.5 / 1.0 = 0.50</span>, which gives an angle of <strong><span class="math-badge">φ
-              = arctan(0.50) ≈ 26.6°</span></strong>! Because Bob's personal watch ticks at 86.6% rate (<span
-            class="math-badge">dτ = dt · cos 30°</span>), Alice's ground stopwatch must count 1.15 seconds before Bob
-          experiences 1 second of proper time, stretching his tick marks slightly along the track.
-        </li>
-        <li>
-          <strong>3. Ultra-Relativistic (<span class="math-badge">θ = 60°</span>)</strong>: At 60° on the speed circle,
-          Bob moves at <span class="math-badge">v = c · sin(60°) ≈ 0.866c</span>. For every 1 unit of time (<span
-            class="math-badge">rise = 1.0</span>), Bob covers 0.866 units of distance (<span class="math-badge">run =
-            0.866</span>). The tilt from the vertical is <span class="math-badge">tan φ = 0.866 / 1.0 = 0.866</span>,
-          which yields <strong><span class="math-badge">φ = arctan(0.866) ≈ 40.9°</span></strong>! Here, Bob's watch
-          ticks at half speed (<span class="math-badge">cos 60° = 0.50</span>, <span class="math-badge">γ = 2.00</span>),
-          so Alice's stopwatch must record two full seconds for every one second of Bob's proper time—spacing his tick
-          marks twice as far apart vertically as Alice's.
-        </li>
-        <li>
-          <strong>4. The Photon Bound (<span class="math-badge">θ = 90°</span>)</strong>: Diverting 100% of speed into
-          space gives <span class="math-badge">v = c · sin(90°) = 1.0c</span>. Every 1 unit of time (<span
-            class="math-badge">rise = 1.0</span>) matches 1 unit of distance (<span class="math-badge">run = 1.0</span>).
-          The tilt is <span class="math-badge">tan φ = 1.0 / 1.0 = 1.0</span>, which yields an exact <strong><span
-              class="math-badge">φ = arctan(1.0) = 45.0°</span></strong>! With all motion in space, zero remains for time:
-          the photon experiences zero proper time (<span class="math-badge">Δτ = 0</span>), and its tick marks vanish
-          entirely.
-        </li>
-      </ul>
-
-      <!-- INSIGHT CALLOUT -->
-      <div class="insight-callout">
-        <h4>Why 45° Is the Cosmic Speed Boundary</h4>
-        <p>
-          The 45° diagonal is the hard boundary of reality on the coordinate map. Any worldline tilted steeper than 45°
-          would require <span class="math-badge">tan φ &gt; 1 ⟹ sin θ &gt; 1</span>, which is mathematically impossible
-          on the speed circle and physically impossible for the cosmos. Everything outside the 45° boundary is causal
-          Elsewhere.
+    <!-- Main Article Body with Wide Container for Side-by-Side Visuals -->
+    <main class="wide-reading-container">
+      <!-- Article Header -->
+      <header class="article-header">
+        <div class="category-tag">Part 02 · Special Relativity</div>
+        <h1 class="article-title">
+          The Cosmic Light Cone: Mapping Space &amp; Time
+        </h1>
+        <p class="article-subtitle">
+          Mapping the boundaries of cause and effect: how flashes of light carve
+          spacetime into what can touch your life and what lies forever out of
+          reach.
         </p>
-      </div>
+        <div class="article-meta">
+          <span>By Aayush Agarwal</span>
+          <span>•</span>
+          <span>Interactive Explorable</span>
+          <span>•</span>
+          <span>10 min read</span>
+        </div>
+      </header>
 
-      <!-- SECTION 2 -->
-      <h2>2. The 3D Light Cone</h2>
-      <p>
-        Up to now, we mapped motion along a single spatial track (<span class="math-badge">x</span>). What happens if you
-        turn on a light bulb for a fraction of a second at a single point in open space?
-      </p>
-      <p>
-        In three-dimensional space, the flash emits an expanding spherical shell of photons spreading outward in all
-        directions at speed <span class="math-badge">c</span>:
-      </p>
-      <div class="formula-card">
-        <div class="formula-card-header">
-          <span class="formula-tag">Spherical Light Wavefront</span>
-        </div>
-        <div class="formula-body">
-          <em>x</em>² + <em>y</em>² + <em>z</em>² = (<em>c</em> · <em>t</em>)²
-        </div>
-        <div class="formula-note">A spherical shell of light spreading outward through space with velocity <em>c</em>.
-        </div>
-      </div>
-      <p>
-        To picture this clearly, let us work in two spatial dimensions—<span class="math-badge">x</span> and <span
-          class="math-badge">y</span>. The flash begins as a single point. One moment later it has become a circle. Two
-        moments later, a larger circle. The radius grows at exactly the speed of light, so at time <span
-          class="math-badge">t</span> the circle has radius <span class="math-badge">r = ct</span>:
-      </p>
+      <!-- Editorial Prose -->
+      <article class="editorial-prose">
+        <p>
+          In
+          <a
+            href="01-motion-and-time.html"
+            style="
+              color: var(--color-time);
+              font-weight: 600;
+              text-decoration: underline;
+            "
+            >Part 1</a
+          >, we saw that sitting still in space devotes 100% of your motion to
+          time, and any spatial speed is borrowed from that cosmic reservoir.
+          Velocity Space gave us an intuitive speedometer for the cosmos (<span
+            class="math-badge"
+            >v_space</span
+          >
+          vs <span class="math-badge">v_time</span>)—explaining why clocks slow
+          down, how motion trades off, and why photons never age.
+        </p>
+        <p>
+          That speedometer tells us how velocity is partitioned and how fast
+          someone's personal wristwatch ticks. But it does not tell us where
+          anyone actually is or where they can go.
+        </p>
+        <p>
+          The natural next question is:
+          <strong>can we draw an actual map?</strong>
+        </p>
+        <p>
+          Not just a graph of speeds, but a coordinate record showing where each
+          traveler is at every moment of cosmic history. The continuous path a
+          traveler traces through such a map is called their
+          <strong>worldline</strong>: a thread woven through space and time
+          recording their position at every instant of their journey.
+        </p>
 
-      <!-- WIDGET 1b: EXPANDING CIRCLES GRID -->
-      <div id="widget-expanding-circles" class="interactive-artifact">
-        <div class="artifact-header">
-          <div>
-            <div class="artifact-badge">ILLUSTRATION 01b · 2D LIGHT RIPPLE SNAPSHOTS</div>
-          </div>
-        </div>
-        <div class="canvas-viewport" style="padding: 1rem;">
-          <div id="expanding-circles-grid" class="expanding-circles-grid">
-            <canvas class="circle-panel" data-t="0"></canvas>
-            <canvas class="circle-panel" data-t="1"></canvas>
-            <canvas class="circle-panel" data-t="2"></canvas>
-            <canvas class="circle-panel" data-t="3"></canvas>
-          </div>
-        </div>
-      </div>
+        <!-- SECTION 1 -->
+        <h2 id="interactive-bridge">1. The 45° Boundary</h2>
+        <p>
+          To draw a map combining space and time, we hit an immediate obstacle:
+          space is measured in meters, but time is measured in seconds. Think of
+          how we talk about distance in everyday speech—like saying "Boston is
+          three hours away," implicitly multiplying time by speed to express
+          distance.
+        </p>
+        <p>
+          Relativity simply flips this habit. By multiplying time (<span
+            class="math-badge"
+            >t</span
+          >) by our cosmic invariant speed (<span class="math-badge">c</span>),
+          we convert time into distance (<span class="math-badge">ct</span>, in
+          light-seconds or light-years). Now both axes speak the exact same
+          physical language, allowing our units to match up seamlessly.
+        </p>
+        <p>
+          With our axes calibrated in compatible units—position
+          <span class="math-badge">x</span> horizontally and
+          <span class="math-badge">ct</span> vertically—let us plant two
+          boundary markers before exploring the space between them.
+        </p>
+        <p>
+          The first boundary is <strong>Alice</strong>, who stays perfectly at
+          rest at position <span class="math-badge">x = 0</span>. She never
+          moves through space—every unit of her cosmic velocity flows purely
+          forward through time. Her worldline in this map is a straight
+          <strong>vertical line</strong>: she climbs steadily upward through
+          time while her position in space never budges. This is one extreme:
+          zero spatial motion, maximum aging.
+        </p>
+        <p>
+          The other extreme is the <strong>photon</strong>. Diverting 100% of
+          cosmic velocity into space leaves nothing for time. Its worldline
+          cannot be vertical, since that would mean standing still in space. But
+          what path does it actually make?
+        </p>
+        <p>
+          Because our vertical axis is measured in units of
+          <span class="math-badge">ct</span>, light travels exactly 1
+          light-second of space in 1 light-second of time (<span
+            class="math-badge"
+            >Δx / Δ(ct) = 1</span
+          >). A rise of 1 unit corresponds to a run of 1 unit. Therefore, light
+          traces a <strong>1:1 path—an exact 45° diagonal</strong>!
+        </p>
+        <p>
+          This is the other extreme: maximum spatial speed, zero aging. Any
+          worldline tilted steeper than 45° from the vertical would require
+          covering more distance than light can travel in that time—moving
+          faster than light—which nature forbids.
+        </p>
+        <p>
+          Between Alice's vertical line and the photon's 45° diagonal lies all
+          of physics for massive objects.
+          <strong>Bob</strong> is that general case. He is free to move at any
+          speed from rest up to—but never reaching—<span class="math-badge"
+            >c</span
+          >. His worldline will always sit inside the wedge between the two
+          extremes.
+        </p>
+        <p>
+          To connect our two visual lenses, we track motion using two distinct
+          angles:
+        </p>
+        <ul>
+          <li>
+            <strong>On the left (Velocity Space):</strong> The needle's angle
+            <span class="math-badge">θ</span> (theta) measures how much of Bob's
+            fixed cosmic speed is diverted into space:
+            <span class="math-badge">v_space = c · sin θ</span>.
+          </li>
+          <li>
+            <strong>On the right (Coordinate Spacetime):</strong> The angle
+            <span class="math-badge">φ</span> (phi) measures the resulting
+            geometric tilt of Bob's worldline away from the vertical time axis.
+          </li>
+        </ul>
+        <p>
+          Use the slider below to steer Bob's speed angle
+          <span class="math-badge">θ</span> and watch how the map's tilt angle
+          <span class="math-badge">φ</span> responds:
+        </p>
 
-      <p>
-        Each of those circles is a snapshot—a single moment frozen in time. Now imagine lifting each snapshot upward by
-        the amount of time that has passed: <span class="math-badge">t = 0</span> stays at the bottom, <span
-          class="math-badge">t = 1</span> rises one step, <span class="math-badge">t = 2</span> rises two, and so on.
-      </p>
-      <p>
-        Stacking these expanding circular snapshots in sequence traces a geometric volume: a conical funnel opening
-        upward into time. That cone is the <strong>Future Light Cone</strong>.
-      </p>
-      <p>
-        Running time backward reveals all light rays from the past converging toward your current location right now.
-        This forms the downward-opening <strong>Past Light Cone</strong>:
-      </p>
-
-      <!-- WIDGET 2: 3D LIGHT CONE EXPLORER -->
-      <div id="widget-3d-light-cone" class="interactive-artifact artifact-wide">
-        <div class="artifact-header">
-          <div>
-            <div class="artifact-badge">SIMULATION 02 · 3D LIGHT CONE VOLUME</div>
-          </div>
-        </div>
-        <div class="artifact-split">
-          <!-- Left Column: Canvas Viewport -->
-          <div class="split-canvas-col">
-            <canvas></canvas>
-          </div>
-          <!-- Right Column: Control Deck & Telemetry -->
-          <div class="split-controls-col">
-            <div style="display: flex; flex-direction: column; gap: 0.85rem;">
-              <!-- Telemetry Header -->
-              <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; flex-wrap: wrap;">
-                <div>
-                  <div
-                    style="font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em;">
-                    CURRENT REGION</div>
-                  <div class="badge-region"
-                    style="font-family: var(--font-mono); font-weight: 750; font-size: 0.88rem; color: var(--color-time); margin-top: 0.15rem;">
-                    CAUSAL FUTURE</div>
-                </div>
-                <button class="btn-primary btn-play-3d" style="padding: 0.35rem 0.75rem; font-size: 0.75rem;">
-                  <span>▶</span><span>Auto Sweep</span>
-                </button>
+        <!-- WIDGET 1: SIDE-BY-SIDE BRIDGE -->
+        <div id="widget-dual-bridge" class="interactive-artifact artifact-wide">
+          <div class="artifact-header">
+            <div>
+              <div class="artifact-badge">
+                SIMULATION 01 · DUAL-VIEW BRIDGE: VELOCITY SPACE &amp; SPACETIME
               </div>
-
-              <!-- Metric Cards -->
-              <div
-                style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.65rem; padding: 0.55rem 0.75rem; border-radius: 0.5rem; background: var(--bg-card-subtle); border: 1px solid var(--border-subtle);">
-                <div>
-                  <div
-                    style="font-family: var(--font-mono); font-size: 0.64rem; color: var(--text-muted); text-transform: uppercase;">
-                    TIME SLICE ct</div>
-                  <div class="val-slice-time"
-                    style="font-family: var(--font-mono); font-weight: 700; font-size: 0.95rem; color: var(--text-primary); font-variant-numeric: tabular-nums;">
-                    +0.40 c·t</div>
-                </div>
-                <div>
-                  <div
-                    style="font-family: var(--font-mono); font-size: 0.64rem; color: var(--text-muted); text-transform: uppercase;">
-                    WAVE RADIUS</div>
-                  <div class="val-wave-radius"
-                    style="font-family: var(--font-mono); font-weight: 700; font-size: 0.95rem; color: var(--color-photon); font-variant-numeric: tabular-nums;">
-                    0.40</div>
-                </div>
+            </div>
+          </div>
+          <div class="comparison-grid">
+            <!-- Left Column: Part 1 Speed Circle -->
+            <div class="canvas-col">
+              <div class="canvas-col-header">
+                <span>VELOCITY SPACE</span>
+                <span class="canvas-col-tag">v_space vs v_time</span>
               </div>
-
-              <!-- Time Slice Slider & Presets -->
+              <canvas class="canvas-speed"></canvas>
+            </div>
+            <!-- Right Column: Part 2 Spacetime Diagram -->
+            <div class="canvas-col">
+              <div class="canvas-col-header">
+                <span>COORDINATE SPACETIME</span>
+                <span class="canvas-col-tag">Position x vs Time ct</span>
+              </div>
+              <canvas class="canvas-spacetime"></canvas>
+            </div>
+          </div>
+          <!-- Controls Deck -->
+          <div class="artifact-controls artifact-controls-deck">
+            <div class="controls-strip">
+              <div class="clock-card amber clock-theta-status-card">
+                <span class="clock-label">Speed Angle</span>
+                <span class="clock-time val-theta-reading"
+                  >0.0<span>°</span></span
+                >
+                <span class="clock-badge badge-theta-status">v = 0.00c</span>
+              </div>
               <div class="control-item">
                 <div class="control-header">
-                  <span>Time Slice ct (-1.0 → +1.0)</span>
-                  <span class="control-val cyan val-slice-badge">+0.40</span>
+                  <span>Speed Angle θ (0° → 90°)</span>
+                  <span class="control-val amber val-theta-label"
+                    >Tilt φ: 0.0°</span
+                  >
                 </div>
-                <input type="range" class="range-slider slider-time" min="-1" max="1" step="0.02" value="0.4">
-                <div class="preset-chips" style="margin-top: 0.25rem;">
-                  <button class="chip-btn preset-slice-btn" data-slice="-0.75">Past (-0.75)</button>
-                  <button class="chip-btn preset-slice-btn" data-slice="0.0">Apex (0.00)</button>
-                  <button class="chip-btn preset-slice-btn active" data-slice="0.4">Future (+0.40)</button>
-                  <button class="chip-btn preset-slice-btn" data-slice="0.85">Future (+0.85)</button>
-                </div>
+                <input
+                  type="range"
+                  class="range-slider amber slider-theta"
+                  min="0"
+                  max="90"
+                  step="0.5"
+                  value="0"
+                />
               </div>
-
-              <!-- Orbit Sliders -->
-              <div class="orbit-sliders-grid">
-                <div class="control-item">
-                  <div class="control-header"><span>Azimuth (Orbit)</span></div>
-                  <input type="range" class="range-slider slider-azimuth" min="-3.14" max="3.14" step="0.05"
-                    value="0.65">
-                </div>
-                <div class="control-item">
-                  <div class="control-header"><span>Elevation (Tilt)</span></div>
-                  <input type="range" class="range-slider slider-elevation" min="-0.6" max="1.2" step="0.05"
-                    value="0.05">
-                </div>
-              </div>
-
-              <!-- Camera Viewpoint Presets -->
-              <div class="viewpoint-bar">
-                <div class="preset-chips">
-                  <button class="chip-btn preset-view-btn" data-az="0.65" data-el="0.05">Isometric</button>
-                  <button class="chip-btn preset-view-btn" data-az="0" data-el="0">Side View</button>
-                  <button class="chip-btn preset-view-btn" data-az="0" data-el="1.15">Top Down</button>
-                </div>
-                <button class="btn-secondary btn-reset-view" style="padding: 0.25rem 0.55rem; font-size: 0.72rem;">Reset View</button>
-              </div>
+              <button class="btn-primary btn-play">
+                <span>▶</span><span>Auto Sweep</span>
+              </button>
             </div>
 
-            <div
-              style="border-top: 1px solid var(--border-subtle); padding-top: 0.5rem; display: flex; align-items: center; justify-content: space-between;">
-              <span style="font-family: var(--font-mono); font-size: 0.68rem; color: var(--text-muted);">
-                Drag canvas or scrub sliders to rotate
+            <div class="controls-preset-row">
+              <div class="preset-chips">
+                <button class="chip-btn preset-btn active" data-theta="0">
+                  0° (At Rest)
+                </button>
+                <button class="chip-btn preset-btn" data-theta="30">
+                  30° (v = 0.50c)
+                </button>
+                <button class="chip-btn preset-btn" data-theta="60">
+                  60° (v = 0.866c)
+                </button>
+                <button class="chip-btn preset-btn" data-theta="90">
+                  90° (Pure Light c)
+                </button>
+              </div>
+              <span class="preset-tag"> Geometric Bridge: tan φ = sin θ </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- KEY PRESET OBSERVATIONS -->
+        <h3>The Four Milestones</h3>
+        <p>
+          On our spacetime map, the vertical axis measures elapsed time (<span
+            class="math-badge"
+            >ct</span
+          >) recorded on Alice's stationary ground stopwatch, while the
+          horizontal axis measures distance (<span class="math-badge">x</span>).
+        </p>
+        <p>
+          Notice the small cross-ticks drawn along Bob's worldline. Each tick
+          marks
+          <strong>one second ticking on Bob's personal wristwatch</strong>. In
+          physics, the time measured by an observer's own carried watch is
+          called their <strong>proper time</strong> (derived from the Latin
+          <em>proprius</em>, meaning "one's own"—the time experienced by your
+          own body, heartbeats, and personal clocks, denoted by the Greek letter
+          <span class="math-badge">τ</span>, tau).
+        </p>
+        <p>
+          The tilt angle <span class="math-badge">φ</span> of Bob's worldline
+          away from the vertical is simply determined by the ratio of horizontal
+          distance covered to vertical ground time elapsed:
+          <span class="math-badge">tan φ = run / rise = x / (ct)</span>. Because
+          spatial velocity is <span class="math-badge">v_x = c · sin θ</span>,
+          nature links the two worlds with an exact geometric bridge:
+        </p>
+
+        <div class="formula-card">
+          <div class="formula-card-header">
+            <span class="formula-tag">The Geometric Bridge</span>
+          </div>
+          <div class="formula-body">
+            tan <em>φ</em> = Δ<em>x</em> / (<em>c</em> · Δ<em>t</em>) =
+            <em>v</em>_x / <em>c</em> = sin <em>θ</em>
+          </div>
+          <div class="formula-note">
+            Spatial speed on the speedometer governs the slope of the worldline:
+            tan <em>φ</em> = sin <em>θ</em> &nbsp;⟹&nbsp; <em>φ</em> =
+            arctan(sin <em>θ</em>).
+          </div>
+        </div>
+
+        <!-- WIDGET 1c: 2x2 SYNTHESIS GRID -->
+        <div id="widget-synthesis-grid" class="interactive-artifact">
+          <div class="artifact-header">
+            <div>
+              <div class="artifact-badge">
+                ILLUSTRATION 01c · THE FOUR MILESTONES: SPEED SPACE TO SPACETIME
+              </div>
+            </div>
+          </div>
+          <div class="canvas-viewport" style="padding: 1rem">
+            <div class="synthesis-grid">
+              <!-- Panel 1: At Rest -->
+              <div class="synthesis-panel-card">
+                <div class="synthesis-panel-header">
+                  <span class="synthesis-panel-title"
+                    >1. Stationary Observer</span
+                  >
+                  <span class="synthesis-panel-tag">θ = 0° · v = 0</span>
+                </div>
+                <div class="synthesis-canvas-wrap">
+                  <canvas data-preset="0"></canvas>
+                </div>
+                <div class="synthesis-panel-footer">
+                  <span>Worldline: <strong>Vertical (φ = 0°)</strong></span>
+                  <span>Aging: <strong>100% Rate</strong></span>
+                </div>
+              </div>
+
+              <!-- Panel 2: Sub-light Cruising -->
+              <div class="synthesis-panel-card">
+                <div class="synthesis-panel-header">
+                  <span class="synthesis-panel-title"
+                    >2. Sub-Light Cruising</span
+                  >
+                  <span class="synthesis-panel-tag">θ = 30° · v = 0.50c</span>
+                </div>
+                <div class="synthesis-canvas-wrap">
+                  <canvas data-preset="30"></canvas>
+                </div>
+                <div class="synthesis-panel-footer">
+                  <span>Worldline: <strong>Mild Tilt (φ = 26.6°)</strong></span>
+                  <span>Aging: <strong>86.6% Rate</strong></span>
+                </div>
+              </div>
+
+              <!-- Panel 3: Ultra-Relativistic -->
+              <div class="synthesis-panel-card">
+                <div class="synthesis-panel-header">
+                  <span class="synthesis-panel-title"
+                    >3. Relativistic Cruise</span
+                  >
+                  <span class="synthesis-panel-tag">θ = 60° · v = 0.866c</span>
+                </div>
+                <div class="synthesis-canvas-wrap">
+                  <canvas data-preset="60"></canvas>
+                </div>
+                <div class="synthesis-panel-footer">
+                  <span
+                    >Worldline: <strong>Steep Tilt (φ = 40.9°)</strong></span
+                  >
+                  <span>Aging: <strong>50.0% Rate (Half)</strong></span>
+                </div>
+              </div>
+
+              <!-- Panel 4: The Photon Bound -->
+              <div class="synthesis-panel-card">
+                <div class="synthesis-panel-header">
+                  <span class="synthesis-panel-title">4. The Photon Bound</span>
+                  <span class="synthesis-panel-tag">θ = 90° · v = c</span>
+                </div>
+                <div class="synthesis-canvas-wrap">
+                  <canvas data-preset="90"></canvas>
+                </div>
+                <div class="synthesis-panel-footer">
+                  <span>Worldline: <strong>Boundary (φ = 45.0°)</strong></span>
+                  <span>Aging: <strong>0% (Frozen)</strong></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <p>
+          Comparing these four milestones side by side clarifies why the
+          geometry behaves as it does:
+        </p>
+        <ul>
+          <li>
+            <strong>1. At Rest (<span class="math-badge">θ = 0°</span>)</strong
+            >: Bob stands still beside Alice. In 1 second, he covers 0 distance
+            in space (<span class="math-badge">run = 0</span>,
+            <span class="math-badge">rise = 1</span>). His tilt is
+            <span class="math-badge">tan φ = 0 / 1 = 0</span>, giving an angle
+            of <strong><span class="math-badge">φ = 0°</span></strong
+            >. His worldline points straight up, and his proper time ticks in
+            exact lockstep with Alice's ground stopwatch (1 second for 1
+            second).
+          </li>
+          <li>
+            <strong
+              >2. Sub-light Cruising (<span class="math-badge">θ = 30°</span
+              >)</strong
+            >: At 30° on the speed circle, Bob directs half of light speed into
+            space: <span class="math-badge">v = c · sin(30°) = 0.50c</span>. For
+            every 1 light-second of time that rises vertically (<span
+              class="math-badge"
+              >rise = 1.0</span
+            >), Bob travels 0.5 light-seconds horizontally (<span
+              class="math-badge"
+              >run = 0.5</span
+            >). The tilt from the vertical is
+            <span class="math-badge">tan φ = 0.5 / 1.0 = 0.50</span>, which
+            gives an angle of
+            <strong
+              ><span class="math-badge">φ = arctan(0.50) ≈ 26.6°</span></strong
+            >! Because Bob's personal watch ticks at 86.6% rate (<span
+              class="math-badge"
+              >dτ = dt · cos 30°</span
+            >), Alice's ground stopwatch must count 1.15 seconds before Bob
+            experiences 1 second of proper time, stretching his tick marks
+            slightly along the track.
+          </li>
+          <li>
+            <strong
+              >3. Ultra-Relativistic (<span class="math-badge">θ = 60°</span
+              >)</strong
+            >: At 60° on the speed circle, Bob moves at
+            <span class="math-badge">v = c · sin(60°) ≈ 0.866c</span>. For every
+            1 unit of time (<span class="math-badge">rise = 1.0</span>), Bob
+            covers 0.866 units of distance (<span class="math-badge"
+              >run = 0.866</span
+            >). The tilt from the vertical is
+            <span class="math-badge">tan φ = 0.866 / 1.0 = 0.866</span>, which
+            yields
+            <strong
+              ><span class="math-badge">φ = arctan(0.866) ≈ 40.9°</span></strong
+            >! Here, Bob's watch ticks at half speed (<span class="math-badge"
+              >cos 60° = 0.50</span
+            >, <span class="math-badge">γ = 2.00</span>), so Alice's stopwatch
+            must record two full seconds for every one second of Bob's proper
+            time—spacing his tick marks twice as far apart vertically as
+            Alice's.
+          </li>
+          <li>
+            <strong
+              >4. The Photon Bound (<span class="math-badge">θ = 90°</span
+              >)</strong
+            >: Diverting 100% of speed into space gives
+            <span class="math-badge">v = c · sin(90°) = 1.0c</span>. Every 1
+            unit of time (<span class="math-badge">rise = 1.0</span>) matches 1
+            unit of distance (<span class="math-badge">run = 1.0</span>). The
+            tilt is <span class="math-badge">tan φ = 1.0 / 1.0 = 1.0</span>,
+            which yields an exact
+            <strong
+              ><span class="math-badge">φ = arctan(1.0) = 45.0°</span></strong
+            >! With all motion in space, zero remains for time: the photon
+            experiences zero proper time (<span class="math-badge">Δτ = 0</span
+            >), and its tick marks vanish entirely.
+          </li>
+        </ul>
+
+        <!-- INSIGHT CALLOUT -->
+        <div class="insight-callout">
+          <h4>Why 45° Is the Cosmic Speed Boundary</h4>
+          <p>
+            The 45° diagonal is the hard boundary of reality on the coordinate
+            map. Any worldline tilted steeper than 45° would require
+            <span class="math-badge">tan φ &gt; 1 ⟹ sin θ &gt; 1</span>, which
+            is mathematically impossible on the speed circle and physically
+            impossible for the cosmos. Everything outside the 45° boundary is
+            causal Elsewhere.
+          </p>
+        </div>
+
+        <!-- SECTION 2 -->
+        <h2>2. The 3D Light Cone</h2>
+        <p>
+          Up to now, we mapped motion along a single spatial track (<span
+            class="math-badge"
+            >x</span
+          >). What happens if you turn on a light bulb for a fraction of a
+          second at a single point in open space?
+        </p>
+        <p>
+          In three-dimensional space, the flash emits an expanding spherical
+          shell of photons spreading outward in all directions at speed
+          <span class="math-badge">c</span>:
+        </p>
+        <div class="formula-card">
+          <div class="formula-card-header">
+            <span class="formula-tag">Spherical Light Wavefront</span>
+          </div>
+          <div class="formula-body">
+            <em>x</em>² + <em>y</em>² + <em>z</em>² = (<em>c</em> · <em>t</em>)²
+          </div>
+          <div class="formula-note">
+            A spherical shell of light spreading outward through space with
+            velocity <em>c</em>.
+          </div>
+        </div>
+        <p>
+          To picture this clearly, let us work in two spatial dimensions—<span
+            class="math-badge"
+            >x</span
+          >
+          and <span class="math-badge">y</span>. The flash begins as a single
+          point. One moment later it has become a circle. Two moments later, a
+          larger circle. The radius grows at exactly the speed of light, so at
+          time <span class="math-badge">t</span> the circle has radius
+          <span class="math-badge">r = ct</span>:
+        </p>
+
+        <!-- WIDGET 1b: EXPANDING CIRCLES GRID -->
+        <div id="widget-expanding-circles" class="interactive-artifact">
+          <div class="artifact-header">
+            <div>
+              <div class="artifact-badge">
+                ILLUSTRATION 01b · 2D LIGHT RIPPLE SNAPSHOTS
+              </div>
+            </div>
+          </div>
+          <div class="canvas-viewport" style="padding: 1rem">
+            <div id="expanding-circles-grid" class="expanding-circles-grid">
+              <canvas class="circle-panel" data-t="0"></canvas>
+              <canvas class="circle-panel" data-t="1"></canvas>
+              <canvas class="circle-panel" data-t="2"></canvas>
+              <canvas class="circle-panel" data-t="3"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <p>
+          Each of those circles is a snapshot—a single moment frozen in time.
+          Now imagine lifting each snapshot upward by the amount of time that
+          has passed: <span class="math-badge">t = 0</span> stays at the bottom,
+          <span class="math-badge">t = 1</span> rises one step,
+          <span class="math-badge">t = 2</span> rises two, and so on.
+        </p>
+        <p>
+          Stacking these expanding circular snapshots in sequence traces a
+          geometric volume: a conical funnel opening upward into time. That cone
+          is the <strong>Future Light Cone</strong>.
+        </p>
+        <p>
+          Running time backward reveals all light rays from the past converging
+          toward your current location right now. This forms the
+          downward-opening <strong>Past Light Cone</strong>:
+        </p>
+
+        <!-- WIDGET 2: 3D LIGHT CONE EXPLORER -->
+        <div
+          id="widget-3d-light-cone"
+          class="interactive-artifact artifact-wide"
+        >
+          <div class="artifact-header">
+            <div>
+              <div class="artifact-badge">
+                SIMULATION 02 · 3D LIGHT CONE VOLUME
+              </div>
+            </div>
+          </div>
+          <div class="artifact-split">
+            <!-- Left Column: Canvas Viewport -->
+            <div class="split-canvas-col">
+              <canvas></canvas>
+            </div>
+            <!-- Right Column: Control Deck & Telemetry -->
+            <div class="split-controls-col">
+              <div style="display: flex; flex-direction: column; gap: 0.85rem">
+                <!-- Telemetry Header -->
+                <div
+                  style="
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    gap: 0.5rem;
+                    flex-wrap: wrap;
+                  "
+                >
+                  <div>
+                    <div
+                      style="
+                        font-family: var(--font-mono);
+                        font-size: 0.65rem;
+                        color: var(--text-muted);
+                        text-transform: uppercase;
+                        letter-spacing: 0.04em;
+                      "
+                    >
+                      CURRENT REGION
+                    </div>
+                    <div
+                      class="badge-region"
+                      style="
+                        font-family: var(--font-mono);
+                        font-weight: 750;
+                        font-size: 0.88rem;
+                        color: var(--color-time);
+                        margin-top: 0.15rem;
+                      "
+                    >
+                      CAUSAL FUTURE
+                    </div>
+                  </div>
+                  <button
+                    class="btn-primary btn-play-3d"
+                    style="padding: 0.35rem 0.75rem; font-size: 0.75rem"
+                  >
+                    <span>▶</span><span>Auto Sweep</span>
+                  </button>
+                </div>
+
+                <!-- Metric Cards -->
+                <div
+                  style="
+                    display: grid;
+                    grid-template-columns: 1fr 1fr;
+                    gap: 0.65rem;
+                    padding: 0.55rem 0.75rem;
+                    border-radius: 0.5rem;
+                    background: var(--bg-card-subtle);
+                    border: 1px solid var(--border-subtle);
+                  "
+                >
+                  <div>
+                    <div
+                      style="
+                        font-family: var(--font-mono);
+                        font-size: 0.64rem;
+                        color: var(--text-muted);
+                        text-transform: uppercase;
+                      "
+                    >
+                      TIME SLICE ct
+                    </div>
+                    <div
+                      class="val-slice-time"
+                      style="
+                        font-family: var(--font-mono);
+                        font-weight: 700;
+                        font-size: 0.95rem;
+                        color: var(--text-primary);
+                        font-variant-numeric: tabular-nums;
+                      "
+                    >
+                      +0.40 c·t
+                    </div>
+                  </div>
+                  <div>
+                    <div
+                      style="
+                        font-family: var(--font-mono);
+                        font-size: 0.64rem;
+                        color: var(--text-muted);
+                        text-transform: uppercase;
+                      "
+                    >
+                      WAVE RADIUS
+                    </div>
+                    <div
+                      class="val-wave-radius"
+                      style="
+                        font-family: var(--font-mono);
+                        font-weight: 700;
+                        font-size: 0.95rem;
+                        color: var(--color-photon);
+                        font-variant-numeric: tabular-nums;
+                      "
+                    >
+                      0.40
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Time Slice Slider & Presets -->
+                <div class="control-item">
+                  <div class="control-header">
+                    <span>Time Slice ct (-1.0 → +1.0)</span>
+                    <span class="control-val cyan val-slice-badge">+0.40</span>
+                  </div>
+                  <input
+                    type="range"
+                    class="range-slider slider-time"
+                    min="-1"
+                    max="1"
+                    step="0.02"
+                    value="0.4"
+                  />
+                  <div class="preset-chips" style="margin-top: 0.25rem">
+                    <button
+                      class="chip-btn preset-slice-btn"
+                      data-slice="-0.75"
+                    >
+                      Past (-0.75)
+                    </button>
+                    <button class="chip-btn preset-slice-btn" data-slice="0.0">
+                      Apex (0.00)
+                    </button>
+                    <button
+                      class="chip-btn preset-slice-btn active"
+                      data-slice="0.4"
+                    >
+                      Future (+0.40)
+                    </button>
+                    <button class="chip-btn preset-slice-btn" data-slice="0.85">
+                      Future (+0.85)
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Orbit Sliders -->
+                <div class="orbit-sliders-grid">
+                  <div class="control-item">
+                    <div class="control-header">
+                      <span>Azimuth (Orbit)</span>
+                    </div>
+                    <input
+                      type="range"
+                      class="range-slider slider-azimuth"
+                      min="-3.14"
+                      max="3.14"
+                      step="0.05"
+                      value="0.65"
+                    />
+                  </div>
+                  <div class="control-item">
+                    <div class="control-header">
+                      <span>Elevation (Tilt)</span>
+                    </div>
+                    <input
+                      type="range"
+                      class="range-slider slider-elevation"
+                      min="-0.6"
+                      max="1.2"
+                      step="0.05"
+                      value="0.05"
+                    />
+                  </div>
+                </div>
+
+                <!-- Camera Viewpoint Presets -->
+                <div class="viewpoint-bar">
+                  <div class="preset-chips">
+                    <button
+                      class="chip-btn preset-view-btn"
+                      data-az="0.65"
+                      data-el="0.05"
+                    >
+                      Isometric
+                    </button>
+                    <button
+                      class="chip-btn preset-view-btn"
+                      data-az="0"
+                      data-el="0"
+                    >
+                      Side View
+                    </button>
+                    <button
+                      class="chip-btn preset-view-btn"
+                      data-az="0"
+                      data-el="1.15"
+                    >
+                      Top Down
+                    </button>
+                  </div>
+                  <button
+                    class="btn-secondary btn-reset-view"
+                    style="padding: 0.25rem 0.55rem; font-size: 0.72rem"
+                  >
+                    Reset View
+                  </button>
+                </div>
+              </div>
+
+              <div
+                style="
+                  border-top: 1px solid var(--border-subtle);
+                  padding-top: 0.5rem;
+                  display: flex;
+                  align-items: center;
+                  justify-content: space-between;
+                "
+              >
+                <span
+                  style="
+                    font-family: var(--font-mono);
+                    font-size: 0.68rem;
+                    color: var(--text-muted);
+                  "
+                >
+                  Drag canvas or scrub sliders to rotate
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- THE THREE COSMIC REGIONS -->
+        <h3>The Three Realms</h3>
+        <p>
+          The 45° boundary of the Light Cone divides all of existence into three
+          mutually exclusive geometric realms:
+        </p>
+        <ol>
+          <li>
+            <strong>The Causal Future (Timelike Future):</strong> The region
+            inside the upper cone (<span class="math-badge"
+              >c²t² &gt; x² + y²</span
+            >
+            with <span class="math-badge">t &gt; 0</span>). Any particle of
+            matter moving at less than light speed (<span class="math-badge"
+              >v &lt; c</span
+            >) will always travel inside this cone. This is the only part of the
+            future you can ever visit, influence, or communicate with.
+          </li>
+          <li>
+            <strong>The Causal Past (Timelike Past):</strong> The region inside
+            the lower cone (<span class="math-badge">t &lt; 0</span>). This
+            contains every event in cosmic history that could have sent a signal
+            (light, gravity, or matter) to reach you right now. Your memories,
+            your DNA, and the light entering your eyes all originate strictly
+            from inside your past light cone.
+          </li>
+          <li>
+            <strong>The "Elsewhere" (Spacelike Region):</strong> The vast
+            territory outside the cone (<span class="math-badge"
+              >c²t² &lt; x² + y²</span
+            >). Because no signal, influence, or matter can travel faster than
+            light,
+            <strong
+              >nothing that happens in your Elsewhere can affect you right now,
+              and nothing you do right now can affect it</strong
+            >. It is completely causally severed from your present instant.
+          </li>
+        </ol>
+
+        <!-- SECTION 3 -->
+        <h2>3. The Horizon of Reality: Light Cones Under the Stars</h2>
+        <p>
+          To see what the light cone truly means, step away from abstract
+          coordinates and look up at the night sky.
+        </p>
+
+        <h3>The 8-Minute Sun</h3>
+        <p>
+          The sunlight warming your skin right now departed the solar surface
+          <strong>8 minutes and 20 seconds</strong>
+          ago across 150 million kilometers of empty space. That delay is not a
+          limitation of our eyes—it is an invariant of spacetime.
+        </p>
+        <p>
+          If the Sun vanished this instant, Earth would feel nothing for 500
+          seconds. Solar panels would keep producing power, birds would keep
+          singing, and Earth would continue orbiting peacefully around empty
+          space.
+        </p>
+        <p>
+          Because neither light nor gravity can outrun
+          <span class="math-badge">c</span>, the disappearance sits in Earth's
+          <strong>Elsewhere</strong>. To our physical world,
+          <strong>it has not happened yet</strong>. Only when the 45° wavefront
+          finally reaches our orbit does our sky plunge into darkness and our
+          planet drift into interstellar space:
+        </p>
+
+        <!-- WIDGET 2b: THE 8-MINUTE SUN ILLUSTRATION -->
+        <div id="widget-sun-delay" class="interactive-artifact artifact-wide">
+          <div class="artifact-header">
+            <div>
+              <div class="artifact-badge">
+                ILLUSTRATION 02b · THE 8-MINUTE SUN &amp; CAUSALITY LAG
+              </div>
+            </div>
+          </div>
+
+          <div class="comparison-grid">
+            <!-- Left Column: Physical Space Track -->
+            <div class="canvas-col">
+              <div class="canvas-col-header">
+                <span>PHYSICAL SPACE TRACK</span>
+                <span class="canvas-col-tag"
+                  >Distance (0 to 1 AU · 150M km)</span
+                >
+              </div>
+              <canvas class="canvas-sun-space"></canvas>
+            </div>
+            <!-- Right Column: Coordinate Spacetime Map -->
+            <div class="canvas-col">
+              <div class="canvas-col-header">
+                <span>COORDINATE SPACETIME</span>
+                <span class="canvas-col-tag"
+                  >Space x vs Time ct (45° Light Cone)</span
+                >
+              </div>
+              <canvas class="canvas-sun-spacetime"></canvas>
+            </div>
+          </div>
+
+          <!-- Controls Deck -->
+          <div class="artifact-controls artifact-controls-deck">
+            <div class="controls-strip">
+              <div class="clock-card cyan clock-status-card">
+                <span class="clock-label">Elapsed Time</span>
+                <span class="clock-time val-sun-time">250 <span>s</span></span>
+                <span class="clock-badge badge-sun-status">ELSEWHERE</span>
+              </div>
+              <div class="control-item">
+                <div class="control-header">
+                  <span>Time Since Vanish (0 to 600s)</span>
+                  <span class="control-val cyan val-time-clock">4m 10s</span>
+                </div>
+                <input
+                  type="range"
+                  class="range-slider slider-sun-time"
+                  min="0"
+                  max="600"
+                  step="2"
+                  value="250"
+                />
+              </div>
+              <button class="btn-primary btn-play-sun">
+                <span>▶</span><span>Auto Play</span>
+              </button>
+            </div>
+
+            <div class="controls-preset-row">
+              <div class="preset-chips">
+                <button class="chip-btn preset-sun-time" data-time="0">
+                  0s: Sun Vanishes
+                </button>
+                <button class="chip-btn preset-sun-time active" data-time="250">
+                  250s: Mid-Transit
+                </button>
+                <button class="chip-btn preset-sun-time" data-time="500">
+                  500s: Earth Hit (8m20s)
+                </button>
+                <button class="chip-btn preset-sun-time" data-time="600">
+                  600s: Causal Future
+                </button>
+              </div>
+              <span class="preset-tag">
+                Distance to Earth: 1 AU (500 light-seconds)
               </span>
             </div>
           </div>
         </div>
-      </div>
 
-      <!-- THE THREE COSMIC REGIONS -->
-      <h3>The Three Realms</h3>
-      <p>
-        The 45° boundary of the Light Cone divides all of existence into three mutually exclusive geometric realms:
-      </p>
-      <ol>
-        <li>
-          <strong>The Causal Future (Timelike Future):</strong> The region inside the upper cone (<span
-            class="math-badge">c²t² &gt; x² + y²</span> with <span class="math-badge">t &gt; 0</span>). Any particle of
-          matter moving at less than light speed (<span class="math-badge">v &lt; c</span>) will always travel inside
-          this cone. This is the only part of the future you can ever visit, influence, or communicate with.
-        </li>
-        <li>
-          <strong>The Causal Past (Timelike Past):</strong> The region inside the lower cone (<span class="math-badge">t
-            &lt; 0</span>). This contains every event in cosmic history that could have sent a signal (light, gravity, or
-          matter) to reach you right now. Your memories, your DNA, and the light entering your eyes all originate strictly
-          from inside your past light cone.
-        </li>
-        <li>
-          <strong>The "Elsewhere" (Spacelike Region):</strong> The vast territory outside the cone (<span
-            class="math-badge">c²t² &lt; x² + y²</span>). Because no signal, influence, or matter can travel faster than
-          light, <strong>nothing that happens in your Elsewhere can affect you right now, and nothing you do right now can
-            affect it</strong>. It is completely causally severed from your present instant.
-        </li>
-      </ol>
+        <h3>Peering Down the Past Light Cone</h3>
+        <p>
+          At night, the effect scales to cosmic proportions. You never perceive
+          the cosmos as a single simultaneous snapshot; you gaze directly down
+          the funnel of your own past light cone. Every point of starlight is an
+          ancient dispatch:
+        </p>
+        <ul>
+          <li>
+            <strong>Proxima Centauri</strong> appears as it was 4.2 years ago.
+          </li>
+          <li><strong>Vega</strong> appears as it was 25 years ago.</li>
+          <li>
+            <strong>Alkaid</strong>, at the tip of the Big Dipper's handle,
+            appears as it was 104 years ago.
+          </li>
+        </ul>
+        <p>
+          The farther away an object sits in space, the deeper into antiquity
+          you must reach to touch it. You see stars not as they are today, but
+          along the diagonal boundary where their history intersects your
+          present:
+        </p>
 
-      <!-- SECTION 3 -->
-      <h2>3. The Horizon of Reality: Light Cones Under the Stars</h2>
-      <p>
-        To see what the light cone truly means, step away from abstract coordinates and look up at the night sky.
-      </p>
-
-      <h3>The 8-Minute Sun</h3>
-      <p>
-        The sunlight warming your skin right now departed the solar surface <strong>8 minutes and 20 seconds</strong> ago
-        across 150 million kilometers of empty space. That delay is not a limitation of our eyes—it is an invariant of
-        spacetime.
-      </p>
-      <p>
-        If the Sun vanished this instant, Earth would feel nothing for 500 seconds. Solar panels would keep producing power,
-        birds would keep singing, and Earth would continue orbiting peacefully around empty space.
-      </p>
-      <p>
-        Because neither light nor gravity can outrun <span class="math-badge">c</span>, the disappearance sits in Earth's
-        <strong>Elsewhere</strong>. To our physical world, <strong>it has not happened yet</strong>. Only when the 45°
-        wavefront finally reaches our orbit does our sky plunge into darkness and our planet drift into interstellar space:
-      </p>
-
-      <!-- WIDGET 2b: THE 8-MINUTE SUN ILLUSTRATION -->
-      <div id="widget-sun-delay" class="interactive-artifact artifact-wide">
-        <div class="artifact-header">
-          <div>
-            <div class="artifact-badge">ILLUSTRATION 02b · THE 8-MINUTE SUN &amp; CAUSALITY LAG</div>
-          </div>
-        </div>
-
-        <div class="comparison-grid">
-          <!-- Left Column: Physical Space Track -->
-          <div class="canvas-col">
-            <div class="canvas-col-header">
-              <span>PHYSICAL SPACE TRACK</span>
-              <span class="canvas-col-tag">Distance (0 to 1 AU · 150M km)</span>
-            </div>
-            <canvas class="canvas-sun-space"></canvas>
-          </div>
-          <!-- Right Column: Coordinate Spacetime Map -->
-          <div class="canvas-col">
-            <div class="canvas-col-header">
-              <span>COORDINATE SPACETIME</span>
-              <span class="canvas-col-tag">Space x vs Time ct (45° Light Cone)</span>
-            </div>
-            <canvas class="canvas-sun-spacetime"></canvas>
-          </div>
-        </div>
-
-        <!-- Controls Deck -->
-        <div class="artifact-controls artifact-controls-deck">
-          <div class="controls-strip">
-            <div class="clock-card cyan clock-status-card">
-              <span class="clock-label">Elapsed Time</span>
-              <span class="clock-time val-sun-time">250 <span>s</span></span>
-              <span class="clock-badge badge-sun-status">ELSEWHERE</span>
-            </div>
-            <div class="control-item">
-              <div class="control-header">
-                <span>Time Since Vanish (0 to 600s)</span>
-                <span class="control-val cyan val-time-clock">4m 10s</span>
+        <!-- WIDGET 2c: PEERING DOWN THE PAST LIGHT CONE -->
+        <div
+          id="widget-past-light-cone"
+          class="interactive-artifact artifact-wide"
+        >
+          <div class="artifact-header">
+            <div>
+              <div class="artifact-badge">
+                ILLUSTRATION 02c · PEERING DOWN THE PAST LIGHT CONE
               </div>
-              <input type="range" class="range-slider slider-sun-time" min="0" max="600" step="2" value="250">
             </div>
-            <button class="btn-primary btn-play-sun"><span>▶</span><span>Auto Play</span></button>
           </div>
 
-          <div class="controls-preset-row">
-            <div class="preset-chips">
-              <button class="chip-btn preset-sun-time" data-time="0">0s: Sun Vanishes</button>
-              <button class="chip-btn preset-sun-time active" data-time="250">250s: Mid-Transit</button>
-              <button class="chip-btn preset-sun-time" data-time="500">500s: Earth Hit (8m20s)</button>
-              <button class="chip-btn preset-sun-time" data-time="600">600s: Causal Future</button>
-            </div>
-            <span class="preset-tag">
-              Distance to Earth: 1 AU (500 light-seconds)
-            </span>
-          </div>
-        </div>
-      </div>
-
-      <h3>Peering Down the Past Light Cone</h3>
-      <p>
-        At night, the effect scales to cosmic proportions. You never perceive the cosmos as a single simultaneous snapshot;
-        you gaze directly down the funnel of your own past light cone. Every point of starlight is an ancient dispatch:
-      </p>
-      <ul>
-        <li><strong>Proxima Centauri</strong> appears as it was 4.2 years ago.</li>
-        <li><strong>Vega</strong> appears as it was 25 years ago.</li>
-        <li><strong>Alkaid</strong>, at the tip of the Big Dipper's handle, appears as it was 104 years ago.</li>
-      </ul>
-      <p>
-        The farther away an object sits in space, the deeper into antiquity you must reach to touch it. You see stars not as
-        they are today, but along the diagonal boundary where their history intersects your present:
-      </p>
-
-      <!-- WIDGET 2c: PEERING DOWN THE PAST LIGHT CONE -->
-      <div id="widget-past-light-cone" class="interactive-artifact artifact-wide">
-        <div class="artifact-header">
-          <div>
-            <div class="artifact-badge">ILLUSTRATION 02c · PEERING DOWN THE PAST LIGHT CONE</div>
-          </div>
-        </div>
-
-        <div class="comparison-grid">
-          <!-- Left Column: Physical Stellar Track -->
-          <div class="canvas-col">
-            <div class="canvas-col-header">
-              <span>PHYSICAL STELLAR TRACK</span>
-              <span class="canvas-col-tag">Distance (0 to 110 ly · Earth to Stars)</span>
-            </div>
-            <canvas class="canvas-past-space"></canvas>
-          </div>
-          <!-- Right Column: Coordinate Spacetime Map -->
-          <div class="canvas-col">
-            <div class="canvas-col-header">
-              <span>COORDINATE SPACETIME</span>
-              <span class="canvas-col-tag">Space x vs Time ct (45° Past Light Cone)</span>
-            </div>
-            <canvas class="canvas-past-spacetime"></canvas>
-          </div>
-        </div>
-
-        <!-- Controls Deck -->
-        <div class="artifact-controls artifact-controls-deck">
-          <div class="controls-strip">
-            <div class="clock-card cyan clock-past-status-card">
-              <span class="clock-label">Lookback Delay</span>
-              <span class="clock-time val-past-time">25.0 <span>yrs</span></span>
-              <span class="clock-badge badge-past-status">VEGA DISPATCH</span>
-            </div>
-            <div class="control-item">
-              <div class="control-header">
-                <span>Target Distance x (0 to 110 ly)</span>
-                <span class="control-val cyan val-past-star-name">Vega · 25.0 ly</span>
+          <div class="comparison-grid">
+            <!-- Left Column: Physical Stellar Track -->
+            <div class="canvas-col">
+              <div class="canvas-col-header">
+                <span>PHYSICAL STELLAR TRACK</span>
+                <span class="canvas-col-tag"
+                  >Distance (0 to 110 ly · Earth to Stars)</span
+                >
               </div>
-              <input type="range" class="range-slider slider-past-dist" min="0" max="110" step="0.5" value="25">
+              <canvas class="canvas-past-space"></canvas>
             </div>
-            <button class="btn-primary btn-play-past"><span>▶</span><span>Auto Tour</span></button>
-          </div>
-
-          <div class="controls-preset-row">
-            <div class="preset-chips">
-              <button class="chip-btn preset-past-star" data-dist="4.2" data-name="Proxima Centauri">Proxima (4.2 ly)</button>
-              <button class="chip-btn preset-past-star" data-dist="8.6" data-name="Sirius">Sirius (8.6 ly)</button>
-              <button class="chip-btn preset-past-star active" data-dist="25" data-name="Vega">Vega (25 ly)</button>
-              <button class="chip-btn preset-past-star" data-dist="79" data-name="Regulus">Regulus (79 ly)</button>
-              <button class="chip-btn preset-past-star" data-dist="104" data-name="Alkaid">Alkaid (104 ly)</button>
-            </div>
-            <span class="preset-tag">
-              Invariant: c = 1 ly / yr (Lookback Time = Spatial Distance)
-            </span>
-          </div>
-        </div>
-      </div>
-
-      <h3>The Lifespan Horizon</h3>
-      <p>
-        Now invert the question: <strong>what happens to events taking place across the cosmos today?</strong>
-      </p>
-      <p>
-        Imagine a child born on Earth today (<span class="math-badge">t = 0</span>) who lives a full 80-year life, their
-        worldline climbing vertically at <span class="math-badge">x = 0</span>. Suppose that on the exact day of their birth,
-        several stars across the galaxy emit a flash of light.
-      </p>
-      <p>
-        Which flashes will that child live to see? Can an 80-year life witness <em>any</em> event born today if they simply
-        wait long enough—or does the geometry of spacetime draw an inescapable boundary across a human life?
-      </p>
-      <p>
-        In <strong>Simulation 03</strong> below, track this journey through two coordinated views: a physical radar map of
-        space (left) and the spacetime map tracking the lifeline (right):
-      </p>
-
-      <!-- WIDGET 3: COORDINATED DUAL-VIEW HORIZON -->
-      <div id="widget-cosmic-horizon" class="interactive-artifact artifact-wide">
-        <div class="artifact-header">
-          <div>
-            <div class="artifact-badge">SIMULATION 03 · THE COSMIC HORIZON &amp; HUMAN LIFESPAN</div>
-          </div>
-        </div>
-
-        <div class="comparison-grid">
-          <!-- Left Column: Physical Stellar Radar -->
-          <div class="canvas-col">
-            <div class="canvas-col-header">
-              <span>PHYSICAL STELLAR RADAR</span>
-              <span class="canvas-col-tag">Distance vs Direction (0 to 106 ly)</span>
-            </div>
-            <canvas class="canvas-radar"></canvas>
-          </div>
-          <!-- Right Column: Coordinate Spacetime Map -->
-          <div class="canvas-col">
-            <div class="canvas-col-header">
-              <span>COORDINATE SPACETIME</span>
-              <span class="canvas-col-tag">Space x vs Time ct (0 to 100+ yrs)</span>
-            </div>
-            <canvas class="canvas-spacetime-cone"></canvas>
-          </div>
-        </div>
-
-        <!-- Controls Deck -->
-        <div class="artifact-controls artifact-controls-deck">
-          <div class="controls-strip">
-            <div class="clock-card cyan clock-horizon-status-card">
-              <span class="clock-label">Lifespan Age</span>
-              <span class="clock-time val-age-reading">25.0 <span>yrs</span></span>
-              <span class="clock-badge badge-horizon-status">VEGA WITNESSED</span>
-            </div>
-            <div class="control-item">
-              <div class="control-header">
-                <span>Scrub Your Age (0 to 80 Years)</span>
-                <span class="range-val val-age-num control-val cyan">25.0 yrs</span>
+            <!-- Right Column: Coordinate Spacetime Map -->
+            <div class="canvas-col">
+              <div class="canvas-col-header">
+                <span>COORDINATE SPACETIME</span>
+                <span class="canvas-col-tag"
+                  >Space x vs Time ct (45° Past Light Cone)</span
+                >
               </div>
-              <input type="range" class="range-slider slider-lifespan-age" min="0" max="80" step="0.5" value="25">
+              <canvas class="canvas-past-spacetime"></canvas>
             </div>
-            <button class="btn-primary btn-auto-age"><span>▶</span><span>Simulate Lifespan</span></button>
           </div>
 
-          <div class="controls-preset-row">
-            <div class="preset-chips">
-              <button class="chip-btn preset-star" data-dist="0.000016" data-name="The Sun">Sun (8.3m)</button>
-              <button class="chip-btn preset-star" data-dist="4.2" data-name="Proxima Centauri">Proxima (4.2 ly)</button>
-              <button class="chip-btn preset-star" data-dist="8.6" data-name="Sirius">Sirius (8.6 ly)</button>
-              <button class="chip-btn preset-star active" data-dist="25" data-name="Vega">Vega (25 ly)</button>
-              <button class="chip-btn preset-star" data-dist="79" data-name="Regulus">Regulus (79 ly)</button>
-              <button class="chip-btn preset-star" data-dist="104" data-name="Alkaid">Alkaid (104 ly)</button>
+          <!-- Controls Deck -->
+          <div class="artifact-controls artifact-controls-deck">
+            <div class="controls-strip">
+              <div class="clock-card cyan clock-past-status-card">
+                <span class="clock-label">Lookback Delay</span>
+                <span class="clock-time val-past-time"
+                  >25.0 <span>yrs</span></span
+                >
+                <span class="clock-badge badge-past-status">VEGA DISPATCH</span>
+              </div>
+              <div class="control-item">
+                <div class="control-header">
+                  <span>Target Distance x (0 to 110 ly)</span>
+                  <span class="control-val cyan val-past-star-name"
+                    >Vega · 25.0 ly</span
+                  >
+                </div>
+                <input
+                  type="range"
+                  class="range-slider slider-past-dist"
+                  min="0"
+                  max="110"
+                  step="0.5"
+                  value="25"
+                />
+              </div>
+              <button class="btn-primary btn-play-past">
+                <span>▶</span><span>Auto Tour</span>
+              </button>
             </div>
-            <span class="preset-tag">
-              Causal Horizon: Radius r = c · Age (1 ly / yr)
-            </span>
+
+            <div class="controls-preset-row">
+              <div class="preset-chips">
+                <button
+                  class="chip-btn preset-past-star"
+                  data-dist="4.2"
+                  data-name="Proxima Centauri"
+                >
+                  Proxima (4.2 ly)
+                </button>
+                <button
+                  class="chip-btn preset-past-star"
+                  data-dist="8.6"
+                  data-name="Sirius"
+                >
+                  Sirius (8.6 ly)
+                </button>
+                <button
+                  class="chip-btn preset-past-star active"
+                  data-dist="25"
+                  data-name="Vega"
+                >
+                  Vega (25 ly)
+                </button>
+                <button
+                  class="chip-btn preset-past-star"
+                  data-dist="79"
+                  data-name="Regulus"
+                >
+                  Regulus (79 ly)
+                </button>
+                <button
+                  class="chip-btn preset-past-star"
+                  data-dist="104"
+                  data-name="Alkaid"
+                >
+                  Alkaid (104 ly)
+                </button>
+              </div>
+              <span class="preset-tag">
+                Invariant: c = 1 ly / yr (Lookback Time = Spatial Distance)
+              </span>
+            </div>
           </div>
         </div>
-      </div>
 
-      <h3>The Geometry of an Elsewhere</h3>
-      <p>
-        Scrubbing the slider forward from birth toward age 80 reveals the exact same geometry in both frames:
-      </p>
-      <ul>
-        <li>
-          <strong>The Catchment Bubble (<span class="math-badge">r = ct</span>):</strong> In the radar map, Earth's blue
-          causal sphere expands outward at one light-year per year. On the right, your past light cone opens downward at
-          45°—its base sweeping across space at the identical rate.
-        </li>
-        <li>
-          <strong>The Arrival of News:</strong> Select <strong>Vega (25 ly)</strong>. At age 25, Earth's bubble and the
-          star's amber wavefront meet. On the spacetime map, Vega's 45° light ray intersects the lifeline at <span
-            class="math-badge">t = 25 years</span>. On their 25th birthday, the flash arrives.
-        </li>
-        <li>
-          <strong>The Alkaid Barrier:</strong> Select <strong>Alkaid (104 ly)</strong> and scrub to age 80. Earth's causal
-          bubble spans 80 light-years, but Alkaid sits 104 light-years out. Its light ray does not reach Earth until <span
-            class="math-badge">t = 104 years</span>—twenty-four years after the lifeline ends.
-        </li>
-      </ul>
-      <p>
-        Across that person's entire lifetime—from first breath to last—today's flash at Alkaid remains locked in their
-        <strong>Elsewhere</strong>. Even though it occurred on the day of their birth, it can never touch, influence, or be
-        known to them. For that life, it effectively never existed.
-      </p>
-      <p>
-        Every observer travels through time wrapped in a private bubble of causality. The 45° diagonal is not an engineering
-        hurdle—it is the geometric horizon of reality. But this raises an even deeper puzzle: who decides what counts as
-        "the same day" across a hundred light-years?
-      </p>
+        <h3>The Lifespan Horizon</h3>
+        <p>
+          Now invert the question:
+          <strong
+            >what happens to events taking place across the cosmos
+            today?</strong
+          >
+        </p>
+        <p>
+          Imagine a child born on Earth today (<span class="math-badge"
+            >t = 0</span
+          >) who lives a full 80-year life, their worldline climbing vertically
+          at <span class="math-badge">x = 0</span>. Suppose that on the exact
+          day of their birth, several stars across the galaxy emit a flash of
+          light.
+        </p>
+        <p>
+          Which flashes will that child live to see? Can an 80-year life witness
+          <em>any</em> event born today if they simply wait long enough—or does
+          the geometry of spacetime draw an inescapable boundary across a human
+          life?
+        </p>
+        <p>
+          In <strong>Simulation 03</strong> below, track this journey through
+          two coordinated views: a physical radar map of space (left) and the
+          spacetime map tracking the lifeline (right):
+        </p>
 
-      <!-- SECTION 4 -->
-      <h2>4. The Angle of "Now"</h2>
-      <p>
-        Now that we have built the coordinate map of spacetime and understood the 45° geometry of the Light Cone, we have
-        established the boundaries of cause and effect.
-      </p>
-      <p>
-        This leads directly to relativity's most mind-bending puzzle:
-      </p>
-      <p>
-        <em>If Bob is moving relative to Alice, his worldline is tilted at angle <span class="math-badge">φ</span>. What
-          does Bob consider to be happening "right now"?</em>
-      </p>
-      <p>
-        For Alice at rest, "Now" is a flat horizontal slice across the spacetime map. But because the speed of light must
-        be identical in both directions for Bob, <strong>Bob's slice of simultaneous space cannot be horizontal. It must
-          tilt upward!</strong>
-      </p>
-      <p>
-        In <a href="03-spacetime-loaf.html"
-          style="color:var(--color-time); font-weight:600; text-decoration:underline;">Part 3: The Spacetime Loaf &amp;
-          Length Contraction</a>, we explore:
-      </p>
-      <ul>
-        <li>How motion tilts your slice through the 4D block universe like cutting an oblique slice of bread.</li>
-        <li>Why moving rulers naturally shorten along their direction of motion.</li>
-        <li>The Twin Paradox resolution: how turning around sweeps Bob's "Now" slice across decades of Alice's life.</li>
-      </ul>
+        <!-- WIDGET 3: COORDINATED DUAL-VIEW HORIZON -->
+        <div
+          id="widget-cosmic-horizon"
+          class="interactive-artifact artifact-wide"
+        >
+          <div class="artifact-header">
+            <div>
+              <div class="artifact-badge">
+                SIMULATION 03 · THE COSMIC HORIZON &amp; HUMAN LIFESPAN
+              </div>
+            </div>
+          </div>
 
-      <!-- SERIES PAGER -->
-      <div class="series-pager">
-        <a href="01-motion-and-time.html" class="btn-secondary">
-          ← Part 1: Motion Through Space &amp; Time
-        </a>
-        <a href="03-spacetime-loaf.html" class="btn-primary">
-          Explore Part 3: The Spacetime Loaf →
-        </a>
-      </div>
+          <div class="comparison-grid">
+            <!-- Left Column: Physical Stellar Radar -->
+            <div class="canvas-col">
+              <div class="canvas-col-header">
+                <span>PHYSICAL STELLAR RADAR</span>
+                <span class="canvas-col-tag"
+                  >Distance vs Direction (0 to 106 ly)</span
+                >
+              </div>
+              <canvas class="canvas-radar"></canvas>
+            </div>
+            <!-- Right Column: Coordinate Spacetime Map -->
+            <div class="canvas-col">
+              <div class="canvas-col-header">
+                <span>COORDINATE SPACETIME</span>
+                <span class="canvas-col-tag"
+                  >Space x vs Time ct (0 to 100+ yrs)</span
+                >
+              </div>
+              <canvas class="canvas-spacetime-cone"></canvas>
+            </div>
+          </div>
 
-      <!-- AUTHOR BIO -->
-      <div class="article-author">
-        <div class="brand-badge">IF</div>
-        <div>
-          <h4>Aayush Agarwal</h4>
+          <!-- Controls Deck -->
+          <div class="artifact-controls artifact-controls-deck">
+            <div class="controls-strip">
+              <div class="clock-card cyan clock-horizon-status-card">
+                <span class="clock-label">Lifespan Age</span>
+                <span class="clock-time val-age-reading"
+                  >25.0 <span>yrs</span></span
+                >
+                <span class="clock-badge badge-horizon-status"
+                  >VEGA WITNESSED</span
+                >
+              </div>
+              <div class="control-item">
+                <div class="control-header">
+                  <span>Scrub Your Age (0 to 80 Years)</span>
+                  <span class="range-val val-age-num control-val cyan"
+                    >25.0 yrs</span
+                  >
+                </div>
+                <input
+                  type="range"
+                  class="range-slider slider-lifespan-age"
+                  min="0"
+                  max="80"
+                  step="0.5"
+                  value="25"
+                />
+              </div>
+              <button class="btn-primary btn-auto-age">
+                <span>▶</span><span>Simulate Lifespan</span>
+              </button>
+            </div>
+
+            <div class="controls-preset-row">
+              <div class="preset-chips">
+                <button
+                  class="chip-btn preset-star"
+                  data-dist="0.000016"
+                  data-name="The Sun"
+                >
+                  Sun (8.3m)
+                </button>
+                <button
+                  class="chip-btn preset-star"
+                  data-dist="4.2"
+                  data-name="Proxima Centauri"
+                >
+                  Proxima (4.2 ly)
+                </button>
+                <button
+                  class="chip-btn preset-star"
+                  data-dist="8.6"
+                  data-name="Sirius"
+                >
+                  Sirius (8.6 ly)
+                </button>
+                <button
+                  class="chip-btn preset-star active"
+                  data-dist="25"
+                  data-name="Vega"
+                >
+                  Vega (25 ly)
+                </button>
+                <button
+                  class="chip-btn preset-star"
+                  data-dist="79"
+                  data-name="Regulus"
+                >
+                  Regulus (79 ly)
+                </button>
+                <button
+                  class="chip-btn preset-star"
+                  data-dist="104"
+                  data-name="Alkaid"
+                >
+                  Alkaid (104 ly)
+                </button>
+              </div>
+              <span class="preset-tag">
+                Causal Horizon: Radius r = c · Age (1 ly / yr)
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <h3>The Geometry of an Elsewhere</h3>
+        <p>
+          Scrubbing the slider forward from birth toward age 80 reveals the
+          exact same geometry in both frames:
+        </p>
+        <ul>
+          <li>
+            <strong
+              >The Catchment Bubble (<span class="math-badge">r = ct</span
+              >):</strong
+            >
+            In the radar map, Earth's blue causal sphere expands outward at one
+            light-year per year. On the right, your past light cone opens
+            downward at 45°—its base sweeping across space at the identical
+            rate.
+          </li>
+          <li>
+            <strong>The Arrival of News:</strong> Select
+            <strong>Vega (25 ly)</strong>. At age 25, Earth's bubble and the
+            star's amber wavefront meet. On the spacetime map, Vega's 45° light
+            ray intersects the lifeline at
+            <span class="math-badge">t = 25 years</span>. On their 25th
+            birthday, the flash arrives.
+          </li>
+          <li>
+            <strong>The Alkaid Barrier:</strong> Select
+            <strong>Alkaid (104 ly)</strong> and scrub to age 80. Earth's causal
+            bubble spans 80 light-years, but Alkaid sits 104 light-years out.
+            Its light ray does not reach Earth until
+            <span class="math-badge">t = 104 years</span>—twenty-four years
+            after the lifeline ends.
+          </li>
+        </ul>
+        <p>
+          Across that person's entire lifetime—from first breath to last—today's
+          flash at Alkaid remains locked in their
+          <strong>Elsewhere</strong>. Even though it occurred on the day of
+          their birth, it can never touch, influence, or be known to them. For
+          that life, it effectively never existed.
+        </p>
+        <p>
+          Every observer travels through time wrapped in a private bubble of
+          causality. The 45° diagonal is not an engineering hurdle—it is the
+          geometric horizon of reality. But this raises an even deeper puzzle:
+          who decides what counts as "the same day" across a hundred
+          light-years?
+        </p>
+
+        <!-- SECTION 4 -->
+        <h2>4. The Angle of "Now"</h2>
+        <p>
+          In
+          <a
+            href="03-spacetime-loaf.html"
+            style="
+              color: var(--color-time);
+              font-weight: 600;
+              text-decoration: underline;
+            "
+            >Part 3: The Spacetime Loaf &amp; Length Contraction</a
+          >, we explore:
+        </p>
+        <ul>
+          <li>
+            How motion tilts your slice through the 4D block universe like
+            cutting an oblique slice of bread.
+          </li>
+          <li>
+            The moving beacon thought experiment with live interactive frame
+            comparisons.
+          </li>
+          <li>
+            Why moving rulers naturally shorten along their direction of motion.
+          </li>
+          <li>
+            The Twin Paradox resolution: how turning around sweeps Bob's "Now"
+            slice across decades of Alice's life.
+          </li>
+        </ul>
+
+        <!-- FOOD FOR THOUGHT CALLOUT -->
+        <div class="insight-callout">
+          <h4>Food for Thought: Three Cosmic Puzzles of the Light Cone</h4>
           <p>
-            Exploring physics, mathematics, and machine learning through intuitive visual geometry and explorable
-            interactive simulations.
+            Before we step into the 3D spacetime loaf, consider three questions
+            that emerge directly from the geometry of the light cone:
+          </p>
+          <p>
+            <strong
+              >1. The Tachyonic Telegram (Why is exceeding light speed a time
+              machine?)</strong
+            ><br />
+            We saw that the 45° boundary strictly walls off the
+            <em>Elsewhere</em>: nothing can travel fast enough to escape the
+            cone. But what if an engineered signal could? Suppose an inventor
+            builds a faster-than-light radio that transmits signals across space
+            into the Elsewhere. Because a moving observer slices time at a
+            different angle, the outgoing signal can travel backward in time
+            from their perspective. If they immediately reply with their own
+            radio, their message can arrive back on Earth
+            <em>before the original signal was ever sent</em>. Is the speed of
+            light an arbitrary speed limit—or nature's only shield protecting
+            cause from effect?
+          </p>
+          <p>
+            <strong
+              >2. The Andromeda Disagreement (Does the future already
+              exist?)</strong
+            ><br />
+            We saw that distant stars sit isolated in your Elsewhere; you cannot
+            know what is happening there today until their light crosses space.
+            Now imagine two people walking past each other on an Earth sidewalk.
+            One walks toward the Andromeda galaxy (2.5 million light-years
+            away); the other walks in the opposite direction. Because motion
+            tilts the slice of "Now" across cosmic distances, their definitions
+            of what is happening in Andromeda right now differ by several whole
+            days. If an event in the Elsewhere is already historical fact for
+            one walker but hasn't happened yet for the other, does that mean
+            tomorrow is already written?
+          </p>
+          <p>
+            <strong
+              >3. The Trapped Light Cone (Can gravity bend the future
+              inward?)</strong
+            ><br />
+            Every light cone we drew opened rigidly upward at 45°, guaranteeing
+            that shining a flashlight always sends light racing outward into
+            open space. But what happens near immense concentrations of mass? If
+            gravity warps spacetime itself, can a collapsing star tilt the light
+            cone inward? If the cone tips so far that its entire 45° interior
+            points toward the center, then reaching the heart of a black hole is
+            no longer a place you can avoid—it becomes your inescapable future
+            in time. Can geometry transform a direction in space into an
+            inevitable moment in time?
           </p>
         </div>
+
+        <!-- SERIES PAGER -->
+        <div class="series-pager">
+          <a href="01-motion-and-time.html" class="btn-secondary">
+            ← Part 1: Motion Through Space &amp; Time
+          </a>
+          <a href="03-spacetime-loaf.html" class="btn-primary">
+            Explore Part 3: The Spacetime Loaf →
+          </a>
+        </div>
+
+        <!-- AUTHOR BIO -->
+        <div class="article-author">
+          <div class="brand-badge">IF</div>
+          <div>
+            <h4>Aayush Agarwal</h4>
+            <p>
+              Exploring physics, mathematics, and machine learning through
+              intuitive visual geometry and explorable interactive simulations.
+            </p>
+          </div>
+        </div>
+      </article>
+    </main>
+
+    <!-- Site Footer -->
+    <footer class="site-footer">
+      <div class="wide-container">
+        <p>
+          <strong>Intuition First</strong> · An Explorable Science &amp;
+          Mathematics Series by Aayush Agarwal
+        </p>
+        <p style="margin-top: 0.5rem">
+          <a href="../index.html">Series Home</a> ·
+          <a href="01-motion-and-time.html">Part 1: Motion &amp; Time</a> ·
+          <a href="03-spacetime-loaf.html">Part 3: The Loaf &amp; Length</a> ·
+          <a
+            href="https://github.com/ayush2991/intuition-first"
+            target="_blank"
+            rel="noopener"
+            >GitHub</a
+          >
+        </p>
       </div>
-    </article>
-  </main>
+    </footer>
 
-  <!-- Site Footer -->
-  <footer class="site-footer">
-    <div class="wide-container">
-      <p><strong>Intuition First</strong> · An Explorable Science &amp; Mathematics Series by Aayush Agarwal</p>
-      <p style="margin-top: 0.5rem;">
-        <a href="../index.html">Series Home</a> · <a href="01-motion-and-time.html">Part 1: Motion &amp; Time</a> · <a
-          href="03-spacetime-loaf.html">Part 3: The Loaf &amp; Length</a> · <a
-          href="https://github.com/ayush2991/intuition-first" target="_blank" rel="noopener">GitHub</a>
-      </p>
-    </div>
-  </footer>
-
-  <!-- Universal Client-Side Script (100% Static & file:// compatible) -->
-  <script src="../js/core.js"></script>
-  <script src="../js/post-02.js"></script>
-</body>
-
+    <!-- Universal Client-Side Script (100% Static & file:// compatible) -->
+    <script src="../js/core.js"></script>
+    <script src="../js/post-02.js"></script>
+  </body>
 </html>
