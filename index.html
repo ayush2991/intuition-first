@@ -31,7 +31,7 @@
       <div class="nav-links">
         <a href="#series-index" class="active">Essays</a>
         <a href="#about">About</a>
-        <a href="https://github.com/ayush2991/intuition-first" target="_blank" rel="noopener">GitHub</a>
+        <a href="#contact">Contact</a>
       </div>
     </div>
   </nav>
@@ -242,43 +242,173 @@
 
   </main>
 
-  <!-- Learning Philosophy / Colophon Section -->
-  <section id="about" class="wide-container philosophy-section">
-    <div class="philosophy-card">
-      <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;">
-        <span
-          style="font-family: var(--font-mono); font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--color-time);">The
-          Publishing Philosophy</span>
-        <span style="color: var(--border-medium);">/</span>
-        <span style="font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-faint);">First
-          Principles</span>
+  <!-- Author, Philosophy & Contact Hub -->
+  <section id="about" class="wide-container bottom-hub-section">
+    <div class="bottom-hub-grid">
+      <!-- Column 1: About the Author & Philosophy -->
+      <div class="bottom-card about-card">
+        <div class="bottom-card-header">
+          <span class="bottom-card-tag">About &amp; Philosophy</span>
+          <span class="bottom-card-divider">/</span>
+          <span class="bottom-card-subtag">First Principles</span>
+        </div>
+
+        <div class="author-profile">
+          <h3 class="author-name">Aayush Agarwal</h3>
+          <p class="author-role">Senior LLM Research Engineer, Bloomberg · Formerly Google</p>
+          <p class="author-bio">
+            Working on domain-adapted language models, agentic systems, and natural language processing. <em>Intuition First</em> is a publishing series built on a simple premise: deep and confusing concepts in physics, mathematics, and computation can be understood intuitively from the ground up—without assuming prior knowledge of advanced mathematics.
+          </p>
+        </div>
+
+        <div class="philosophy-content">
+          <h4 class="philosophy-heading">Building Intuition From the Ground Up</h4>
+          <p>
+            Technical subjects are often taught backwards: learners are handed abstract formulas, rigid definitions, and dense notation first, leaving them to guess what the math actually represents.
+          </p>
+          <p>
+            Whether uncovering the geometry of spacetime or unraveling information theory and entropy, each essay strips away unneeded jargon to build understanding step by step. When visual simulations clarify a physical trade-off, we provide active, hands-on controls; when conceptual clarity is what matters, we ground the math in tangible thought experiments so equations arrive naturally as descriptions of ideas you already understand.
+          </p>
+        </div>
+
+        <!-- Links & Socials Deck -->
+        <div class="author-socials-deck">
+          <span class="socials-label">Connect &amp; Follow:</span>
+          <div class="social-chips">
+            <a href="https://ayush2991.github.io/" target="_blank" rel="noopener" class="social-chip" title="Personal Website">
+              <svg class="social-chip-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+              <span>Website</span>
+            </a>
+            <a href="https://linkedin.com/in/ayush2991" target="_blank" rel="noopener" class="social-chip" title="LinkedIn Profile">
+              <svg class="social-chip-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.86 0-2.15 1.45-2.15 2.94v5.67H9.33V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28ZM5.34 7.43a2.07 2.07 0 1 1 0-4.13 2.07 2.07 0 0 1 0 4.13ZM7.12 20.45H3.56V9h3.56v11.45Z"></path></svg>
+              <span>LinkedIn</span>
+            </a>
+          </div>
+        </div>
       </div>
-      <h3 style="font-size: 1.45rem; margin-bottom: 1rem;">Why Explorable Explanations?</h3>
-      <p>
-        Physics is often taught backwards: first you are handed abstract mathematical equations, and only later are you
-        invited to guess what they physically mean.
-      </p>
-      <p>
-        By creating interactive simulations with active controls, scrubbable parameters, and live coordinated clocks, we
-        allow you to manipulate the underlying geometry of nature directly. When you see how steering a vector sideways
-        reduces its vertical component, time dilation stops being an abstract puzzle—it becomes an intuitive geometric
-        certainty.
-      </p>
+
+      <!-- Column 2: Reach Out & Email Contact Form -->
+      <div id="contact" class="bottom-card contact-card">
+        <div class="bottom-card-header">
+          <span class="bottom-card-tag" style="color: var(--color-space);">Get In Touch</span>
+          <span class="bottom-card-divider">/</span>
+          <span class="bottom-card-subtag">Direct Email</span>
+        </div>
+
+        <h3 class="contact-title">Reach Out to the Author</h3>
+        <p class="contact-desc">
+          Have feedback on an essay, spotted a bug, or want to explore ideas in physics and ML? Send a message directly.
+        </p>
+
+        <form id="contact-form" class="contact-form" onsubmit="handleContactSubmit(event)">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="contact-name" class="form-label">Your Name</label>
+              <input type="text" id="contact-name" class="form-input" placeholder="e.g. Alice" />
+            </div>
+            <div class="form-group">
+              <label for="contact-email" class="form-label">Your Email</label>
+              <input type="email" id="contact-email" class="form-input" placeholder="alice@example.com" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="contact-subject" class="form-label">Subject / Topic</label>
+            <input type="text" id="contact-subject" class="form-input" placeholder="e.g. Question on Special Relativity" />
+          </div>
+
+          <div class="form-group">
+            <label for="contact-message" class="form-label">Message <span class="required-mark">*</span></label>
+            <textarea id="contact-message" class="form-textarea" rows="3" required placeholder="What's on your mind?"></textarea>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn-primary contact-submit-btn">
+              <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"></rect><path d="m22 6-10 7L2 6"></path></svg>
+              <span>Send via Email</span>
+            </button>
+          </div>
+        </form>
+
+        <div class="contact-direct-bar">
+          <span class="direct-label">Or write directly:</span>
+          <a href="mailto:ayush2991@gmail.com" class="direct-email-link">ayush2991@gmail.com</a>
+          <button type="button" class="btn-copy-email" id="btn-copy-email" onclick="copyContactEmail()" title="Copy email address">
+            <span id="copy-email-text">Copy</span>
+          </button>
+        </div>
+      </div>
     </div>
   </section>
 
-  <!-- Site Footer -->
+  <!-- Compact Colophon Footer -->
   <footer class="site-footer">
-    <div class="wide-container">
-      <p><strong>Intuition First</strong> · An Explorable Scientific &amp; Mathematical Publishing Series</p>
-      <p style="margin-top: 0.5rem;">
-        <a href="https://github.com/ayush2991/intuition-first" target="_blank" rel="noopener">GitHub Repository</a>
-      </p>
+    <div class="wide-container footer-inner">
+      <div class="footer-meta">
+        <strong>Intuition First</strong> · An Explorable Scientific &amp; Mathematical Publishing Series by <a href="https://ayush2991.github.io/" target="_blank" rel="noopener">Aayush Agarwal</a>
+      </div>
+      <div class="footer-links">
+        <a href="https://ayush2991.github.io/" target="_blank" rel="noopener">Website</a>
+        <span>·</span>
+        <a href="https://linkedin.com/in/ayush2991" target="_blank" rel="noopener">LinkedIn</a>
+        <span>·</span>
+        <a href="#series-index">Essays</a>
+        <span>·</span>
+        <a href="#contact">Contact</a>
+      </div>
     </div>
   </footer>
 
   <!-- Universal Client-Side Script (100% Static & file:// compatible) -->
   <script src="js/core.js"></script>
+
+  <!-- Client-side Contact Form Script -->
+  <script>
+    function handleContactSubmit(e) {
+      e.preventDefault();
+      var name = document.getElementById('contact-name').value.trim();
+      var email = document.getElementById('contact-email').value.trim();
+      var subj = document.getElementById('contact-subject').value.trim() || 'Feedback on Intuition First';
+      var msg = document.getElementById('contact-message').value.trim();
+
+      var body = msg;
+      if (name || email) {
+        body += '\n\n---\nSender: ' + (name || 'Anonymous');
+        if (email) body += ' (' + email + ')';
+      }
+
+      var mailtoUrl = 'mailto:ayush2991@gmail.com?subject=' + encodeURIComponent(subj) + '&body=' + encodeURIComponent(body);
+      window.location.href = mailtoUrl;
+    }
+
+    function copyContactEmail() {
+      var email = 'ayush2991@gmail.com';
+      var btnText = document.getElementById('copy-email-text');
+      var handleDone = function () {
+        if (btnText) {
+          btnText.textContent = 'Copied!';
+          setTimeout(function () { btnText.textContent = 'Copy'; }, 2000);
+        }
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(email).then(handleDone).catch(function () {
+          fallbackCopy(email, handleDone);
+        });
+      } else {
+        fallbackCopy(email, handleDone);
+      }
+    }
+
+    function fallbackCopy(text, cb) {
+      var temp = document.createElement('input');
+      temp.value = text;
+      document.body.appendChild(temp);
+      temp.select();
+      try { document.execCommand('copy'); } catch (err) {}
+      document.body.removeChild(temp);
+      if (cb) cb();
+    }
+  </script>
 
 </body>
 
