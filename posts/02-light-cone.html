@@ -524,8 +524,68 @@
       <p>
         Because neither light nor gravity can outrun <span class="math-badge">c</span>, the disappearance sits in Earth's
         <strong>Elsewhere</strong>. To our physical world, <strong>it has not happened yet</strong>. Only when the 45°
-        wavefront finally reaches our orbit does our sky plunge into darkness and our planet drift into interstellar space.
+        wavefront finally reaches our orbit does our sky plunge into darkness and our planet drift into interstellar space:
       </p>
+
+      <!-- WIDGET 2b: THE 8-MINUTE SUN ILLUSTRATION -->
+      <div id="widget-sun-delay" class="interactive-artifact artifact-wide">
+        <div class="artifact-header">
+          <div>
+            <div class="artifact-badge">ILLUSTRATION 02b · THE 8-MINUTE SUN &amp; CAUSALITY LAG</div>
+          </div>
+        </div>
+
+        <div class="comparison-grid">
+          <!-- Left Column: Physical Space Track -->
+          <div class="canvas-col">
+            <div class="canvas-col-header">
+              <span>PHYSICAL SPACE TRACK</span>
+              <span class="canvas-col-tag">Distance (0 to 1 AU · 150M km)</span>
+            </div>
+            <canvas class="canvas-sun-space"></canvas>
+          </div>
+          <!-- Right Column: Coordinate Spacetime Map -->
+          <div class="canvas-col">
+            <div class="canvas-col-header">
+              <span>COORDINATE SPACETIME</span>
+              <span class="canvas-col-tag">Space x vs Time ct (45° Light Cone)</span>
+            </div>
+            <canvas class="canvas-sun-spacetime"></canvas>
+          </div>
+        </div>
+
+        <!-- Controls Deck -->
+        <div class="artifact-controls" style="padding: 0.85rem 1.25rem; display: flex; flex-direction: column; gap: 0.75rem;">
+          <div class="controls-strip" style="padding: 0; gap: 0.85rem;">
+            <div class="clock-card cyan clock-status-card"
+              style="margin: 0; padding: 0.4rem 0.75rem; display: flex; align-items: center; gap: 0.65rem; white-space: nowrap; flex-shrink: 0;">
+              <span class="clock-label" style="font-size: 0.68rem;">Elapsed Time</span>
+              <span class="clock-time val-sun-time" style="font-size: 1.1rem; line-height: 1;">250 <span>s</span></span>
+              <span class="clock-badge badge-sun-status">ELSEWHERE</span>
+            </div>
+            <div class="control-item" style="flex: 1; min-width: 160px;">
+              <div class="control-header">
+                <span>Time Since Disappearance (0 to 600 s)</span>
+                <span class="control-val cyan val-time-clock">4m 10s</span>
+              </div>
+              <input type="range" class="range-slider slider-sun-time" min="0" max="600" step="2" value="250">
+            </div>
+            <button class="btn-primary btn-play-sun" style="flex-shrink: 0;"><span>▶</span><span>Auto Play</span></button>
+          </div>
+
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; border-top: 1px solid var(--border-subtle); padding-top: 0.5rem;">
+            <div class="preset-chips">
+              <button class="chip-btn preset-sun-time" data-time="0">0s: Sun Vanishes</button>
+              <button class="chip-btn preset-sun-time active" data-time="250">250s: Mid-Transit (Elsewhere)</button>
+              <button class="chip-btn preset-sun-time" data-time="500">500s: 8m 20s (Intersection)</button>
+              <button class="chip-btn preset-sun-time" data-time="600">600s: Causal Future (Drift)</button>
+            </div>
+            <span style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-muted);">
+              Distance to Earth: 1 AU (500 light-seconds)
+            </span>
+          </div>
+        </div>
+      </div>
 
       <h3>Peering Down the Past Light Cone</h3>
       <p>

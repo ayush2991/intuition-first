@@ -17,7 +17,7 @@
 
 ## 2. Editorial Philosophy
 
-This series teaches physics and mathematics **bottom-up**, not top-down. Every agent working on prose must internalize and consistently apply these 12 core principles.
+This series teaches physics and mathematics **bottom-up**, not top-down. Every agent working on prose must internalize and consistently apply these 13 core principles.
 
 ### 1. Build from what the reader already knows — never from what they don't
 Every new concept must grow organically out of direct physical intuition, everyday experience, or knowledge established in a previous section. Never start from the destination (a formula or textbook concept) and work backward to justify it.
@@ -85,6 +85,11 @@ When advancing from section $N$ to section $N+1$, never re-derive or re-explain 
 - ✅ *"In Section 2, we saw that sitting still devotes 100% of motion to time. What happens when you spend some of that speed moving across space?"*
 - ❌ Re-explaining the at-rest case with bullet points and full descriptions that repeat the preceding section's widget.
 
+### 13. Cadence Over Fragmentation (Rhythmic Narrative Velocity)
+Avoid choppy, one-sentence paragraphs in thought experiments (e.g., *"Nothing."* / *"Why?"* / *"Because..."*). Consolidate related thought beats into tight, 2–3 sentence rhythmic paragraphs. This preserves suspense and the "pacing of wonder" while maintaining strong narrative momentum without feeling disjointed.
+- ✅ *"If the Sun vanished this instant, Earth would feel nothing for 500 seconds. Solar panels would keep producing power, birds would keep singing, and Earth would continue orbiting peacefully around empty space."*
+- ❌ Stacking 4 separate one-line paragraphs: *"Suppose the Sun vanishes."* / *"What happens on Earth?"* / *"Nothing."* / *"Why?"*
+
 ---
 
 ## 3. Semantic Physics & Editorial Color Palette (Monograph Theme)
@@ -151,6 +156,19 @@ Every interactive simulation follows a standardized visual hierarchy, tactile co
    - **Play button pinned right**: `flex-shrink: 0` keeps it from collapsing.
    - **Drop redundant text**: Remove `clock-subtext` paragraphs and any math badges that duplicate what is already annotated on the canvas.
    - **Reference implementation**: `widget-stationary` (`posts/01-motion-and-time.html`, `#widget-stationary`).
+10. **Dual-View Coordinate Bridging (`.comparison-grid`)**:
+    - When introducing an abstract causal structure (such as the *Elsewhere*, past light cones, or signal delays), pair physical intuition and spacetime geometry side by side:
+      - **Left Panel (Physical Space Track / Radar)**: Familiar spatial distances (km, AU, light-years), spherical wavefronts propagating outward at speed $c$, and concrete physical observer states (daylight vs. darkness, orbit stability vs. tangential drift).
+      - **Right Panel (Coordinate Spacetime Map)**: The underlying geometric worldlines ($x$ vs. $ct$, 45° light cone boundaries, and intersection events).
+    - **Exact 45° Scale Invariant**: In coordinate spacetime ($x$ vs $ct$), always calibrate scales so $scaleX = scaleY$ when units match ($1\text{ ls space} \leftrightarrow 1\text{ s time}$). Light rays *must* travel along exact 45° diagonals ($\Delta x = \Delta(ct)$). Distorting the aspect ratio destroys geometric intuition.
+    - **Shared Milestone Architecture**: Both panels and preset chips must share identical milestone landmarks:
+      1. *Emission / Origin* ($t = 0$): Apex of the light cone formed.
+      2. *Transit / Elsewhere Buffer* ($t_{\text{mid}}$): Wavefront in flight; observer worldline climbing strictly through the *Elsewhere*.
+      3. *Intersection Event* ($t_{\text{hit}}$): 45° boundary strikes observer worldline.
+      4. *Causal Future* ($t_{\text{future}}$): Observer enters cone interior, triggering physical consequences.
+    - **Synchronized "Now" Slices**: Render a coordinated horizontal time-slice cursor sweeping upward across both views in lockstep.
+11. **In-Canvas Causality Lag Indicators**:
+    - When an observer is in the *Elsewhere*, draw a direct dimension line or double-headed connector between the photon wavefront and the observer's position/worldline annotated with the remaining causal buffer ($\Delta x = d - ct$). This makes the abstract definition of "Elsewhere" immediately tangible as an untraversed distance buffer.
 
 ---
 
@@ -201,6 +219,7 @@ Every interactive simulation follows a standardized visual hierarchy, tactile co
 | **01b** | `widget-expanding-circles` | `initWidgetExpandingCircles` | 2×2 grid of outgoing light circles at $t=0,1,2,3$ in the $x$–$y$ plane |
 | **01c** | `widget-synthesis-grid` | `initWidgetSynthesisGrid` | 2×2 synthesis grid bridging Velocity Space ($v_x, v_t$) to Spacetime ($\phi$) across 4 archetypes |
 | **02** | `widget-3d-light-cone` | `initWidget3DLightConeExplorer` | Full 3D rotatable Light Cone volume ($x_1, x_2, ct$) with dynamic Now-Slice |
+| **02b** | `widget-sun-delay` | `initWidgetSunDelay` | The 8-Minute Sun: 500-second causality lag, expanding wavefront at $c$, Elsewhere vs Causal Future |
 | **03** | `widget-cosmic-horizon` | `initWidgetCosmicHorizon` | Coordinated dual-view: Physical stellar radar bubble vs $(x, ct)$ past light cone |
 
 #### Part 3: The Spacetime Loaf & Length Contraction (`posts/03-spacetime-loaf.html` / `js/post-03.js`)

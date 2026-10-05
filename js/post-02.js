@@ -1735,10 +1735,622 @@
     renderAll();
   }
 
+  // ILLUSTRATION 02b: The 8-Minute Sun & Causality Lag (Dual View)
+  function initWidgetSunDelay(containerId) {
+    var container = document.getElementById(containerId || 'widget-sun-delay');
+    if (!container) return;
+
+    var canvasSpace = container.querySelector('.canvas-sun-space');
+    var canvasSpacetime = container.querySelector('.canvas-sun-spacetime');
+    if (!canvasSpace && !canvasSpacetime) return;
+
+    var sliderTime = container.querySelector('.slider-sun-time');
+    var elSunTime = container.querySelector('.val-sun-time');
+    var elTimeClock = container.querySelector('.val-time-clock');
+    var badgeStatus = container.querySelector('.badge-sun-status');
+    var clockCard = container.querySelector('.clock-status-card');
+    var btnPlay = container.querySelector('.btn-play-sun');
+    var presetBtns = container.querySelectorAll('.preset-sun-time');
+
+    var currentTime = 250; // seconds (0 to 600)
+    var isPlaying = false;
+    var isVisible = true;
+    var animFrameId = null;
+
+    function formatTimeMinSec(sec) {
+      var m = Math.floor(sec / 60);
+      var s = Math.floor(sec % 60);
+      return m + 'm ' + (s < 10 ? '0' : '') + s + 's';
+    }
+
+    function updateControls() {
+      if (sliderTime) sliderTime.value = currentTime;
+      if (elSunTime) elSunTime.innerHTML = Math.round(currentTime) + ' <span>s</span>';
+      if (elTimeClock) elTimeClock.textContent = formatTimeMinSec(currentTime);
+
+      var isElsewhere = currentTime < 500;
+      if (badgeStatus) {
+        badgeStatus.textContent = isElsewhere ? 'ELSEWHERE' : 'CAUSAL FUTURE';
+      }
+      if (clockCard) {
+        if (isElsewhere) {
+          clockCard.className = 'clock-card cyan clock-status-card';
+        } else {
+          clockCard.className = 'clock-card danger clock-status-card';
+        }
+      }
+
+      presetBtns.forEach(function (btn) {
+        var tVal = parseFloat(btn.getAttribute('data-time'));
+        if (Math.abs(tVal - currentTime) < 18) {
+          btn.classList.add('active');
+        } else {
+          btn.classList.remove('active');
+        }
+      });
+    }
+
+    // ── 1. Physical Space Track Canvas ────────────────────────────────────
+    function drawSpace() {
+      if (!canvasSpace) return;
+      var colors = getThemeColors();
+      var ret = setupRetinaCanvas(canvasSpace);
+      var ctx = ret.ctx, w = ret.width, h = ret.height;
+      ctx.clearRect(0, 0, w, h);
+
+      var emerald = colors.isLight ? '#059669' : '#10b981';
+      var danger = colors.isLight ? '#dc2626' : '#f87171';
+      var sunColor = colors.photonColor || '#f59e0b';
+
+      var padLeft = 60;
+      var padRight = 65;
+      var cy = h * 0.48;
+
+      var sunX = padLeft;
+      var earthX = w - padRight;
+      var totalTrackDist = earthX - sunX;
+
+      drawGrid(ctx, sunX, cy, w, h, 34);
+
+      // Distance Axis Track Line
+      ctx.strokeStyle = colors.axisLine;
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(sunX - 25, cy);
+      ctx.lineTo(earthX + 35, cy);
+      ctx.stroke();
+
+      // Axis ticks and labels
+      var ticks = [
+        { frac: 0.0, label: '0 km (Sun)', sub: 't = 0s' },
+        { frac: 0.5, label: '75M km', sub: 't = 250s' },
+        { frac: 1.0, label: '150M km (Earth)', sub: 't = 500s (8m 20s)' }
+      ];
+      ticks.forEach(function (tk) {
+        var tx = sunX + tk.frac * totalTrackDist;
+        ctx.strokeStyle = colors.axisLine;
+        ctx.beginPath();
+        ctx.moveTo(tx, cy - 4);
+        ctx.lineTo(tx, cy + 4);
+        ctx.stroke();
+
+        ctx.font = '600 8px "JetBrains Mono", monospace';
+        ctx.fillStyle = colors.subtleText;
+        ctx.textAlign = 'center';
+        ctx.fillText(tk.label, tx, cy + 16);
+        ctx.font = '500 7px "JetBrains Mono", monospace';
+        ctx.fillText(tk.sub, tx, cy + 26);
+      });
+
+      // Wavefront Position
+      var waveFrac = currentTime / 500.0;
+      var waveX = sunX + waveFrac * totalTrackDist;
+
+      // Void / Causal Shadow Region (behind wavefront)
+      var clampedWaveX = Math.min(earthX + 35, Math.max(sunX, waveX));
+      if (clampedWaveX > sunX) {
+        ctx.fillStyle = colors.isLight ? 'rgba(15, 23, 42, 0.06)' : 'rgba(15, 23, 42, 0.40)';
+        ctx.fillRect(sunX, cy - 75, clampedWaveX - sunX, 150);
+
+        if (clampedWaveX - sunX > 75) {
+          ctx.font = '600 8px "JetBrains Mono", monospace';
+          ctx.fillStyle = danger;
+          ctx.textAlign = 'center';
+          ctx.fillText('CAUSAL SHADOW', (sunX + clampedWaveX) / 2, cy - 50);
+          ctx.font = '500 7px "JetBrains Mono", monospace';
+          ctx.fillText('Darkness & Zero Gravity', (sunX + clampedWaveX) / 2, cy - 38);
+        }
+      }
+
+      // Pre-Vanish Sunlight En Route (ahead of wavefront)
+      if (waveX < earthX) {
+        ctx.fillStyle = colors.isLight ? 'rgba(245, 158, 11, 0.08)' : 'rgba(245, 158, 11, 0.12)';
+        ctx.fillRect(waveX, cy - 75, earthX - waveX, 150);
+
+        ctx.strokeStyle = colors.isLight ? 'rgba(245, 158, 11, 0.45)' : 'rgba(245, 158, 11, 0.55)';
+        ctx.lineWidth = 1.2;
+        ctx.setLineDash([5, 5]);
+        var beamYs = [-35, -18, 0, 18, 35];
+        beamYs.forEach(function (by) {
+          ctx.beginPath();
+          ctx.moveTo(waveX, cy + by);
+          ctx.lineTo(earthX, cy + by);
+          ctx.stroke();
+        });
+        ctx.setLineDash([]);
+
+        if (earthX - waveX > 90) {
+          ctx.font = '600 8px "JetBrains Mono", monospace';
+          ctx.fillStyle = colors.isLight ? '#b45309' : '#fbbf24';
+          ctx.textAlign = 'center';
+          ctx.fillText('PRE-VANISH SUNLIGHT', (waveX + earthX) / 2, cy - 50);
+          ctx.font = '500 7px "JetBrains Mono", monospace';
+          ctx.fillText('Speed c · Gravity Active', (waveX + earthX) / 2, cy - 38);
+        }
+      }
+
+      // Wavefront line & arrow
+      if (currentTime > 0) {
+        ctx.strokeStyle = sunColor;
+        ctx.lineWidth = 2.5;
+        ctx.shadowColor = sunColor;
+        ctx.shadowBlur = 8;
+        ctx.beginPath();
+        ctx.arc(waveX, cy, 70, -Math.PI / 2.8, Math.PI / 2.8);
+        ctx.stroke();
+        ctx.shadowBlur = 0;
+
+        ctx.fillStyle = sunColor;
+        ctx.beginPath();
+        ctx.moveTo(waveX + 8, cy);
+        ctx.lineTo(waveX + 1, cy - 4);
+        ctx.lineTo(waveX + 1, cy + 4);
+        ctx.closePath();
+        ctx.fill();
+
+        var wavePillX = Math.min(w - 70, Math.max(sunX + 45, waveX));
+        drawLabelPill(ctx, 'Wavefront (v = c)', wavePillX, cy - 85, {
+          textColor: sunColor,
+          font: 'bold 8.5px "JetBrains Mono", monospace'
+        });
+      }
+
+      // Vanished Sun Marker
+      ctx.strokeStyle = colors.isLight ? 'rgba(234, 88, 12, 0.6)' : 'rgba(251, 146, 60, 0.7)';
+      ctx.lineWidth = 1.5;
+      ctx.setLineDash([3, 3]);
+      ctx.beginPath();
+      ctx.arc(sunX, cy, 18, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      ctx.fillStyle = colors.isLight ? '#ea580c' : '#fb923c';
+      ctx.beginPath();
+      ctx.arc(sunX, cy, 3.5, 0, Math.PI * 2);
+      ctx.fill();
+
+      drawLabelPill(ctx, 'Sun (Vanished)', sunX, cy + 45, {
+        textColor: colors.isLight ? '#c2410c' : '#fb923c',
+        font: 'bold 8.5px "JetBrains Mono", monospace'
+      });
+
+      // Earth & State
+      var isElsewhere = currentTime < 500;
+      var isArriving = Math.abs(currentTime - 500) < 10;
+
+      // Orbit arc
+      ctx.strokeStyle = isElsewhere ? (colors.isLight ? 'rgba(5, 150, 105, 0.35)' : 'rgba(16, 185, 129, 0.35)') : colors.borderSubtle;
+      ctx.lineWidth = 1.25;
+      ctx.setLineDash([3, 3]);
+      ctx.beginPath();
+      ctx.arc(sunX, cy, totalTrackDist, -Math.PI / 4, Math.PI / 4);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      if (!isElsewhere) {
+        var driftFrac = (currentTime - 500) / 100.0;
+        var earthCurrY = cy - driftFrac * 36;
+
+        ctx.strokeStyle = danger;
+        ctx.lineWidth = 1.5;
+        ctx.setLineDash([3, 3]);
+        ctx.beginPath();
+        ctx.moveTo(earthX, cy);
+        ctx.lineTo(earthX, cy - 45);
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        drawGlowingDot(ctx, earthX, earthCurrY, danger, 7);
+        ctx.fillStyle = colors.isLight ? '#334155' : '#1e293b';
+        ctx.beginPath();
+        ctx.arc(earthX, earthCurrY, 6, 0, Math.PI * 2);
+        ctx.fill();
+
+        drawLabelPill(ctx, 'Earth: CAUSAL FUTURE', earthX - 25, earthCurrY - 22, {
+          textColor: danger,
+          font: 'bold 8.5px "JetBrains Mono", monospace'
+        });
+      } else {
+        drawGlowingDot(ctx, earthX, cy, emerald, isArriving ? 11 : 6.5);
+        ctx.fillStyle = colors.photonColor;
+        ctx.beginPath();
+        ctx.arc(earthX, cy, 6.5, Math.PI / 2, -Math.PI / 2, false);
+        ctx.fill();
+
+        if (isArriving) {
+          ctx.strokeStyle = colors.photonColor;
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.arc(earthX, cy, 16, 0, Math.PI * 2);
+          ctx.stroke();
+
+          drawLabelPill(ctx, 'WAVEFRONT HITS (8m 20s)', earthX - 35, cy - 25, {
+            textColor: colors.photonColor,
+            font: 'bold 9px "JetBrains Mono", monospace'
+          });
+        } else {
+          drawLabelPill(ctx, 'Earth: ELSEWHERE', earthX - 30, cy - 24, {
+            textColor: emerald,
+            font: 'bold 8.5px "JetBrains Mono", monospace'
+          });
+        }
+      }
+
+      ctx.font = '600 7.5px "JetBrains Mono", monospace';
+      ctx.fillStyle = isElsewhere ? emerald : danger;
+      ctx.textAlign = 'center';
+      ctx.fillText(isElsewhere ? 'Orbit Stable · Daylight' : 'Tangent Drift · Darkness', earthX, cy + 45);
+    }
+
+    // ── 2. Coordinate Spacetime Canvas (x vs ct) ──────────────────────────
+    function drawSpacetime() {
+      if (!canvasSpacetime) return;
+      var colors = getThemeColors();
+      var ret = setupRetinaCanvas(canvasSpacetime);
+      var ctx = ret.ctx, w = ret.width, h = ret.height;
+      ctx.clearRect(0, 0, w, h);
+
+      var emerald = colors.isLight ? '#059669' : '#10b981';
+      var danger = colors.isLight ? '#dc2626' : '#f87171';
+      var photonCol = colors.photonColor || '#f59e0b';
+
+      var padLeft = 45;
+      var padRight = 30;
+      var padBottom = 34;
+      var padTop = 26;
+
+      var ox = padLeft + 15;
+      var oy = h - padBottom;
+      var plotW = w - ox - padRight;
+      var plotH = oy - padTop;
+
+      // Ensure exact 45° slope for light: Δx == Δ(ct)
+      // 500 light-seconds fits comfortably on both axes
+      var scale = Math.min((plotW * 0.72) / 500, (plotH * 0.80) / 500);
+      var scaleX = scale;
+      var scaleY = scale;
+
+      drawGrid(ctx, ox, oy, w, h, 34);
+
+      // Axes
+      ctx.strokeStyle = colors.axisLine;
+      ctx.lineWidth = 1.5;
+
+      // Horizontal space axis (+x)
+      ctx.beginPath();
+      ctx.moveTo(ox - 10, oy);
+      ctx.lineTo(w - padRight + 10, oy);
+      ctx.stroke();
+
+      // Vertical time axis (+ct)
+      ctx.beginPath();
+      ctx.moveTo(ox, oy + 8);
+      ctx.lineTo(ox, padTop - 12);
+      ctx.stroke();
+
+      // Arrowheads
+      ctx.fillStyle = colors.axisArrow;
+      ctx.beginPath();
+      ctx.moveTo(w - padRight + 10, oy - 3);
+      ctx.lineTo(w - padRight + 16, oy);
+      ctx.lineTo(w - padRight + 10, oy + 3);
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.moveTo(ox - 3, padTop - 12);
+      ctx.lineTo(ox, padTop - 18);
+      ctx.lineTo(ox + 3, padTop - 12);
+      ctx.fill();
+
+      // Axis labels
+      ctx.font = '700 9px "JetBrains Mono", monospace';
+      ctx.fillStyle = colors.spaceColor;
+      ctx.fillText('+x (ls)', w - padRight - 8, oy + 16);
+      ctx.fillStyle = colors.timeColor;
+      ctx.fillText('ct (Seconds)', ox + 8, padTop - 8);
+
+      // Space ticks (250 ls, 500 ls = 1 AU)
+      ctx.font = '500 7.5px "JetBrains Mono", monospace';
+      ctx.fillStyle = colors.subtleText;
+      [250, 500].forEach(function (sx) {
+        var tx = ox + sx * scaleX;
+        ctx.strokeStyle = colors.axisLine;
+        ctx.beginPath();
+        ctx.moveTo(tx, oy - 3);
+        ctx.lineTo(tx, oy + 3);
+        ctx.stroke();
+        ctx.textAlign = 'center';
+        ctx.fillText(sx + (sx === 500 ? ' (1 AU)' : ' ls'), tx, oy + 14);
+      });
+
+      // Time ticks (250s, 500s = 8m20s, 600s)
+      [250, 500, 600].forEach(function (st) {
+        var ty = oy - st * scaleY;
+        ctx.strokeStyle = colors.axisLine;
+        ctx.beginPath();
+        ctx.moveTo(ox - 3, ty);
+        ctx.lineTo(ox + 3, ty);
+        ctx.stroke();
+        ctx.textAlign = 'right';
+        ctx.fillText(st + (st === 500 ? ' (8m20s)' : 's'), ox - 6, ty + 3);
+      });
+
+      // ── Shaded 45° Light Cone Region (Causal Future) ────────────────────
+      var maxConeT = Math.min(620, (oy - padTop) / scaleY);
+      var coneTopX = ox + maxConeT * scaleX;
+      var coneTopY = oy - maxConeT * scaleY;
+
+      ctx.fillStyle = colors.isLight ? 'rgba(245, 158, 11, 0.08)' : 'rgba(245, 158, 11, 0.12)';
+      ctx.beginPath();
+      ctx.moveTo(ox, oy);
+      ctx.lineTo(coneTopX, coneTopY);
+      ctx.lineTo(ox, coneTopY);
+      ctx.closePath();
+      ctx.fill();
+
+      // Label inside cone (Causal Future)
+      ctx.font = '600 8px "JetBrains Mono", monospace';
+      ctx.fillStyle = colors.isLight ? '#b45309' : '#fbbf24';
+      ctx.textAlign = 'left';
+      ctx.fillText('CAUSAL FUTURE OF SUN', ox + 18, oy - 320 * scaleY);
+
+      // Label in Elsewhere (Outside cone, x > ct)
+      ctx.fillStyle = colors.isLight ? 'rgba(2, 132, 199, 0.75)' : 'rgba(56, 189, 248, 0.75)';
+      ctx.fillText('THE ELSEWHERE (x > ct)', ox + 280 * scaleX, oy - 140 * scaleY);
+
+      // ── 45° Light Cone Boundary Line ────────────────────────────────────
+      ctx.strokeStyle = photonCol;
+      ctx.lineWidth = 2.2;
+      ctx.beginPath();
+      ctx.moveTo(ox, oy);
+      ctx.lineTo(coneTopX, coneTopY);
+      ctx.stroke();
+
+      ctx.font = '600 7.5px "JetBrains Mono", monospace';
+      ctx.fillStyle = photonCol;
+      ctx.textAlign = 'left';
+      ctx.fillText('45° Light Cone (v = c)', ox + 120 * scaleX, oy - 120 * scaleY - 6);
+
+      // ── Sun's Worldline (at x = 0) ──────────────────────────────────────
+      // Origin node at (0, 0): Sun Vanishes!
+      drawGlowingDot(ctx, ox, oy, danger, 6);
+      drawLabelPill(ctx, 'Sun Vanishes (t = 0)', ox + 22, oy + 2, {
+        textColor: danger,
+        font: 'bold 8.5px "JetBrains Mono", monospace'
+      });
+
+      // Sun's line after t = 0 (dashed / empty)
+      ctx.strokeStyle = colors.isLight ? 'rgba(148, 163, 184, 0.5)' : 'rgba(100, 116, 139, 0.4)';
+      ctx.lineWidth = 1.25;
+      ctx.setLineDash([3, 3]);
+      ctx.beginPath();
+      ctx.moveTo(ox, oy);
+      ctx.lineTo(ox, padTop);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      // ── Earth's Worldline (at x = 500 ls = 1 AU) ────────────────────────
+      var earthPlotX = ox + 500 * scaleX;
+      var earthIntersectY = oy - 500 * scaleY;
+
+      // Section 1: t = 0 to 500s (In the Elsewhere, solid blue/green line)
+      ctx.strokeStyle = emerald;
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(earthPlotX, oy);
+      ctx.lineTo(earthPlotX, earthIntersectY);
+      ctx.stroke();
+
+      // Section 2: t > 500s (Inside light cone / causal future, dashed red line)
+      ctx.strokeStyle = danger;
+      ctx.lineWidth = 2.5;
+      ctx.setLineDash([4, 3]);
+      ctx.beginPath();
+      ctx.moveTo(earthPlotX, earthIntersectY);
+      ctx.lineTo(earthPlotX, padTop);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      // ── The 500s Intersection Event Node ────────────────────────────────
+      drawGlowingDot(ctx, earthPlotX, earthIntersectY, photonCol, 6.5);
+      ctx.strokeStyle = photonCol;
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.arc(earthPlotX, earthIntersectY, 11, 0, Math.PI * 2);
+      ctx.stroke();
+
+      drawLabelPill(ctx, 'Intersection Event (8m 20s)', earthPlotX - 42, earthIntersectY - 14, {
+        textColor: photonCol,
+        font: 'bold 8.5px "JetBrains Mono", monospace'
+      });
+
+      // Earth worldline label at bottom (t = 0)
+      drawLabelPill(ctx, 'Earth Worldline (x = 1 AU)', earthPlotX, oy + 20, {
+        textColor: colors.timeColor,
+        font: 'bold 8px "JetBrains Mono", monospace'
+      });
+
+      // ── Milestone Indicators along Earth's lifeline ──────────────────────
+      // Milestone t = 0
+      drawGlowingDot(ctx, earthPlotX, oy, emerald, 4);
+
+      // Milestone t = 250s marker
+      var y250 = oy - 250 * scaleY;
+      ctx.fillStyle = emerald;
+      ctx.beginPath();
+      ctx.arc(earthPlotX, y250, 3, 0, Math.PI * 2);
+      ctx.fill();
+
+      // ── Current "Now" Slice (t = currentTime) ───────────────────────────
+      var currY = oy - currentTime * scaleY;
+      var photonCurrX = ox + currentTime * scaleX;
+
+      // Horizontal "Now" line across spacetime
+      ctx.strokeStyle = colors.isLight ? 'rgba(100, 116, 139, 0.45)' : 'rgba(148, 163, 184, 0.45)';
+      ctx.lineWidth = 1;
+      ctx.setLineDash([3, 3]);
+      ctx.beginPath();
+      ctx.moveTo(ox, currY);
+      ctx.lineTo(w - padRight, currY);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      // Point on 45° photon line
+      if (currentTime > 0 && photonCurrX <= w - padRight) {
+        drawGlowingDot(ctx, photonCurrX, currY, photonCol, 5);
+      }
+
+      // Point on Earth's Worldline
+      var isElsewhere = currentTime < 500;
+      var isHit = Math.abs(currentTime - 500) < 10;
+      var earthDotColor = isHit ? photonCol : (isElsewhere ? emerald : danger);
+      drawGlowingDot(ctx, earthPlotX, currY, earthDotColor, isHit ? 8 : 6);
+
+      // Status pill on Earth node
+      var pillStatusText = isHit
+        ? 'Wave Hits Earth!'
+        : (isElsewhere ? 'Earth: In Elsewhere' : 'Earth: In Causal Future');
+      drawLabelPill(ctx, pillStatusText, earthPlotX + (isElsewhere ? -25 : -35), currY - 16, {
+        textColor: earthDotColor,
+        font: 'bold 8.5px "JetBrains Mono", monospace'
+      });
+
+      // Double-arrow lag connector between photon dot and Earth dot (when in Elsewhere)
+      if (isElsewhere && currentTime >= 40 && earthPlotX - photonCurrX > 35) {
+        ctx.strokeStyle = colors.isLight ? 'rgba(234, 88, 12, 0.65)' : 'rgba(251, 146, 60, 0.75)';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(photonCurrX + 6, currY);
+        ctx.lineTo(earthPlotX - 6, currY);
+        ctx.stroke();
+
+        ctx.font = '500 7px "JetBrains Mono", monospace';
+        ctx.fillStyle = colors.spaceColor;
+        ctx.textAlign = 'center';
+        ctx.fillText('Lag: ' + Math.round(500 - currentTime) + 's', (photonCurrX + earthPlotX) / 2, currY - 5);
+      }
+    }
+
+    function renderAll() {
+      updateControls();
+      drawSpace();
+      drawSpacetime();
+    }
+
+    if (sliderTime) {
+      sliderTime.addEventListener('input', function (e) {
+        currentTime = parseFloat(e.target.value);
+        if (isPlaying) stopPlay();
+        renderAll();
+      });
+    }
+
+    presetBtns.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var t = parseFloat(btn.getAttribute('data-time'));
+        if (!isNaN(t)) {
+          currentTime = t;
+          if (isPlaying) stopPlay();
+          renderAll();
+        }
+      });
+    });
+
+    function stopPlay() {
+      isPlaying = false;
+      if (animFrameId) {
+        cancelAnimationFrame(animFrameId);
+        animFrameId = null;
+      }
+      if (btnPlay) {
+        btnPlay.innerHTML = '<span>▶</span><span>Auto Play</span>';
+      }
+    }
+
+    function runLoop() {
+      if (!animFrameId && isPlaying && isVisible) {
+        var lastTime = performance.now();
+        function step(now) {
+          if (!isPlaying || !isVisible) {
+            animFrameId = null;
+            return;
+          }
+          var dt = (now - lastTime) / 1000;
+          lastTime = now;
+          if (dt > 0.2) dt = 0.2;
+
+          // Sweep from 0 to 600 in ~12 seconds
+          currentTime += dt * 50;
+          if (currentTime >= 600) {
+            currentTime = 600;
+            renderAll();
+            stopPlay();
+            return;
+          }
+          renderAll();
+          animFrameId = requestAnimationFrame(step);
+        }
+        animFrameId = requestAnimationFrame(step);
+      }
+    }
+
+    function startPlay() {
+      if (currentTime >= 600) currentTime = 0;
+      isPlaying = true;
+      if (btnPlay) {
+        btnPlay.innerHTML = '<span>⏸</span><span>Pause</span>';
+      }
+      runLoop();
+    }
+
+    if (btnPlay) {
+      btnPlay.addEventListener('click', function () {
+        if (isPlaying) stopPlay();
+        else startPlay();
+      });
+    }
+
+    observeSimulationVisibility(container, function () {
+      isVisible = true;
+      if (isPlaying) runLoop();
+    }, function () {
+      isVisible = false;
+      if (animFrameId) {
+        cancelAnimationFrame(animFrameId);
+        animFrameId = null;
+      }
+    });
+
+    registerDraw(renderAll);
+    window.addEventListener('resize', renderAll);
+    renderAll();
+  }
+
   function initAllPost02() {
     try { initWidgetDualSpeedSpacetime('widget-dual-bridge'); } catch (e) { console.error('Error in initWidgetDualSpeedSpacetime:', e); }
     try { initWidgetExpandingCircles('widget-expanding-circles'); } catch (e) { console.error('Error in initWidgetExpandingCircles:', e); }
     try { initWidget3DLightConeExplorer('widget-3d-light-cone'); } catch (e) { console.error('Error in initWidget3DLightConeExplorer:', e); }
+    try { initWidgetSunDelay('widget-sun-delay'); } catch (e) { console.error('Error in initWidgetSunDelay:', e); }
     try { initWidgetCosmicHorizon('widget-cosmic-horizon'); } catch (e) { console.error('Error in initWidgetCosmicHorizon:', e); }
     try { initWidgetSynthesisGrid('widget-synthesis-grid'); } catch (e) { console.error('Error in initWidgetSynthesisGrid:', e); }
   }
@@ -1746,6 +2358,7 @@
   sim.initWidgetDualSpeedSpacetime = initWidgetDualSpeedSpacetime;
   sim.initWidgetExpandingCircles = initWidgetExpandingCircles;
   sim.initWidget3DLightConeExplorer = initWidget3DLightConeExplorer;
+  sim.initWidgetSunDelay = initWidgetSunDelay;
   sim.initWidgetCosmicHorizon = initWidgetCosmicHorizon;
   sim.initWidgetSynthesisGrid = initWidgetSynthesisGrid;
   sim.initAllPost02 = initAllPost02;
