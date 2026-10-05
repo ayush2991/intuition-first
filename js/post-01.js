@@ -1,5 +1,5 @@
 /**
- * post-01.js - Part 1 Interactive Simulations: Why Motion Through Space Affects Time
+ * post-01.js - Part 1 Interactive Simulations: Borrowed Seconds: The Geometry of Moving Through Time
  */
 
 (function (window) {

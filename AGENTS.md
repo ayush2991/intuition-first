@@ -66,7 +66,7 @@ Every article teaches **bottom-up**: mathematical formulas arrive as natural des
 
 | Level | Role & Formatting | Preferred Pattern | Forbidden Patterns |
 | :--- | :--- | :--- | :--- |
-| **`<h1>`** | **Article Title**<br>Title Case, bold, profound insight or hook. | *"Why Motion Through Space Affects Time"*<br>*"The Cosmic Light Cone: Mapping Space & Time"* | *"Special Relativity: Part 1"*<br>*"Lorentz Transformations & Time Dilation"* |
+| **`<h1>`** | **Article Title**<br>Title Case, bold, profound insight or hook. | *"Borrowed Seconds: The Geometry of Moving Through Time"*<br>*"The Boundaries of Causality: Inside the Cosmic Light Cone"* | *"Special Relativity: Part 1"*<br>*"Lorentz Transformations & Time Dilation"* |
 | **`<h2>`** | **Discovery Steps**<br>Numbered sequentially (`1. `, `2. `). Title Case. Physical metaphors & actions. | `1. The Two-Car Trade-Off`<br>`2. Moving While Sitting Still`<br>`3. Nature's Invariant Speed` | `1. Introduction`<br>`2. Time Dilation Theory`<br>`3. Mathematical Derivations` |
 | **Final `<h2>`** | **The Forward Bridge**<br>Explicit launchpad to next essay. | `8. The Road to the Light Cone`<br>`4. The Angle of "Now"` | `Summary`<br>`Conclusion`<br>`Final Remarks` |
 | **`<h3>`** | **Subsections & Thought Experiments**<br>Open questions & anchored setups. | *"Why is the Speed of Light an Unbreakable Limit?"*<br>*"The 8-Minute Sun"*, *"Atmospheric Muons"* | Taxonomic labels: *"Section 2.1"*, *"Properties of Light"* |

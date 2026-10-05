@@ -1,5 +1,5 @@
 /**
- * post-02.js - Part 2 Interactive Simulations: The Cosmic Light Cone
+ * post-02.js - Part 2 Interactive Simulations: The Boundaries of Causality: Inside the Cosmic Light Cone
  */
 
 (function (window) {
