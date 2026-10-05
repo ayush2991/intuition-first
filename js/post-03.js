@@ -1312,7 +1312,278 @@
     update();
   }
 
-  // WIDGET 5: Slicing the Loaf: The Angle of "Now"
+  // ILLUSTRATION 4: Alice's Coordinate Spacetime Map (Slanted Line of Simultaneity)
+  function initWidgetAliceSpacetime(containerId) {
+    var container = document.getElementById(containerId);
+    if (!container) return;
+
+    var canvas = container.querySelector('canvas');
+    var sliderSpeed = container.querySelector('.slider-speed');
+    var sliderTime = container.querySelector('.slider-time');
+    var chipSpeeds = container.querySelectorAll('.chip-map-speed');
+    var readoutSpeed = container.querySelector('.readout-map-speed');
+    var readoutTime = container.querySelector('.readout-map-time');
+    var readoutErBadge = container.querySelector('.readout-er-badge');
+    var readoutErTime = container.querySelector('.readout-er-time');
+    var readoutEfBadge = container.querySelector('.readout-ef-badge');
+    var readoutEfTime = container.querySelector('.readout-ef-time');
+    var readoutSlope = container.querySelector('.readout-map-slope');
+
+    var vFraction = 0.866;
+    var aliceTime = 1.0;
+
+    function getSpacetimeData() {
+      var gamma = 1 / Math.sqrt(Math.max(0.01, 1 - vFraction * vFraction));
+      var d = 1.0;
+      var dPrime = d / gamma;
+      var tR = dPrime / (1.0 + vFraction);
+      var tF = vFraction >= 0.999 ? 99.0 : dPrime / Math.max(0.001, 1.0 - vFraction);
+      var ctR = tR;
+      var ctF = tF;
+      var xR = -ctR;
+      var xF = +ctF;
+      var deltaT = tF - tR;
+      var deltaX = xF - xR;
+      var slope = deltaX > 0 ? (ctF - ctR) / deltaX : vFraction;
+      return {
+        gamma: gamma,
+        dPrime: dPrime,
+        tR: tR,
+        tF: tF,
+        ctR: ctR,
+        ctF: ctF,
+        xR: xR,
+        xF: xF,
+        deltaT: deltaT,
+        deltaX: deltaX,
+        slope: slope
+      };
+    }
+
+    function update() {
+      var data = getSpacetimeData();
+      var thetaDeg = (Math.asin(Math.min(1, vFraction)) * 180) / Math.PI;
+
+      if (readoutSpeed) {
+        readoutSpeed.innerText = 'v = ' + vFraction.toFixed(3) + ' c (θ = ' + thetaDeg.toFixed(0) + '°)';
+      }
+      if (readoutTime) {
+        readoutTime.innerText = 'ct = ' + aliceTime.toFixed(2) + ' m';
+      }
+      if (readoutErBadge) {
+        readoutErBadge.innerText = 't_R = ' + data.tR.toFixed(2) + ' s';
+      }
+      if (readoutErTime) {
+        readoutErTime.innerHTML = 'ct_R = ' + data.ctR.toFixed(2) + ' <span>m</span>';
+      }
+      if (readoutEfBadge) {
+        readoutEfBadge.innerText = 't_F = ' + data.tF.toFixed(2) + ' s';
+      }
+      if (readoutEfTime) {
+        readoutEfTime.innerHTML = 'ct_F = ' + data.ctF.toFixed(2) + ' <span>m</span>';
+      }
+      if (readoutSlope) {
+        readoutSlope.innerHTML = 'Slanted Line Slope: <strong>cΔt / Δx = v / c = ' + vFraction.toFixed(3) + '</strong>';
+      }
+
+      draw();
+    }
+
+    function draw() {
+      if (!canvas) return;
+      var c = getThemeColors();
+      var ret = setupRetinaCanvas(canvas);
+      var ctx = ret.ctx, width = ret.width, height = ret.height;
+      ctx.clearRect(0, 0, width, height);
+
+      var data = getSpacetimeData();
+
+      var ox = width * 0.40;
+      var oy = height - 42;
+      var unitScale = Math.min(width * 0.16, (height - 60) / 4.2);
+
+      function toPx(x, ct) {
+        return {
+          x: ox + x * unitScale,
+          y: oy - ct * unitScale
+        };
+      }
+
+      drawGrid(ctx, ox, oy, width, height, unitScale);
+      drawAxes(ctx, ox, oy, width, height, 'Space x (Alice)', 'Time ct (Alice)');
+
+      var maxCt = (oy - 20) / unitScale;
+      var pLightR = toPx(maxCt, maxCt);
+      var pLightL = toPx(-maxCt, maxCt);
+
+      ctx.save();
+      ctx.strokeStyle = 'rgba(250, 204, 21, 0.45)';
+      ctx.lineWidth = 1.8;
+      ctx.setLineDash([4, 4]);
+      ctx.beginPath();
+      ctx.moveTo(ox, oy);
+      ctx.lineTo(pLightR.x, pLightR.y);
+      ctx.moveTo(ox, oy);
+      ctx.lineTo(pLightL.x, pLightL.y);
+      ctx.stroke();
+      ctx.restore();
+
+      drawLabelPill(ctx, 'Light Ray (+c, 45°)', Math.min(width - 90, pLightR.x - 20), Math.max(30, pLightR.y + 15), {
+        textColor: '#eab308', font: '9px "JetBrains Mono"'
+      });
+      drawLabelPill(ctx, 'Light Ray (−c, 45°)', Math.max(80, pLightL.x + 20), Math.max(30, pLightL.y + 15), {
+        textColor: '#eab308', font: '9px "JetBrains Mono"'
+      });
+
+      // Alice's Worldline
+      ctx.strokeStyle = c.timeColor;
+      ctx.lineWidth = 2.4;
+      ctx.beginPath();
+      ctx.moveTo(ox, oy);
+      ctx.lineTo(ox, 25);
+      ctx.stroke();
+      drawLabelPill(ctx, 'Alice Worldline (x = 0)', ox, 22, {
+        textColor: c.timeColor, font: '10px "JetBrains Mono"'
+      });
+
+      // Coach Worldtube in Alice's coordinates
+      var tTop = maxCt;
+      var pCenterTop = toPx(vFraction * tTop, tTop);
+      var pRearBottom = toPx(-data.dPrime, 0);
+      var pRearTop = toPx(-data.dPrime + vFraction * tTop, tTop);
+      var pFrontBottom = toPx(+data.dPrime, 0);
+      var pFrontTop = toPx(+data.dPrime + vFraction * tTop, tTop);
+
+      ctx.fillStyle = c.isLight ? 'rgba(234, 88, 12, 0.08)' : 'rgba(251, 146, 60, 0.10)';
+      ctx.beginPath();
+      ctx.moveTo(pRearBottom.x, pRearBottom.y);
+      ctx.lineTo(pRearTop.x, pRearTop.y);
+      ctx.lineTo(pFrontTop.x, pFrontTop.y);
+      ctx.lineTo(pFrontBottom.x, pFrontBottom.y);
+      ctx.closePath();
+      ctx.fill();
+
+      ctx.strokeStyle = c.spaceColor;
+      ctx.lineWidth = 1.6;
+      ctx.setLineDash([3, 3]);
+      ctx.beginPath();
+      ctx.moveTo(pRearBottom.x, pRearBottom.y);
+      ctx.lineTo(pRearTop.x, pRearTop.y);
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.moveTo(pFrontBottom.x, pFrontBottom.y);
+      ctx.lineTo(pFrontTop.x, pFrontTop.y);
+      ctx.stroke();
+
+      ctx.setLineDash([]);
+      ctx.lineWidth = 2.0;
+      ctx.beginPath();
+      ctx.moveTo(ox, oy);
+      ctx.lineTo(pCenterTop.x, pCenterTop.y);
+      ctx.stroke();
+
+      drawLabelPill(ctx, 'Bob Center (slope v/c)', pCenterTop.x, Math.max(35, pCenterTop.y - 12), {
+        textColor: c.spaceColor, font: '10px "JetBrains Mono"'
+      });
+
+      // Event 1 (Rear Flash)
+      var pE1 = toPx(data.xR, data.ctR);
+      drawGlowingDot(ctx, pE1.x, pE1.y, '#facc15', 6.0);
+      ctx.strokeStyle = '#eab308';
+      ctx.lineWidth = 1.8;
+      ctx.beginPath();
+      ctx.arc(pE1.x, pE1.y, 14, 0, Math.PI * 2);
+      ctx.stroke();
+      drawLabelPill(ctx, 'Event 1 (Rear Flash, ct_R=' + data.ctR.toFixed(2) + ')', pE1.x - 12, pE1.y - 16, {
+        textColor: '#eab308', font: '10px "JetBrains Mono"'
+      });
+
+      // Event 2 (Front Flash)
+      var pE2 = toPx(data.xF, data.ctF);
+      drawGlowingDot(ctx, pE2.x, pE2.y, c.spaceColor, 6.0);
+      ctx.strokeStyle = c.spaceColor;
+      ctx.lineWidth = 1.8;
+      ctx.beginPath();
+      ctx.arc(pE2.x, pE2.y, 14, 0, Math.PI * 2);
+      ctx.stroke();
+      drawLabelPill(ctx, 'Event 2 (Front Flash, ct_F=' + data.ctF.toFixed(2) + ')', Math.min(width - 90, pE2.x + 10), Math.max(30, pE2.y - 16), {
+        textColor: c.spaceColor, font: '10px "JetBrains Mono"'
+      });
+
+      // The Slanted Line Connecting Event 1 and Event 2
+      var lineXMin = -2.5, lineXMax = 3.5;
+      var lineCtMin = data.ctR + (lineXMin - data.xR) * data.slope;
+      var lineCtMax = data.ctR + (lineXMax - data.xR) * data.slope;
+      var pLineStart = toPx(lineXMin, lineCtMin);
+      var pLineEnd = toPx(lineXMax, lineCtMax);
+
+      ctx.save();
+      ctx.strokeStyle = '#eab308';
+      ctx.lineWidth = 2.8;
+      ctx.beginPath();
+      ctx.moveTo(pLineStart.x, pLineStart.y);
+      ctx.lineTo(pLineEnd.x, pLineEnd.y);
+      ctx.stroke();
+      ctx.restore();
+
+      var pMid = toPx((data.xR + data.xF) / 2, (data.ctR + data.ctF) / 2);
+      drawLabelPill(ctx, 'Slanted Line of Bob\'s Simultaneity (Slope = ' + vFraction.toFixed(2) + ')', pMid.x, pMid.y + 18, {
+        textColor: '#d97706', font: 'bold 10px "JetBrains Mono"'
+      });
+
+      // Alice's Horizontal Slice of "Now"
+      var pAliceNowLeft = toPx(-3.0, aliceTime);
+      var pAliceNowRight = toPx(3.5, aliceTime);
+
+      ctx.save();
+      ctx.strokeStyle = c.timeColor;
+      ctx.lineWidth = 2.0;
+      ctx.setLineDash([5, 4]);
+      ctx.beginPath();
+      ctx.moveTo(pAliceNowLeft.x, pAliceNowLeft.y);
+      ctx.lineTo(pAliceNowRight.x, pAliceNowRight.y);
+      ctx.stroke();
+      ctx.restore();
+
+      drawLabelPill(ctx, 'Alice\'s Slice of "Now" (ct = ' + aliceTime.toFixed(2) + 'm)', Math.min(width - 110, pAliceNowRight.x - 30), pAliceNowRight.y - 14, {
+        textColor: c.timeColor, font: '10px "JetBrains Mono"'
+      });
+    }
+
+    if (sliderSpeed) {
+      sliderSpeed.addEventListener('input', function (e) {
+        vFraction = parseFloat(e.target.value) / 1000;
+        for (var i = 0; i < chipSpeeds.length; i++) chipSpeeds[i].classList.remove('active');
+        update();
+      });
+    }
+
+    if (sliderTime) {
+      sliderTime.addEventListener('input', function (e) {
+        aliceTime = parseFloat(e.target.value) / 100;
+        update();
+      });
+    }
+
+    for (var s = 0; s < chipSpeeds.length; s++) {
+      (function (btn) {
+        btn.addEventListener('click', function () {
+          for (var j = 0; j < chipSpeeds.length; j++) chipSpeeds[j].classList.remove('active');
+          btn.classList.add('active');
+          vFraction = parseFloat(btn.getAttribute('data-val')) / 1000;
+          if (sliderSpeed) sliderSpeed.value = btn.getAttribute('data-val');
+          update();
+        });
+      })(chipSpeeds[s]);
+    }
+
+    registerDraw(draw);
+    window.addEventListener('resize', draw);
+    update();
+  }
+
+  // WIDGET 6: Slicing the Loaf: The Angle of "Now"
   function initWidgetSimultaneitySlice(containerId) {
     var container = document.getElementById(containerId);
     if (!container) return;
@@ -1579,7 +1850,231 @@
     ctx.restore();
   }
 
-  // WIDGET 6: The Oblique Slice & Length Contraction
+  // ILLUSTRATION 7: Bob's Coordinate Spacetime Map (Reciprocal Frame)
+  function initWidgetBobSpacetime(containerId) {
+    var container = document.getElementById(containerId);
+    if (!container) return;
+
+    var canvas = container.querySelector('canvas');
+    var sliderSpeed = container.querySelector('.slider-speed');
+    var sliderSlice = container.querySelector('.slider-slice');
+    var chipSpeeds = container.querySelectorAll('.chip-bobmap-speed');
+    var readoutSpeed = container.querySelector('.readout-bobmap-speed');
+    var readoutSlice = container.querySelector('.readout-bobmap-slice');
+    var readoutBobNow = container.querySelector('.readout-bob-now-time');
+    var readoutGap = container.querySelector('.readout-bob-view-gap');
+    var readoutTiltBadge = container.querySelector('.readout-alice-tilt-badge');
+    var readoutSummary = container.querySelector('.readout-bobmap-summary');
+
+    var vFraction = 0.866;
+    var aliceTimeSweep = 0.0;
+
+    function update() {
+      var d = 1.0;
+      var slope = -vFraction;
+      var desyncGap = 2 * d * vFraction;
+
+      if (readoutSpeed) readoutSpeed.innerText = 'v = ' + vFraction.toFixed(3) + ' c';
+      if (readoutSlice) readoutSlice.innerText = 't_Alice = ' + (aliceTimeSweep >= 0 ? '+' : '') + aliceTimeSweep.toFixed(2) + ' s';
+      if (readoutBobNow) readoutBobNow.innerHTML = 'cτ = 1.00 <span>m</span>';
+      if (readoutGap) readoutGap.innerHTML = 'Δτ = ' + desyncGap.toFixed(2) + ' <span>s</span>';
+      if (readoutTiltBadge) readoutTiltBadge.innerText = 'Tilted: Slope = ' + slope.toFixed(3);
+      if (readoutSummary) {
+        readoutSummary.innerHTML = 'Alice\'s Tilt: <strong>cΔτ / Δx\' = ' + slope.toFixed(3) + '</strong> (Reciprocal Symmetry)';
+      }
+
+      draw();
+    }
+
+    function draw() {
+      if (!canvas) return;
+      var c = getThemeColors();
+      var ret = setupRetinaCanvas(canvas);
+      var ctx = ret.ctx, width = ret.width, height = ret.height;
+      ctx.clearRect(0, 0, width, height);
+
+      var d = 1.0;
+      var ox = width * 0.50;
+      var oy = height - 42;
+      var unitScale = Math.min(width * 0.17, (height - 60) / 3.8);
+
+      function toPx(xp, ctau) {
+        return {
+          x: ox + xp * unitScale,
+          y: oy - ctau * unitScale
+        };
+      }
+
+      drawGrid(ctx, ox, oy, width, height, unitScale);
+      drawAxes(ctx, ox, oy, width, height, 'Space x\' (Bob)', 'Time cτ (Bob)');
+
+      var maxCtau = (oy - 20) / unitScale;
+
+      // Bob's Coach Worldtube (Vertical in Bob's Frame)
+      var pRearBottom = toPx(-d, 0);
+      var pRearTop = toPx(-d, maxCtau);
+      var pFrontBottom = toPx(+d, 0);
+      var pFrontTop = toPx(+d, maxCtau);
+      var pCenterBottom = toPx(0, 0);
+      var pCenterTop = toPx(0, maxCtau);
+
+      ctx.fillStyle = c.isLight ? 'rgba(234, 88, 12, 0.08)' : 'rgba(251, 146, 60, 0.10)';
+      ctx.fillRect(pRearBottom.x, pRearTop.y, (2 * d) * unitScale, maxCtau * unitScale);
+
+      ctx.strokeStyle = c.spaceColor;
+      ctx.lineWidth = 1.6;
+      ctx.setLineDash([3, 3]);
+      ctx.beginPath();
+      ctx.moveTo(pRearBottom.x, pRearBottom.y);
+      ctx.lineTo(pRearTop.x, pRearTop.y);
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.moveTo(pFrontBottom.x, pFrontBottom.y);
+      ctx.lineTo(pFrontTop.x, pFrontTop.y);
+      ctx.stroke();
+
+      ctx.setLineDash([]);
+      ctx.lineWidth = 2.4;
+      ctx.beginPath();
+      ctx.moveTo(pCenterBottom.x, pCenterBottom.y);
+      ctx.lineTo(pCenterTop.x, pCenterTop.y);
+      ctx.stroke();
+
+      drawLabelPill(ctx, 'Bob Worldline (x\' = 0)', ox, 22, {
+        textColor: c.spaceColor, font: '10px "JetBrains Mono"'
+      });
+
+      // Light pulses in Bob's frame: 45 deg rays from (0,0)
+      ctx.save();
+      ctx.strokeStyle = 'rgba(250, 204, 21, 0.45)';
+      ctx.lineWidth = 1.6;
+      ctx.setLineDash([3, 3]);
+      var pRayLeft = toPx(-d, d);
+      var pRayRight = toPx(+d, d);
+      ctx.beginPath();
+      ctx.moveTo(ox, oy); ctx.lineTo(pRayLeft.x, pRayLeft.y);
+      ctx.moveTo(ox, oy); ctx.lineTo(pRayRight.x, pRayRight.y);
+      ctx.stroke();
+      ctx.restore();
+
+      // Event 1 (Rear Beacon Flash in Bob's Frame) at (-d, d)
+      var pE1 = toPx(-d, d);
+      drawGlowingDot(ctx, pE1.x, pE1.y, '#facc15', 5.5);
+      ctx.strokeStyle = '#eab308';
+      ctx.lineWidth = 1.8;
+      ctx.beginPath();
+      ctx.arc(pE1.x, pE1.y, 13, 0, Math.PI * 2);
+      ctx.stroke();
+      drawLabelPill(ctx, 'Event 1: Rear Hit (cτ = 1.0)', pE1.x - 10, pE1.y - 15, {
+        textColor: '#eab308', font: '10px "JetBrains Mono"'
+      });
+
+      // Event 2 (Front Beacon Flash in Bob's Frame) at (+d, d)
+      var pE2 = toPx(+d, d);
+      drawGlowingDot(ctx, pE2.x, pE2.y, '#facc15', 5.5);
+      ctx.strokeStyle = '#eab308';
+      ctx.lineWidth = 1.8;
+      ctx.beginPath();
+      ctx.arc(pE2.x, pE2.y, 13, 0, Math.PI * 2);
+      ctx.stroke();
+      drawLabelPill(ctx, 'Event 2: Front Hit (cτ = 1.0)', pE2.x + 10, pE2.y - 15, {
+        textColor: '#eab308', font: '10px "JetBrains Mono"'
+      });
+
+      // Bob's Line of Simultaneity: Level Horizontal Line at cτ = d
+      var pBobNowL = toPx(-2.2, d);
+      var pBobNowR = toPx(+2.2, d);
+      ctx.save();
+      ctx.strokeStyle = '#eab308';
+      ctx.lineWidth = 2.4;
+      ctx.beginPath();
+      ctx.moveTo(pBobNowL.x, pBobNowL.y);
+      ctx.lineTo(pBobNowR.x, pBobNowR.y);
+      ctx.stroke();
+      ctx.restore();
+
+      drawLabelPill(ctx, 'Bob\'s Simultaneity Line (cτ = 1.00 m, Flat & Level: Δτ = 0)', ox, pBobNowL.y + 16, {
+        textColor: '#d97706', font: 'bold 10px "JetBrains Mono"'
+      });
+
+      // Alice's Worldline as seen by Bob: tilted to the left (velocity -v)
+      var pAliceTop = toPx(-vFraction * maxCtau, maxCtau);
+      ctx.save();
+      ctx.strokeStyle = c.timeColor;
+      ctx.lineWidth = 2.2;
+      ctx.beginPath();
+      ctx.moveTo(ox, oy);
+      ctx.lineTo(pAliceTop.x, pAliceTop.y);
+      ctx.stroke();
+      ctx.restore();
+
+      drawLabelPill(ctx, 'Alice Worldline (moving −v)', pAliceTop.x, Math.max(30, pAliceTop.y - 12), {
+        textColor: c.timeColor, font: '10px "JetBrains Mono"'
+      });
+
+      // Alice's Tilted Slice of "Now" as seen by Bob
+      var ctau0 = 1.0 + aliceTimeSweep;
+      var xpMin = -2.2, xpMax = +2.2;
+      var pAliceNowLeft = toPx(xpMin, ctau0 - vFraction * xpMin);
+      var pAliceNowRight = toPx(xpMax, ctau0 - vFraction * xpMax);
+
+      ctx.save();
+      ctx.strokeStyle = c.timeColor;
+      ctx.lineWidth = 2.2;
+      ctx.setLineDash([5, 4]);
+      ctx.beginPath();
+      ctx.moveTo(pAliceNowLeft.x, pAliceNowLeft.y);
+      ctx.lineTo(pAliceNowRight.x, pAliceNowRight.y);
+      ctx.stroke();
+      ctx.restore();
+
+      var ctauAtRear = ctau0 - vFraction * (-d);
+      var ctauAtFront = ctau0 - vFraction * (+d);
+      var pCutRear = toPx(-d, ctauAtRear);
+      var pCutFront = toPx(+d, ctauAtFront);
+
+      drawGlowingDot(ctx, pCutRear.x, pCutRear.y, c.timeColor, 4.5);
+      drawGlowingDot(ctx, pCutFront.x, pCutFront.y, c.timeColor, 4.5);
+
+      drawLabelPill(ctx, 'Alice\'s Tilted "Now" (Slope = −' + vFraction.toFixed(2) + ')', pAliceNowRight.x - 25, pAliceNowRight.y - 14, {
+        textColor: c.timeColor, font: 'bold 10px "JetBrains Mono"'
+      });
+    }
+
+    if (sliderSpeed) {
+      sliderSpeed.addEventListener('input', function (e) {
+        vFraction = parseFloat(e.target.value) / 1000;
+        for (var i = 0; i < chipSpeeds.length; i++) chipSpeeds[i].classList.remove('active');
+        update();
+      });
+    }
+
+    if (sliderSlice) {
+      sliderSlice.addEventListener('input', function (e) {
+        aliceTimeSweep = parseFloat(e.target.value) / 100;
+        update();
+      });
+    }
+
+    for (var s = 0; s < chipSpeeds.length; s++) {
+      (function (btn) {
+        btn.addEventListener('click', function () {
+          for (var j = 0; j < chipSpeeds.length; j++) chipSpeeds[j].classList.remove('active');
+          btn.classList.add('active');
+          vFraction = parseFloat(btn.getAttribute('data-val')) / 1000;
+          if (sliderSpeed) sliderSpeed.value = btn.getAttribute('data-val');
+          update();
+        });
+      })(chipSpeeds[s]);
+    }
+
+    registerDraw(draw);
+    window.addEventListener('resize', draw);
+    update();
+  }
+
+  // WIDGET 8: The Oblique Slice & Length Contraction
   function initWidgetLengthContraction(containerId) {
     var container = document.getElementById(containerId);
     if (!container) return;
@@ -2724,9 +3219,11 @@
   function initAllPost03() {
     initWidgetLoafAlice('widget-loaf-alice');
     initWidgetLoafBob('widget-loaf-bob');
-    initWidgetBeaconsBob('widget-beacons-bob');
     initWidgetBeaconsAlice('widget-beacons-alice');
+    initWidgetAliceSpacetime('widget-alice-spacetime');
+    initWidgetBeaconsBob('widget-beacons-bob');
     initWidgetSimultaneitySlice('widget-simultaneity-slice');
+    initWidgetBobSpacetime('widget-bob-spacetime');
     initWidgetLengthContraction('widget-length-contraction');
     initWidgetDualFrame('widget-dual-frame');
     initWidgetMuonContraction('widget-muon-contraction');
@@ -2737,9 +3234,11 @@
   sim.setup3DCameraController = setup3DCameraController;
   sim.initWidgetLoafAlice = initWidgetLoafAlice;
   sim.initWidgetLoafBob = initWidgetLoafBob;
-  sim.initWidgetBeaconsBob = initWidgetBeaconsBob;
   sim.initWidgetBeaconsAlice = initWidgetBeaconsAlice;
+  sim.initWidgetAliceSpacetime = initWidgetAliceSpacetime;
+  sim.initWidgetBeaconsBob = initWidgetBeaconsBob;
   sim.initWidgetSimultaneitySlice = initWidgetSimultaneitySlice;
+  sim.initWidgetBobSpacetime = initWidgetBobSpacetime;
   sim.initWidgetLengthContraction = initWidgetLengthContraction;
   sim.initWidgetDualFrame = initWidgetDualFrame;
   sim.initWidgetMuonContraction = initWidgetMuonContraction;

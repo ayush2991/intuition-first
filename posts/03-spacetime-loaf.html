@@ -61,7 +61,7 @@
         In <a href="01-motion-and-time.html"
           style="color:var(--color-time); font-weight:600; text-decoration:underline;">Part 1</a>, we discovered an
         extraordinary geometric principle: <strong>everyone and everything moves through spacetime at a single invariant
-          speed, bounded by <em>c</em>.</strong> When you sit completely still in your chair, 100% of your speed carries
+          speed, always exactly equal to <em>c</em>.</strong> When you sit completely still, 100% of your speed carries
         you forward through time. The moment you begin moving through space, part of that total speed is diverted
         sideways, and your personal wristwatch inevitably ticks more slowly.
       </p>
@@ -73,7 +73,7 @@
         outgoing flashes of light trace a majestic 45° boundary: the <strong>Cosmic Light Cone</strong>.
       </p>
       <p>
-        That coordinate map answered where travellers are at any given moment. Yet it leaves an even deeper question
+        That coordinate map answered where travellers are at any given moment. But it leaves an even deeper question
         waiting to be asked: <em>if two travellers in relative motion carry clocks ticking at different rates, what does it mean to say that
         two distant events happen at the "same time"? Whose clock decides what is happening right now across
         the cosmos?</em>
@@ -120,24 +120,6 @@
       </p>
       <p>
         Because Alice never moves across the platform, her spatial coordinates never change. As coordinate time flows steadily upward from the past toward the future, each snapshot of Alice sits directly above the previous one. Stacking these identical snapshots creates a straight vertical column stretching straight upward through the loaf: Alice's <strong>worldtube</strong>.
-      </p>
-      <p>
-        Now consider Alice’s experience of reality at any chosen coordinate time <span class="math-badge">t</span>:
-      </p>
-      <ul>
-        <li><strong>Her Slice of "Now":</strong> To Alice, the present instant is a flat, horizontal sheet cutting
-          cleanly across the loaf at her current time <span class="math-badge">ct</span>. Every event touching this
-          horizontal plane occurs at the exact same instant according to Alice's platform stopwatch.</li>
-        <li><strong>Her Expanding Light Wavefront:</strong> If a flash of light was emitted at the origin when <span
-            class="math-badge">t = 0</span>, the intersection of Alice's horizontal slice with the 45° Light Cone forms
-          an expanding circular ring of radius <span class="math-badge">r = ct</span>.</li>
-        <li><strong>Past, Future, and Elsewhere:</strong> Events below her slice inside the cone are her past; events
-          above her slice inside the cone are her reachable future; and everything outside the 45° cone belongs to the causal
-          Elsewhere.</li>
-      </ul>
-      <p>
-        Explore the 3D volume below. Rotate the perspective by dragging the canvas or using the orbit/tilt controls,
-        select viewing presets, and scrub Alice's platform stopwatch to watch her slice of Now rise through the loaf:
       </p>
 
       <!-- INTERACTIVE WIDGET 1: ALICE AT REST -->
@@ -205,7 +187,21 @@
         </div>
       </div>
 
-      <div class="formula-card">
+       <p>
+        Now consider Alice’s experience of reality at any chosen coordinate time <span class="math-badge">t</span>:
+      </p>
+      <ul>
+        <li><strong>Her Slice of "Now":</strong> To Alice, the present instant is a flat, horizontal sheet cutting
+          cleanly across the loaf at her current time <span class="math-badge">ct</span>. Every event touching this
+          horizontal plane occurs at the exact same instant according to Alice's platform stopwatch.</li>
+        <li><strong>Her Expanding Light Wavefront:</strong> If a flash of light was emitted at the origin when <span
+            class="math-badge">t = 0</span>, the intersection of Alice's horizontal slice with the 45° Light Cone forms
+          an expanding circular ring of radius <span class="math-badge">r = ct</span>.</li>
+        <li><strong>Past, Future, and Elsewhere:</strong> Events below her slice inside the cone are her past; events
+          above her slice inside the cone are her reachable future; and everything outside the 45° cone belongs to the causal
+          Elsewhere.</li>
+      </ul>
+       <div class="formula-card">
         <div class="formula-card-header">
           <span class="formula-tag">Alice's Plane of Simultaneity</span>
         </div>
@@ -215,6 +211,7 @@
         <div class="formula-note">For an observer standing at rest, all events occurring at the same vertical height
           share the exact same instant of coordinate time.</div>
       </div>
+     
 
       <p>
         For Alice, everything is intuitive: time ticks upward, space stretches flat, and her slice of the present is
@@ -341,81 +338,57 @@
       <!-- SECTION 4 -->
       <h2 id="interactive-loaf">4. Finding "Right Now": Why Motion Angles the Present</h2>
       <p>
-        Alice experiences the present as a flat, horizontal slice across the loaf. But what about Bob? Does Bob share Alice's horizontal slice of "Now"?
+        In everyday intuition, we imagine that the universe is governed by a cosmic master clock ticking uniformly
+        across all existence. If you snap your fingers right now, you naturally assume there is an objective, universal
+        instant across the cosmos that coincides with your snap.
       </p>
       <p>
-        To answer this without guessing, let us ask a fundamental question: <strong>how do you physically determine
-        whether two distant events happen at the same time?</strong>
-      </p>
-      <p>
-        Imagine Bob rides at the exact center of a passenger coach of total length <span class="math-badge">2d</span>. At each end of the coach sits a sensor beacon: a <strong>Rear Beacon</strong> at <span class="math-badge">x' = −d</span> and a <strong>Front Beacon</strong> at <span class="math-badge">x' = +d</span>. From the center of his coach, Bob fires a single flash of light outward in both directions simultaneously.
-      </p>
-      <p>
-        <strong>Inside Bob's Rest Frame:</strong> Bob considers himself at rest. Light travels outward at the invariant speed <span class="math-badge">c</span> in both directions. Because both beacons sit at identical distances (<span class="math-badge">d</span>) from the central emitter, the light pulses strike the Rear Beacon and Front Beacon at the <em>exact same instant</em> on Bob's personal wristwatch (<span class="math-badge">τ_rear = τ_front = d/c</span>). Bob concludes with complete physical justification: <em>"Both beacons flashed at the same time!"</em>
+        In relativity, however, there is no instantaneous cosmic signal that can synchronize distant clocks. To understand
+        what "the present" actually means, we must ask an operational question: <strong>how do you physically determine
+        whether two distant events happen at the exact same instant?</strong>
       </p>
 
-      <!-- INTERACTIVE WIDGET 3: BEACONS BOB -->
-      <div id="widget-beacons-bob" class="interactive-artifact">
-        <div class="artifact-header">
-          <div>
-            <div class="artifact-badge">SIMULATION 03 · BOB'S REST FRAME BEACONS</div>
-          </div>
-        </div>
-        <div class="canvas-viewport">
-          <canvas></canvas>
-        </div>
-        <div class="twin-clocks-panel">
-          <div class="clock-card amber">
-            <div class="clock-meta">
-              <span class="clock-label">Rear Beacon Arrival (Wristwatch)</span>
-              <span class="clock-badge">τ_rear</span>
-            </div>
-            <div class="clock-time readout-rear-arrival">1.00 <span>s</span></div>
-            <p class="clock-subtext">Backward pulse strikes rear sensor at x' = −d.</p>
-          </div>
-          <div class="clock-card amber">
-            <div class="clock-meta">
-              <span class="clock-label">Front Beacon Arrival (Wristwatch)</span>
-              <span class="clock-badge">τ_front</span>
-            </div>
-            <div class="clock-time readout-front-arrival">1.00 <span>s</span></div>
-            <p class="clock-subtext">Forward pulse strikes front sensor at x' = +d.</p>
-          </div>
-        </div>
-        <div class="artifact-controls artifact-controls-deck">
-          <div class="controls-strip">
-            <div class="control-item">
-              <div class="control-header">
-                <span>Scrub Bob's Wristwatch (τ)</span>
-                <span class="control-val amber readout-bob-time">τ = 0.00 s</span>
-              </div>
-              <input type="range" class="range-slider amber slider-time" min="0" max="1000" value="0">
-            </div>
-            <button class="btn-primary btn-play">
-              <span>▶</span><span>Auto Play</span>
-            </button>
-          </div>
-          <div class="controls-preset-row">
-            <div class="math-badge readout-beacon-desync">
-              Arrival Difference: <strong>Δτ = 0.00 s (Exact Rest-Frame Simultaneity!)</strong>
-            </div>
-            <span class="preset-tag">Bob's Frame: <strong>Δτ = 0</strong></span>
-          </div>
-        </div>
-      </div>
-
+      <h3>4.1 The Speeding Train &amp; The Two Flashes (Alice's Ground Frame)</h3>
       <p>
-        Now look at this identical physical experiment from Alice's station platform outside:
+        Let us set up a concrete physical experiment on Alice's railway track.
       </p>
       <p>
-        <strong>From Alice's Platform Frame:</strong> Alice watches Bob's coach glide past at speed <span class="math-badge">v</span>. To Alice, light also travels at invariant speed <span class="math-badge">c</span> in both directions. But while the photons are in flight, the coach is moving! The Rear Beacon is speeding forward to meet the oncoming backward pulse, so the backward beam covers a shorter platform distance. Meanwhile, the Front Beacon is fleeing forward away from the forward pulse, so the forward beam must chase it down over a longer platform distance.
+        Bob rides inside a high-speed passenger coach of rest length <span class="math-badge">2d</span>. At the exact
+        center of the coach sits a light emitter, and at each end sits an optical sensor beacon: a <strong>Rear Beacon</strong>
+        at <span class="math-badge">x' = −d</span> and a <strong>Front Beacon</strong> at <span class="math-badge">x' = +d</span>.
       </p>
+      <p>
+        Alice stands completely stationary on the platform with her reference stopwatch. At coordinate time <span
+          class="math-badge">t = 0</span>, the center of Bob's coach glides past Alice at track coordinate <span
+          class="math-badge">x = 0</span> with constant speed <span class="math-badge">v</span>. At that exact alignment
+        instant, the central emitter fires a single flash of light outward in both directions.
+      </p>
+      <p>
+        Now let us observe what happens strictly from Alice's platform frame of reference:
+      </p>
+      <p>
+        According to the invariance of light, the outward light pulses expand across Alice's platform at the invariant
+        speed <span class="math-badge">c</span> in both directions, completely independent of the train's motion. But
+        while these photons are traveling through space, Bob's train is speeding along the track:
+      </p>
+      <ul>
+        <li>
+          <strong>The Rear Beacon</strong> is moving forward at speed <em>v</em> to <em>meet</em> the oncoming backward
+          pulse. Because the beacon and the light beam rush toward each other, the backward light pulse covers a shorter
+          platform distance and strikes early.
+        </li>
+        <li>
+          <strong>The Front Beacon</strong> is speeding forward at speed <em>v</em>, <em>fleeing</em> away from the
+          forward pulse. The forward beam must chase down the retreating front beacon across an extended platform
+          distance, taking much longer to catch it.
+        </li>
+      </ul>
 
-      <!-- INTERACTIVE WIDGET 4: BEACONS ALICE -->
+      <!-- INTERACTIVE WIDGET 3: BEACONS ALICE -->
       <div id="widget-beacons-alice" class="interactive-artifact">
         <div class="artifact-header">
           <div>
-            <div class="artifact-badge">SIMULATION 04 · ALICE'S FRAME MOVING BEACONS</div>
+            <div class="artifact-badge">SIMULATION 03 · ALICE'S PLATFORM FRAME: THE MOVING BEACONS</div>
           </div>
         </div>
         <div class="canvas-viewport">
@@ -472,34 +445,288 @@
       </div>
 
       <p>
-        The consequence is unavoidable: in Alice's frame of reference, <strong>the Rear Beacon flashes first, and the Front Beacon flashes later</strong>. Two events that Bob certifies as happening at the exact same instant on his wristwatch occur at <em>different coordinate times</em> on Alice's platform stopwatch.
+        The physical consequence in Alice's frame is undeniable:
+      </p>
+      <ul>
+        <li><strong>Event 1 (Rear Beacon Flash):</strong> occurs early at coordinate time <span class="math-badge">t_rear</span> on Alice's platform stopwatch.</li>
+        <li><strong>Event 2 (Front Beacon Flash):</strong> occurs later at coordinate time <span class="math-badge">t_front &gt; t_rear</span> on Alice's platform stopwatch.</li>
+      </ul>
+
+      <h3>4.2 Calculating the Time Gap: A Step-by-Step Derivation of Δt</h3>
+      <p>
+        Let us calculate the exact time interval between these two beacon flashes using basic kinematics in Alice's
+        coordinates.
       </p>
       <p>
-        On Alice's spacetime loaf, the strike at the front beacon sits higher up on the time axis (in Alice's future), while the strike at the rear beacon sits lower down (in Alice's past). If we connect all events that Bob considers simultaneous at one moment of his trip, they do not lie along a horizontal sheet: <strong>Bob's slice of "Now" tilts upward in the direction of his motion</strong>.
+        Let <span class="math-badge">2d'</span> be the length of Bob's coach as measured on Alice's platform tracks. At
+        time <span class="math-badge">t = 0</span>, the coach's center is at <span class="math-badge">x = 0</span>, so the
+        rear beacon starts at <span class="math-badge">x_rear(0) = −d'</span> and the front beacon starts at <span
+          class="math-badge">x_front(0) = +d'</span>.
       </p>
-
+      <p>
+        As coordinate time <span class="math-badge">t</span> advances:
+      </p>
+      <ul>
+        <li>The rear beacon moves according to <span class="math-badge">x_rear(t) = −d' + v · t</span>.</li>
+        <li>The backward light pulse travels according to <span class="math-badge">x_light(t) = −c · t</span>.</li>
+      </ul>
+      <p>
+        Setting their positions equal to find the collision time <span class="math-badge">t_rear</span>:
+      </p>
       <div class="formula-card">
         <div class="formula-card-header">
-          <span class="formula-tag">The Tilt of Simultaneity</span>
+          <span class="formula-tag">Rear Beacon Arrival Time (Alice's Frame)</span>
         </div>
         <div class="formula-body">
-          Δ<em>t</em> = (<em>v</em> / <em>c</em>²) · Δ<em>x</em> &nbsp;⟹&nbsp; Slope in Spacetime: <em>c</em>Δ<em>t</em> /
-          Δ<em>x</em> = <em>v</em> / <em>c</em> = sin <em>θ</em>
+          −<em>c</em> · <em>t</em>_rear = −<em>d</em>' + <em>v</em> · <em>t</em>_rear &nbsp;⟹&nbsp; (<em>c</em> + <em>v</em>) · <em>t</em>_rear = <em>d</em>' &nbsp;⟹&nbsp; <strong><em>t</em>_rear = <em>d</em>' / (<em>c</em> + <em>v</em>)</strong>
         </div>
-        <div class="formula-note">Events separated by spatial distance Δ<em>x</em> along the direction of motion are
-          desynchronized in platform coordinate time by (<em>v</em> / <em>c</em>²) · Δ<em>x</em>.</div>
+        <div class="formula-note">Because the rear sensor rushes forward toward the backward beam at relative closure rate (c + v), the pulse arrives rapidly.</div>
       </div>
 
       <p>
-        In the 3D simulation below, adjust Bob's speed presets (<span class="math-badge">θ = 0°, 30°, 60°</span>) and
-        orbit the volume to see how Bob's amber plane of "Now" tilts relative to Alice's cyan horizontal plane:
+        Next, let us trace the forward beam chasing the front beacon:
+      </p>
+      <ul>
+        <li>The front beacon moves according to <span class="math-badge">x_front(t) = +d' + v · t</span>.</li>
+        <li>The forward light pulse travels according to <span class="math-badge">x_light(t) = +c · t</span>.</li>
+      </ul>
+      <p>
+        Setting their positions equal to find the collision time <span class="math-badge">t_front</span>:
+      </p>
+      <div class="formula-card">
+        <div class="formula-card-header">
+          <span class="formula-tag">Front Beacon Arrival Time (Alice's Frame)</span>
+        </div>
+        <div class="formula-body">
+          +<em>c</em> · <em>t</em>_front = +<em>d</em>' + <em>v</em> · <em>t</em>_front &nbsp;⟹&nbsp; (<em>c</em> − <em>v</em>) · <em>t</em>_front = <em>d</em>' &nbsp;⟹&nbsp; <strong><em>t</em>_front = <em>d</em>' / (<em>c</em> − <em>v</em>)</strong>
+        </div>
+        <div class="formula-note">Because the front sensor flees away from the forward beam at closure rate (c − v), the forward pulse takes longer to overtake it.</div>
+      </div>
+
+      <p>
+        Now we subtract <span class="math-badge">t_rear</span> from <span class="math-badge">t_front</span> to find the
+        arrival gap <span class="math-badge">Δt</span> on Alice's platform stopwatch:
+      </p>
+      <div class="formula-card">
+        <div class="formula-card-header">
+          <span class="formula-tag">Step-by-Step Derivation of Δt</span>
+        </div>
+        <div class="formula-body">
+          Δ<em>t</em> = <em>t</em>_front − <em>t</em>_rear = <em>d</em>' · [ 1 / (<em>c</em> − <em>v</em>) − 1 / (<em>c</em> + <em>v</em>) ]<br><br>
+          Δ<em>t</em> = <em>d</em>' · [ (<em>c</em> + <em>v</em>) − (<em>c</em> − <em>v</em>) ] / (<em>c</em>² − <em>v</em>²)<br><br>
+          <strong>Δ<em>t</em> = 2<em>d</em>' · <em>v</em> / (<em>c</em>² − <em>v</em>²) = [ 2<em>d</em>' · <em>v</em> / <em>c</em>² ] / (1 − <em>v</em>² / <em>c</em>²)</strong>
+        </div>
+        <div class="formula-note">The arrival gap is proportional to the coach's length 2d' and velocity v, magnified by the relativistic denominator (1 − v²/c²).</div>
+      </div>
+
+      <p>
+        Recall that Bob's coach has rest length <span class="math-badge">2d = Δx'</span> inside Bob's own carriage. As we will formally establish in Section 6, the length measured on Alice's platform is length-contracted: <span class="math-badge">2d' = 2d / γ = 2d · √(1 − v²/c²)</span>. Substituting this into our expression yields:
+      </p>
+      <div class="formula-card">
+        <div class="formula-card-header">
+          <span class="formula-tag">The Time Desynchronization Formula</span>
+        </div>
+        <div class="formula-body">
+          Δ<em>t</em> = γ · (<em>v</em> / <em>c</em>²) · Δ<em>x</em>'
+        </div>
+        <div class="formula-note">Events that occur at opposite ends of Bob's coach (separated by rest distance Δx') are desynchronized in Alice's timeline by exactly γ · (v/c²) · Δx'.</div>
+      </div>
+
+      <h3>4.3 Mapping the Flashes in Spacetime: The Slanted Line of Events</h3>
+      <p>
+        What does this sequence of events look like when plotted onto Alice's coordinate spacetime diagram <span
+          class="math-badge">(x, ct)</span>?
+      </p>
+      <p>
+        Let us trace each component on Alice's spacetime grid:
+      </p>
+      <ul>
+        <li><strong>Alice's Worldline:</strong> stays fixed at <span class="math-badge">x = 0</span>, rising straight up as a vertical axis.</li>
+        <li><strong>Bob's Coach Worldtube:</strong> climbs upward at a slant with slope <span class="math-badge">tan φ = v/c</span>. The rear and front walls trace parallel worldlines flanking Bob's center path.</li>
+        <li><strong>The Light Pulses:</strong> shoot outward from the origin along diagonal lines tilted at exactly 45° (<span class="math-badge">x = ±ct</span>).</li>
+        <li><strong>Event 1 (Rear Flash):</strong> occurs at spacetime coordinates <span class="math-badge">(x_rear, c · t_rear)</span>.</li>
+        <li><strong>Event 2 (Front Flash):</strong> occurs higher up at spacetime coordinates <span class="math-badge">(x_front, c · t_front)</span>.</li>
+      </ul>
+      <p>
+        Now, draw a straight line connecting Event 1 and Event 2 in Alice's spacetime map. What is its slope?
+      </p>
+      <div class="formula-card">
+        <div class="formula-card-header">
+          <span class="formula-tag">Slope of the Connected Events Line</span>
+        </div>
+        <div class="formula-body">
+          Slope = <em>c</em> · Δ<em>t</em> / Δ<em>x</em> = <em>c</em> · (<em>t</em>_front − <em>t</em>_rear) / (<em>x</em>_front − <em>x</em>_rear) = <strong><em>v</em> / <em>c</em> = sin <em>θ</em></strong>
+        </div>
+        <div class="formula-note">Because x_front = c · t_front and x_rear = −c · t_rear, the spatial span is Δx = c · (t_front + t_rear). The slope simplifies purely to v/c.</div>
+      </div>
+
+      <p>
+        Examine this carefully in the interactive spacetime diagram below. Notice that on Alice's map, <strong>the line
+        connecting Event 1 and Event 2 is slanted</strong>. Yet Alice's own slice of "Now" is completely horizontal (<span
+          class="math-badge">ct = const</span>). To Alice, Event 1 is finished in her past, while Event 2 is still
+        waiting in her future:
       </p>
 
-      <!-- INTERACTIVE WIDGET 5: SIMULTANEITY SLICE -->
+      <!-- INTERACTIVE WIDGET 4: ALICE'S SPACETIME MAP -->
+      <div id="widget-alice-spacetime" class="interactive-artifact">
+        <div class="artifact-header">
+          <div>
+            <div class="artifact-badge">ILLUSTRATION 04 · ALICE'S SPACETIME MAP: THE SLANTED LINE OF SIMULTANEITY</div>
+          </div>
+        </div>
+        <div class="canvas-viewport">
+          <canvas></canvas>
+        </div>
+        <div class="twin-clocks-panel">
+          <div class="clock-card cyan">
+            <div class="clock-meta">
+              <span class="clock-label">Event 1: Rear Beacon Flash</span>
+              <span class="clock-badge readout-er-badge">t_R = 0.27 s</span>
+            </div>
+            <div class="clock-time readout-er-time">ct_R = 0.27 <span>m</span></div>
+            <p class="clock-subtext">Coordinate location: x_R = −0.27 m on Alice's platform.</p>
+          </div>
+          <div class="clock-card amber">
+            <div class="clock-meta">
+              <span class="clock-label">Event 2: Front Beacon Flash</span>
+              <span class="clock-badge readout-ef-badge">t_F = 3.73 s</span>
+            </div>
+            <div class="clock-time readout-ef-time" style="color:var(--color-space);">ct_F = 3.73 <span>m</span></div>
+            <p class="clock-subtext">Coordinate location: x_F = +3.73 m on Alice's platform.</p>
+          </div>
+        </div>
+        <div class="artifact-controls artifact-controls-deck">
+          <div class="controls-strip">
+            <div class="control-item">
+              <div class="control-header">
+                <span>Coach Velocity (v = c · sin θ)</span>
+                <span class="control-val amber readout-map-speed">v = 0.866 c (θ = 60°)</span>
+              </div>
+              <input type="range" class="range-slider amber slider-speed" min="0" max="950" value="866">
+            </div>
+            <div class="control-item">
+              <div class="control-header">
+                <span>Alice's Time Slice (ct)</span>
+                <span class="control-val cyan readout-map-time">ct = 1.00 m</span>
+              </div>
+              <input type="range" class="range-slider slider-time" min="0" max="400" value="100">
+            </div>
+          </div>
+          <div class="controls-preset-row">
+            <div class="preset-chips">
+              <button class="chip-btn chip-map-speed" data-val="0">v = 0 (Rest)</button>
+              <button class="chip-btn chip-map-speed" data-val="500">θ = 30° (0.500 c)</button>
+              <button class="chip-btn chip-map-speed active" data-val="866">θ = 60° (0.866 c)</button>
+            </div>
+            <div class="math-badge readout-map-slope">
+              Slanted Line Slope: <strong>cΔt / Δx = v / c = 0.866</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <h3>4.4 Aboard the Train: Bob's Rest Frame &amp; The Oblique Slice of "Now"</h3>
+      <p>
+        Now let us step aboard the passenger coach and adopt Bob's perspective.
+      </p>
+      <p>
+        According to the Principle of Relativity, Bob is in an inertial reference frame. Inside his coach, the air is
+        calm, coffee rests quietly on the table, and Bob has every right to consider himself completely at rest. To Bob,
+        it is Alice and her entire platform that are zooming backward at speed <span class="math-badge">−v</span>.
+      </p>
+      <p>
+        From Bob's viewpoint:
+      </p>
+      <ul>
+        <li>The light source is at rest in the center of the coach.</li>
+        <li>The light pulses travel outward at invariant speed <span class="math-badge">c</span> in both directions.</li>
+        <li>Both sensor beacons sit at identical distances (<span class="math-badge">d</span>) from the central emitter.</li>
+      </ul>
+      <p>
+        Because the light pulses travel identical distances at identical speeds inside Bob's stationary coach, they
+        strike both beacons at the <strong>exact same instant</strong> on Bob's personal wristwatch:
+      </p>
+      <div class="formula-card">
+        <div class="formula-card-header">
+          <span class="formula-tag">Arrival Times in Bob's Rest Frame</span>
+        </div>
+        <div class="formula-body">
+          τ_rear = <em>d</em> / <em>c</em> &nbsp;|&nbsp; τ_front = <em>d</em> / <em>c</em> &nbsp;⟹&nbsp; <strong>Δτ = 0</strong>
+        </div>
+        <div class="formula-note">Inside Bob's rest frame, both beacon strikes occur at the exact same instant of proper time. To Bob, they are completely simultaneous!</div>
+      </div>
+
+      <!-- INTERACTIVE WIDGET 5: BEACONS BOB -->
+      <div id="widget-beacons-bob" class="interactive-artifact">
+        <div class="artifact-header">
+          <div>
+            <div class="artifact-badge">SIMULATION 05 · BOB'S REST FRAME BEACONS</div>
+          </div>
+        </div>
+        <div class="canvas-viewport">
+          <canvas></canvas>
+        </div>
+        <div class="twin-clocks-panel">
+          <div class="clock-card amber">
+            <div class="clock-meta">
+              <span class="clock-label">Rear Beacon Arrival (Wristwatch)</span>
+              <span class="clock-badge">τ_rear</span>
+            </div>
+            <div class="clock-time readout-rear-arrival">1.00 <span>s</span></div>
+            <p class="clock-subtext">Backward pulse strikes rear sensor at x' = −d.</p>
+          </div>
+          <div class="clock-card amber">
+            <div class="clock-meta">
+              <span class="clock-label">Front Beacon Arrival (Wristwatch)</span>
+              <span class="clock-badge">τ_front</span>
+            </div>
+            <div class="clock-time readout-front-arrival">1.00 <span>s</span></div>
+            <p class="clock-subtext">Forward pulse strikes front sensor at x' = +d.</p>
+          </div>
+        </div>
+        <div class="artifact-controls artifact-controls-deck">
+          <div class="controls-strip">
+            <div class="control-item">
+              <div class="control-header">
+                <span>Scrub Bob's Wristwatch (τ)</span>
+                <span class="control-val amber readout-bob-time">τ = 0.00 s</span>
+              </div>
+              <input type="range" class="range-slider amber slider-time" min="0" max="1000" value="0">
+            </div>
+            <button class="btn-primary btn-play">
+              <span>▶</span><span>Auto Play</span>
+            </button>
+          </div>
+          <div class="controls-preset-row">
+            <div class="math-badge readout-beacon-desync">
+              Arrival Difference: <strong>Δτ = 0.00 s (Exact Rest-Frame Simultaneity!)</strong>
+            </div>
+            <span class="preset-tag">Bob's Frame: <strong>Δτ = 0</strong></span>
+          </div>
+        </div>
+      </div>
+
+      <p>
+        Now look at the extraordinary conclusion that follows:
+      </p>
+      <ul>
+        <li>Bob certifies with complete physical authority that Event 1 and Event 2 happen at the <strong>exact same instant</strong> (<span class="math-badge">Δτ = 0</span>). Therefore, the line connecting Event 1 and Event 2 is <strong>Bob's line of simultaneity</strong>.</li>
+        <li>Yet on Alice's coordinate map of spacetime, we just proved that the line connecting Event 1 and Event 2 is <strong>slanted with slope <em>v</em>/<em>c</em></strong>!</li>
+      </ul>
+      <p>
+        Here is the central geometric revelation of special relativity: <strong>Bob's slice of "Now" is an oblique,
+        tilted slice cutting across spacetime</strong>.
+      </p>
+      <p>
+        In the 3D simulation below, orbit the Spacetime Loaf to watch how Bob's amber plane of simultaneity cuts at an
+        angle across Alice's cyan horizontal plane:
+      </p>
+
+      <!-- INTERACTIVE WIDGET 6: SIMULTANEITY SLICE -->
       <div id="widget-simultaneity-slice" class="interactive-artifact">
         <div class="artifact-header">
           <div>
-            <div class="artifact-badge">SIMULATION 05 · THE OBLIQUE SLICE OF NOW</div>
+            <div class="artifact-badge">SIMULATION 06 · THE OBLIQUE SLICE OF NOW</div>
           </div>
         </div>
         <div class="canvas-viewport">
@@ -566,24 +793,95 @@
         </div>
       </div>
 
+      <h3>4.5 Through Bob's Eyes: The Reciprocal View of Alice's Timeline</h3>
       <p>
-        Notice three key details revealed by this simulation:
+        Physics contains no preferred vantage point. What happens if we invert the coordinate axes and draw spacetime
+        strictly from <strong>Bob's rest frame</strong>?
+      </p>
+      <p>
+        In Bob's coordinate system <span class="math-badge">(x', cτ)</span>:
       </p>
       <ul>
-        <li><strong>At the crossing point:</strong> Where Bob and Alice pass each other at <span class="math-badge">x₁ =
-            0</span>, their slices intersect. They agree that their encounter is happening right now.</li>
-        <li><strong>Ahead of Bob (<span class="math-badge">+x₁</span>):</strong> Bob's slice cuts upward into what Alice
-          considers her <em>future</em>. An event that Alice considers seconds or years away has already occurred in
-          Bob's present!</li>
-        <li><strong>Behind Bob (<span class="math-badge">−x₁</span>):</strong> Bob's slice dips downward into what Alice
-          considers her <em>past</em>. An event that Alice remembers as already finished is still in the present for
-          Bob.</li>
+        <li><strong>Bob's Worldline:</strong> stays fixed at <span class="math-badge">x' = 0</span>, rising straight up as a vertical axis. His coach walls rise straight upward as a vertical worldtube.</li>
+        <li><strong>Bob's Lines of "Now":</strong> are completely level and horizontal (<span class="math-badge">cτ = const</span>). Both beacon flashes lie on the exact same horizontal sheet at <span class="math-badge">cτ = d</span>.</li>
+        <li><strong>Alice's Motion:</strong> Alice and her station platform are moving to the left at speed <span class="math-badge">−v</span>. Alice's worldline tilts upward to the left with slope <span class="math-badge">−c/v</span>.</li>
+        <li><strong>Alice's Slice of "Now":</strong> To Bob, Alice's lines of simultaneity (<span class="math-badge">t = const</span>) are <strong>tilted downward to the right with slope −v/c</strong>!</li>
       </ul>
       <p>
-        This is the <strong>Relativity of Simultaneity</strong>: there is no single, universal "Now" shared across the
-        cosmos. The angle at which you slice reality through the spacetime loaf depends directly on your speed through
-        space.
+        Observe the profound symmetry shown in the interactive diagram below. In Bob's frame, Bob's line of simultaneity
+        is level, while Alice's lines of simultaneity slant across Bob's coach.
       </p>
+      <p>
+        When Alice marks Event 1 (the rear beacon flash), Alice's tilted slice cuts across Bob's coach such that the
+        front beacon is still far in Bob's past (<span class="math-badge">cτ &lt; d</span>). From Bob's perspective,
+        Alice records the rear beacon as flashing long before the front pulse has even reached its sensor!
+      </p>
+
+      <!-- INTERACTIVE WIDGET 7: BOB'S SPACETIME MAP -->
+      <div id="widget-bob-spacetime" class="interactive-artifact">
+        <div class="artifact-header">
+          <div>
+            <div class="artifact-badge">ILLUSTRATION 07 · BOB'S SPACETIME MAP: THE RECIPROCAL SLICE</div>
+          </div>
+        </div>
+        <div class="canvas-viewport">
+          <canvas></canvas>
+        </div>
+        <div class="twin-clocks-panel">
+          <div class="clock-card amber">
+            <div class="clock-meta">
+              <span class="clock-label">Bob's Rest Slice of "Now"</span>
+              <span class="clock-badge">Horizontal (Δτ = 0)</span>
+            </div>
+            <div class="clock-time readout-bob-now-time">cτ = 1.00 <span>m</span></div>
+            <p class="clock-subtext">Both beacons flash at the exact same instant on Bob's wristwatch.</p>
+          </div>
+          <div class="clock-card cyan">
+            <div class="clock-meta">
+              <span class="clock-label">Alice's Slice of "Now" as Seen by Bob</span>
+              <span class="clock-badge readout-alice-tilt-badge">Tilted: Slope = −0.866</span>
+            </div>
+            <div class="clock-time readout-bob-view-gap" style="color:var(--color-time);">Δτ = 1.73 <span>s</span></div>
+            <p class="clock-subtext">Alice marks rear beacon before front beacon has occurred!</p>
+          </div>
+        </div>
+        <div class="artifact-controls artifact-controls-deck">
+          <div class="controls-strip">
+            <div class="control-item">
+              <div class="control-header">
+                <span>Platform Velocity (Relative: −v)</span>
+                <span class="control-val amber readout-bobmap-speed">v = 0.866 c</span>
+              </div>
+              <input type="range" class="range-slider amber slider-speed" min="0" max="950" value="866">
+            </div>
+            <div class="control-item">
+              <div class="control-header">
+                <span>Sweep Alice's "Now" Slice (ct_Alice)</span>
+                <span class="control-val cyan readout-bobmap-slice">t_Alice = 0.00 s</span>
+              </div>
+              <input type="range" class="range-slider slider-slice" min="-200" max="200" value="0">
+            </div>
+          </div>
+          <div class="controls-preset-row">
+            <div class="preset-chips">
+              <button class="chip-btn chip-bobmap-speed" data-val="0">v = 0</button>
+              <button class="chip-btn chip-bobmap-speed" data-val="500">v = 0.500 c</button>
+              <button class="chip-btn chip-bobmap-speed active" data-val="866">v = 0.866 c</button>
+            </div>
+            <div class="math-badge readout-bobmap-summary">
+              Alice's Tilt: <strong>cΔτ / Δx' = −v / c</strong> (Reciprocal Symmetry)
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <p>
+        Notice what this symmetry teaches us:
+      </p>
+      <ul>
+        <li><strong>Neither observer is "correct" or "wrong":</strong> Both observers use valid physical clocks, measuring light traveling at speed <em>c</em> in their own reference frames.</li>
+        <li><strong>Simultaneity is relative to velocity:</strong> Motion does not physically alter the clocks through mechanical pressure; rather, relative motion tilts the coordinate angle at which an observer slices the four-dimensional loaf of spacetime.</li>
+      </ul>
 
       <!-- SECTION 5 -->
       <h2>5. The True Meaning of Length</h2>
@@ -648,7 +946,7 @@
       <div id="widget-length-contraction" class="interactive-artifact">
         <div class="artifact-header">
           <div>
-            <div class="artifact-badge">SIMULATION 06 · GEOMETRIC LENGTH CONTRACTION</div>
+            <div class="artifact-badge">SIMULATION 08 · GEOMETRIC LENGTH CONTRACTION</div>
           </div>
         </div>
         <div class="canvas-viewport">
@@ -757,7 +1055,7 @@
       <div id="widget-dual-frame" class="interactive-artifact">
         <div class="artifact-header">
           <div>
-            <div class="artifact-badge">SIMULATION 07 · RECIPROCAL PERSPECTIVES</div>
+            <div class="artifact-badge">SIMULATION 09 · RECIPROCAL PERSPECTIVES</div>
           </div>
         </div>
         <div class="canvas-viewport">
@@ -853,7 +1151,7 @@
       <div id="widget-muon-contraction" class="interactive-artifact">
         <div class="artifact-header">
           <div>
-            <div class="artifact-badge">SIMULATION 08 · THE MUON PERSPECTIVE</div>
+            <div class="artifact-badge">SIMULATION 10 · THE MUON PERSPECTIVE</div>
           </div>
         </div>
         <div class="canvas-viewport">
