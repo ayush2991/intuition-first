@@ -1017,14 +1017,16 @@ body {
   border-color: var(--border-medium);
 }
 
-.chip-btn.active {
+.chip-btn.active,
+.chip-btn.is-active {
   background: rgba(2, 132, 199, 0.1);
   border-color: var(--color-time);
   color: var(--color-time);
   font-weight: 600;
 }
 
-[data-theme="dark"] .chip-btn.active {
+[data-theme="dark"] .chip-btn.active,
+[data-theme="dark"] .chip-btn.is-active {
   background: rgba(56, 189, 248, 0.15);
   border-color: var(--color-time);
   color: var(--color-time);

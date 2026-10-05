@@ -278,6 +278,524 @@
     ctx.fill();
   }
 
+  // ==========================================================================
+  // 1b. Shared Canvas Graphics Primitives
+  // ==========================================================================
+  function drawArrowhead(ctx, tipX, tipY, angle, options) {
+    options = options || {};
+    var c = getThemeColors();
+    var color = options.color || c.axisArrow;
+    var length = options.length || 7;
+    var spread = options.spread !== undefined ? options.spread : 0.48;
+    var backOffset = options.backOffset !== undefined ? options.backOffset : length;
+    var tipOffset = options.tipOffset !== undefined ? options.tipOffset : 0;
+
+    if (angle === undefined || angle === null) {
+      if (options.fromX !== undefined && options.fromY !== undefined) {
+        angle = Math.atan2(tipY - options.fromY, tipX - options.fromX);
+      } else {
+        angle = 0;
+      }
+    }
+
+    ctx.save();
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    var headTipX = tipX + tipOffset * Math.cos(angle);
+    var headTipY = tipY + tipOffset * Math.sin(angle);
+    ctx.moveTo(headTipX, headTipY);
+    ctx.lineTo(tipX - backOffset * Math.cos(angle - spread), tipY - backOffset * Math.sin(angle - spread));
+    ctx.lineTo(tipX - backOffset * Math.cos(angle + spread), tipY - backOffset * Math.sin(angle + spread));
+    ctx.closePath();
+    ctx.fill();
+    ctx.restore();
+  }
+
+  function drawVector(ctx, ox, oy, tipX, tipY, options) {
+    options = options || {};
+    var c = getThemeColors();
+    var color = options.color || c.invariantColor;
+    var lineWidth = options.lineWidth !== undefined ? options.lineWidth : 2.5;
+    var lineDash = options.lineDash || [];
+    var mode = options.mode || 'velocity'; // 'velocity' (arrowhead) | 'position' (glowing dot) | 'ray' | 'none'
+
+    ctx.save();
+    ctx.strokeStyle = color;
+    ctx.lineWidth = lineWidth;
+    if (lineDash.length) ctx.setLineDash(lineDash);
+
+    ctx.beginPath();
+    ctx.moveTo(ox, oy);
+    ctx.lineTo(tipX, tipY);
+    ctx.stroke();
+    if (lineDash.length) ctx.setLineDash([]);
+    ctx.restore();
+
+    if (mode === 'velocity' || mode === 'arrow') {
+      var angle = Math.atan2(tipY - oy, tipX - ox);
+      var arrowLen = options.arrowLength || 7;
+      drawArrowhead(ctx, tipX, tipY, angle, {
+        color: options.arrowColor || color,
+        length: arrowLen,
+        spread: options.arrowSpread || 0.48,
+        tipOffset: options.tipOffset !== undefined ? options.tipOffset : (arrowLen * 0.8),
+        backOffset: options.backOffset !== undefined ? options.backOffset : (arrowLen * 0.95)
+      });
+    } else if (mode === 'position' || mode === 'dot') {
+      drawGlowingDot(ctx, tipX, tipY, options.dotColor || color, options.dotRadius || 5);
+    }
+  }
+
+  function drawDropLines(ctx, ox, oy, tipX, tipY, options) {
+    options = options || {};
+    var c = getThemeColors();
+    var horizontalColor = options.horizontalColor || options.spaceColor || c.spaceColor;
+    var verticalColor = options.verticalColor || options.timeColor || c.timeColor;
+    var lineWidth = options.lineWidth || 1.2;
+    var lineDash = options.lineDash || [3, 3];
+
+    ctx.save();
+    ctx.lineWidth = lineWidth;
+    ctx.setLineDash(lineDash);
+
+    // Vertical drop line to horizontal axis (space component)
+    if (options.dropX !== false) {
+      ctx.strokeStyle = horizontalColor;
+      ctx.beginPath();
+      ctx.moveTo(tipX, tipY);
+      ctx.lineTo(tipX, oy);
+      ctx.stroke();
+    }
+
+    // Horizontal drop line to vertical axis (time component)
+    if (options.dropY !== false) {
+      ctx.strokeStyle = verticalColor;
+      ctx.beginPath();
+      ctx.moveTo(tipX, tipY);
+      ctx.lineTo(ox, tipY);
+      ctx.stroke();
+    }
+
+    ctx.setLineDash([]);
+    ctx.restore();
+  }
+
+  function drawDimensionLine(ctx, x1, y1, x2, y2, label, options) {
+    options = options || {};
+    var c = getThemeColors();
+    var color = options.color || c.dangerColor;
+    var lineWidth = options.lineWidth || 1.5;
+    var angle = Math.atan2(y2 - y1, x2 - x1);
+
+    ctx.save();
+    ctx.strokeStyle = color;
+    ctx.lineWidth = lineWidth;
+    if (options.lineDash) ctx.setLineDash(options.lineDash);
+
+    ctx.beginPath();
+    ctx.moveTo(x1, y1);
+    ctx.lineTo(x2, y2);
+    ctx.stroke();
+    if (options.lineDash) ctx.setLineDash([]);
+    ctx.restore();
+
+    if (options.arrows !== false) {
+      drawArrowhead(ctx, x1, y1, angle + Math.PI, { color: color, length: options.arrowLength || 6 });
+      drawArrowhead(ctx, x2, y2, angle, { color: color, length: options.arrowLength || 6 });
+    }
+
+    if (label) {
+      var midX = (x1 + x2) / 2 + (options.labelOffsetX || 0);
+      var midY = (y1 + y2) / 2 + (options.labelOffsetY || 0);
+      drawLabelPill(ctx, label, midX, midY, options.labelOptions || {
+        textColor: color,
+        borderColor: color,
+        font: options.font || 'bold 9.5px "JetBrains Mono", monospace'
+      });
+    }
+  }
+
+  function drawTicks(ctx, ox, oy, scale, count, options) {
+    options = options || {};
+    var c = getThemeColors();
+    var color = options.color || c.axisLine;
+    var textColor = options.textColor || c.subtleText;
+    var font = options.font || '500 8.5px "JetBrains Mono", monospace';
+    var tickLen = options.tickLen || 3.5;
+    var direction = options.direction || 'vertical';
+    var angle = options.angle !== undefined ? options.angle : (direction === 'vertical' ? -Math.PI / 2 : 0);
+    var format = options.format || function (val) { return val + ''; };
+
+    ctx.save();
+    ctx.font = font;
+    ctx.strokeStyle = color;
+    ctx.fillStyle = textColor;
+    ctx.lineWidth = options.lineWidth || 1.5;
+
+    for (var i = 1; i <= count; i++) {
+      var fraction = i / count;
+      var x, y, perpAngle;
+      if (direction === 'vertical') {
+        x = ox;
+        y = oy - fraction * scale;
+        perpAngle = 0;
+      } else if (direction === 'horizontal') {
+        x = ox + fraction * scale;
+        y = oy;
+        perpAngle = Math.PI / 2;
+      } else {
+        x = ox + Math.cos(angle) * fraction * scale;
+        y = oy + Math.sin(angle) * fraction * scale;
+        perpAngle = angle + Math.PI / 2;
+      }
+
+      ctx.beginPath();
+      ctx.moveTo(x - Math.cos(perpAngle) * tickLen, y - Math.sin(perpAngle) * tickLen);
+      ctx.lineTo(x + Math.cos(perpAngle) * tickLen, y + Math.sin(perpAngle) * tickLen);
+      ctx.stroke();
+
+      var label = format(i, fraction);
+      if (label) {
+        if (options.align) ctx.textAlign = options.align;
+        if (options.baseline) ctx.textBaseline = options.baseline;
+        var textX = x + (options.offsetX !== undefined ? options.offsetX : (direction === 'vertical' ? 7 : 0));
+        var textY = y + (options.offsetY !== undefined ? options.offsetY : (direction === 'horizontal' ? 8 : 3));
+        ctx.fillText(label, textX, textY);
+      }
+    }
+    ctx.restore();
+  }
+
+  // ==========================================================================
+  // 1c. 3D Coordinate Projection & Orbit Engine
+  // ==========================================================================
+  function project3D(x, y, z, cx, cy, scale, azimuth, elevation) {
+    var cosAz = Math.cos(azimuth);
+    var sinAz = Math.sin(azimuth);
+    var xRot = x * cosAz - y * sinAz;
+    var yRot = x * sinAz + y * cosAz;
+
+    var cosEl = Math.cos(elevation);
+    var sinEl = Math.sin(elevation);
+    var yFinal = yRot * cosEl - z * sinEl;
+    var zFinal = yRot * sinEl + z * cosEl;
+
+    return {
+      x: cx + xRot * scale,
+      y: cy - yFinal * scale,
+      zDepth: zFinal,
+      xRot: xRot,
+      yRot: yRot,
+      yFinal: yFinal
+    };
+  }
+
+  function attachOrbitControls(canvas, options) {
+    options = options || {};
+    var state = {
+      azimuth: options.azimuth !== undefined ? options.azimuth : 0.65,
+      elevation: options.elevation !== undefined ? options.elevation : 0.45,
+      minElevation: options.minElevation !== undefined ? options.minElevation : 0.05,
+      maxElevation: options.maxElevation !== undefined ? options.maxElevation : 1.4,
+      sensitivity: options.sensitivity || 0.01,
+      isDragging: false
+    };
+
+    var lastMouseX = 0;
+    var lastMouseY = 0;
+    canvas.style.cursor = 'grab';
+
+    function triggerChange() {
+      if (options.sliderOrbit) {
+        var deg = Math.round((state.azimuth * 180 / Math.PI) % 360);
+        if (deg > 180) deg -= 360;
+        if (deg < -180) deg += 360;
+        options.sliderOrbit.value = deg;
+      }
+      if (options.sliderElevation) {
+        options.sliderElevation.value = state.elevation.toFixed(2);
+      }
+      if (options.onChange) {
+        options.onChange({
+          azimuth: state.azimuth,
+          elevation: state.elevation
+        });
+      }
+    }
+
+    function onMouseDown(e) {
+      state.isDragging = true;
+      lastMouseX = e.clientX;
+      lastMouseY = e.clientY;
+      canvas.style.cursor = 'grabbing';
+    }
+
+    function onMouseMove(e) {
+      if (!state.isDragging) return;
+      var dx = e.clientX - lastMouseX;
+      var dy = e.clientY - lastMouseY;
+      lastMouseX = e.clientX;
+      lastMouseY = e.clientY;
+
+      state.azimuth += dx * state.sensitivity;
+      state.elevation += dy * state.sensitivity;
+      state.elevation = Math.max(state.minElevation, Math.min(state.maxElevation, state.elevation));
+      triggerChange();
+    }
+
+    function onMouseUp() {
+      if (state.isDragging) {
+        state.isDragging = false;
+        canvas.style.cursor = 'grab';
+      }
+    }
+
+    function onTouchStart(e) {
+      if (e.touches.length === 1) {
+        state.isDragging = true;
+        lastMouseX = e.touches[0].clientX;
+        lastMouseY = e.touches[0].clientY;
+        canvas.style.cursor = 'grabbing';
+      }
+    }
+
+    function onTouchMove(e) {
+      if (!state.isDragging || e.touches.length !== 1) return;
+      if (e.cancelable) e.preventDefault();
+      var dx = e.touches[0].clientX - lastMouseX;
+      var dy = e.touches[0].clientY - lastMouseY;
+      lastMouseX = e.touches[0].clientX;
+      lastMouseY = e.touches[0].clientY;
+
+      state.azimuth += dx * state.sensitivity;
+      state.elevation += dy * state.sensitivity;
+      state.elevation = Math.max(state.minElevation, Math.min(state.maxElevation, state.elevation));
+      triggerChange();
+    }
+
+    function onTouchEnd() {
+      if (state.isDragging) {
+        state.isDragging = false;
+        canvas.style.cursor = 'grab';
+      }
+    }
+
+    canvas.addEventListener('mousedown', onMouseDown);
+    window.addEventListener('mousemove', onMouseMove);
+    window.addEventListener('mouseup', onMouseUp);
+
+    canvas.addEventListener('touchstart', onTouchStart, { passive: true });
+    window.addEventListener('touchmove', onTouchMove, { passive: false });
+    window.addEventListener('touchend', onTouchEnd);
+
+    if (options.sliderOrbit) {
+      options.sliderOrbit.addEventListener('input', function (e) {
+        state.azimuth = (parseFloat(e.target.value) * Math.PI) / 180;
+        if (options.onChange) {
+          options.onChange({ azimuth: state.azimuth, elevation: state.elevation });
+        }
+      });
+    }
+
+    if (options.sliderElevation) {
+      options.sliderElevation.addEventListener('input', function (e) {
+        state.elevation = parseFloat(e.target.value);
+        if (options.onChange) {
+          options.onChange({ azimuth: state.azimuth, elevation: state.elevation });
+        }
+      });
+    }
+
+    return {
+      getState: function () { return state; },
+      setView: function (az, el) {
+        state.azimuth = az;
+        state.elevation = Math.max(state.minElevation, Math.min(state.maxElevation, el));
+        triggerChange();
+      },
+      destroy: function () {
+        canvas.removeEventListener('mousedown', onMouseDown);
+        window.removeEventListener('mousemove', onMouseMove);
+        window.removeEventListener('mouseup', onMouseUp);
+        canvas.removeEventListener('touchstart', onTouchStart);
+        window.removeEventListener('touchmove', onTouchMove);
+        window.removeEventListener('touchend', onTouchEnd);
+      }
+    };
+  }
+
+  // ==========================================================================
+  // 1d. Simulation Lifecycle & Animation Controller
+  // ==========================================================================
+  function createAnimationLoop(options) {
+    options = options || {};
+    var isPlaying = options.autoStart !== undefined ? options.autoStart : true;
+    var isVisible = true;
+    var playBtn = options.playButton || (options.container ? options.container.querySelector('.btn-play, button[class*="btn-play"]') : null);
+    var playText = options.playText || 'Auto Play';
+    var pauseText = options.pauseText || 'Pause';
+    var lastTimestamp = null;
+    var animFrameId = null;
+
+    function updateButton() {
+      if (!playBtn) return;
+      playBtn.innerHTML = isPlaying ?
+        '<span>⏸</span><span>' + pauseText + '</span>' :
+        '<span>▶</span><span>' + playText + '</span>';
+    }
+
+    function step(now) {
+      if (!isPlaying || !isVisible) {
+        animFrameId = null;
+        lastTimestamp = null;
+        return;
+      }
+      if (!lastTimestamp) lastTimestamp = now;
+      var dt = (now - lastTimestamp) / 1000;
+      lastTimestamp = now;
+      if (dt > 0.25) dt = 0.25;
+
+      if (options.onStep) options.onStep(dt);
+      if (options.onDraw) options.onDraw();
+
+      animFrameId = requestAnimationFrame(step);
+    }
+
+    function start() {
+      if (isPlaying && animFrameId) return;
+      isPlaying = true;
+      updateButton();
+      if (isVisible && !animFrameId) {
+        lastTimestamp = null;
+        animFrameId = requestAnimationFrame(step);
+      }
+    }
+
+    function stop() {
+      isPlaying = false;
+      updateButton();
+      if (animFrameId) {
+        cancelAnimationFrame(animFrameId);
+        animFrameId = null;
+      }
+      lastTimestamp = null;
+    }
+
+    function toggle() {
+      if (isPlaying) stop();
+      else start();
+    }
+
+    if (playBtn) {
+      playBtn.addEventListener('click', toggle);
+    }
+
+    if (options.container) {
+      observeSimulationVisibility(options.container, function () {
+        isVisible = true;
+        if (isPlaying && !animFrameId) {
+          lastTimestamp = null;
+          animFrameId = requestAnimationFrame(step);
+        }
+      }, function () {
+        isVisible = false;
+        if (animFrameId) {
+          cancelAnimationFrame(animFrameId);
+          animFrameId = null;
+        }
+        lastTimestamp = null;
+      });
+    }
+
+    updateButton();
+    if (isPlaying) {
+      animFrameId = requestAnimationFrame(step);
+    }
+
+    return {
+      start: start,
+      stop: stop,
+      toggle: toggle,
+      isPlaying: function () { return isPlaying; },
+      renderOnce: function () {
+        if (options.onDraw) options.onDraw();
+      }
+    };
+  }
+
+  // ==========================================================================
+  // 1e. UI Controls Synchronizers
+  // ==========================================================================
+  function bindChipGroup(container, chipSelector, options) {
+    options = options || {};
+    var chips = typeof chipSelector === 'string' ? container.querySelectorAll(chipSelector) : chipSelector;
+    if (!chips || !chips.length) return null;
+
+    var dataAttr = options.dataAttr || 'val';
+    var activeClass = options.activeClass || 'active';
+
+    function setActive(targetChip) {
+      for (var i = 0; i < chips.length; i++) {
+        chips[i].classList.remove(activeClass);
+        chips[i].classList.remove('is-active');
+      }
+      if (targetChip) {
+        targetChip.classList.add(activeClass);
+      }
+    }
+
+    for (var i = 0; i < chips.length; i++) {
+      (function (chip) {
+        chip.addEventListener('click', function () {
+          setActive(chip);
+          var rawVal = chip.getAttribute('data-' + dataAttr);
+          var numVal = parseFloat(rawVal);
+          var val = isNaN(numVal) ? rawVal : numVal;
+
+          if (options.slider) {
+            options.slider.value = rawVal;
+          }
+          if (options.onSelect) {
+            options.onSelect(val, chip);
+          }
+        });
+      })(chips[i]);
+    }
+
+    if (options.slider) {
+      options.slider.addEventListener('input', function (e) {
+        var currentVal = parseFloat(e.target.value);
+        var matched = false;
+        for (var j = 0; j < chips.length; j++) {
+          var chipVal = parseFloat(chips[j].getAttribute('data-' + dataAttr));
+          if (Math.abs(chipVal - currentVal) < 0.001) {
+            setActive(chips[j]);
+            matched = true;
+            break;
+          }
+        }
+        if (!matched) {
+          setActive(null);
+        }
+      });
+    }
+
+    return {
+      setActive: setActive,
+      chips: chips
+    };
+  }
+
+  function bindSliderBadge(slider, badge, formatter) {
+    if (!slider || !badge) return;
+    function update() {
+      var val = parseFloat(slider.value);
+      badge.innerText = formatter ? formatter(val) : slider.value;
+    }
+    slider.addEventListener('input', update);
+    update();
+  }
+
   // Active redraw registry for theme switches & resize
   var registeredDraws = [];
   function registerDraw(fn) {
@@ -634,6 +1152,16 @@
   window.UniverseSimulations.drawAxes = drawAxes;
   window.UniverseSimulations.drawConstraintArc = drawConstraintArc;
   window.UniverseSimulations.drawGlowingDot = drawGlowingDot;
+  window.UniverseSimulations.drawArrowhead = drawArrowhead;
+  window.UniverseSimulations.drawVector = drawVector;
+  window.UniverseSimulations.drawDropLines = drawDropLines;
+  window.UniverseSimulations.drawDimensionLine = drawDimensionLine;
+  window.UniverseSimulations.drawTicks = drawTicks;
+  window.UniverseSimulations.project3D = project3D;
+  window.UniverseSimulations.attachOrbitControls = attachOrbitControls;
+  window.UniverseSimulations.createAnimationLoop = createAnimationLoop;
+  window.UniverseSimulations.bindChipGroup = bindChipGroup;
+  window.UniverseSimulations.bindSliderBadge = bindSliderBadge;
   window.UniverseSimulations.registerDraw = registerDraw;
   window.UniverseSimulations.redrawAll = redrawAll;
   window.UniverseSimulations.initThemeManager = initThemeManager;

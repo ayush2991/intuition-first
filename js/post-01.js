@@ -14,6 +14,11 @@
   var drawLabelPill = function (ctx, txt, x, y, opts) { sim.drawLabelPill(ctx, txt, x, y, opts); };
   var drawGlowingDot = function (ctx, x, y, c, r) { sim.drawGlowingDot(ctx, x, y, c, r); };
   var drawConstraintArc = function (ctx, ox, oy, r, c) { sim.drawConstraintArc(ctx, ox, oy, r, c); };
+  var drawVector = function (ctx, ox, oy, tx, ty, o) { return sim.drawVector(ctx, ox, oy, tx, ty, o); };
+  var drawDropLines = function (ctx, ox, oy, tx, ty, o) { return sim.drawDropLines(ctx, ox, oy, tx, ty, o); };
+  var project3D = function (x, y, z, cx, cy, s, az, el) { return sim.project3D(x, y, z, cx, cy, s, az, el); };
+  var attachOrbitControls = function (c, o) { return sim.attachOrbitControls(c, o); };
+  var bindChipGroup = function (c, s, o) { return sim.bindChipGroup(c, s, o); };
   var observeSimulationVisibility = function (c, onIn, onOut) {
     return sim.observeSimulationVisibility ? sim.observeSimulationVisibility(c, onIn, onOut) : null;
   };
@@ -282,22 +287,12 @@
 
       // Right-Triangle Decomposition Dashed Lines for Orange Car
       if (angleDeg > 2 && angleDeg < 88) {
-        ctx.strokeStyle = c.spaceColor;
-        ctx.lineWidth = 1.5;
-        ctx.setLineDash([4, 4]);
-
-        // Horizontal line from tip to vertical North axis
-        ctx.beginPath();
-        ctx.moveTo(tipX, tipY);
-        ctx.lineTo(ox, tipY);
-        ctx.stroke();
-
-        // Vertical line from tip down to East axis
-        ctx.beginPath();
-        ctx.moveTo(tipX, tipY);
-        ctx.lineTo(tipX, oy);
-        ctx.stroke();
-        ctx.setLineDash([]);
+        drawDropLines(ctx, ox, oy, tipX, tipY, {
+          spaceColor: c.spaceColor,
+          timeColor: c.spaceColor,
+          lineWidth: 1.5,
+          lineDash: [4, 4]
+        });
 
         // Small square for right angle
         var sq = 8;
@@ -329,21 +324,11 @@
       }
 
       // Blue Car Velocity Vector (North: 0, 60 mph)
-      ctx.strokeStyle = c.timeColor;
-      ctx.lineWidth = 3.5;
-      ctx.beginPath();
-      ctx.moveTo(ox, oy);
-      ctx.lineTo(ox, oy - radius);
-      ctx.stroke();
-
-      // Arrowhead for Blue Vector
-      ctx.fillStyle = c.timeColor;
-      ctx.beginPath();
-      ctx.moveTo(ox, oy - radius - 5);
-      ctx.lineTo(ox - 5, oy - radius + 4);
-      ctx.lineTo(ox + 5, oy - radius + 4);
-      ctx.closePath();
-      ctx.fill();
+      drawVector(ctx, ox, oy, ox, oy - radius, {
+        color: c.timeColor,
+        lineWidth: 3.5,
+        mode: 'velocity'
+      });
 
       // Label for Blue Vector
       var bluePillX = angleDeg < 5 ? ox - 50 : ox - 35;
@@ -353,22 +338,11 @@
       });
 
       // Orange Car Velocity Vector (Tilted: vEast, vNorth)
-      ctx.strokeStyle = c.spaceColor;
-      ctx.lineWidth = 3.5;
-      ctx.beginPath();
-      ctx.moveTo(ox, oy);
-      ctx.lineTo(tipX, tipY);
-      ctx.stroke();
-
-      // Arrowhead for Orange Vector
-      var arrowAng = Math.atan2(tipY - oy, tipX - ox);
-      ctx.fillStyle = c.spaceColor;
-      ctx.beginPath();
-      ctx.moveTo(tipX + 5 * Math.cos(arrowAng), tipY + 5 * Math.sin(arrowAng));
-      ctx.lineTo(tipX - 6 * Math.cos(arrowAng - 0.5), tipY - 6 * Math.sin(arrowAng - 0.5));
-      ctx.lineTo(tipX - 6 * Math.cos(arrowAng + 0.5), tipY - 6 * Math.sin(arrowAng + 0.5));
-      ctx.closePath();
-      ctx.fill();
+      drawVector(ctx, ox, oy, tipX, tipY, {
+        color: c.spaceColor,
+        lineWidth: 3.5,
+        mode: 'velocity'
+      });
 
       // Label for Orange Vector
       var orangePillX = angleDeg < 5 ? ox + 55 : tipX + (angleDeg > 70 ? -15 : 30);
@@ -596,7 +570,6 @@
       var ox = 48;
       var oy = height - 42;
       var radius = Math.min(width - 75, height - 70);
-      var progress = animTime / 6.0;
 
       drawGrid(ctx, ox, oy, width, height, 32);
       drawAxes(ctx, ox, oy, width, height, 'Space Speed (v_space)', 'Wristwatch Rate (v_time)');
@@ -651,21 +624,11 @@
       });
 
       // Speed vector has constant length V pointing 100% into time
-      ctx.strokeStyle = c.timeColor;
-      ctx.lineWidth = 3.5;
-      ctx.beginPath();
-      ctx.moveTo(ox, oy);
-      ctx.lineTo(ox, tipY);
-      ctx.stroke();
-
-      // Arrowhead for Observer Time Vector
-      ctx.fillStyle = c.timeColor;
-      ctx.beginPath();
-      ctx.moveTo(ox, tipY - 5);
-      ctx.lineTo(ox - 5, tipY + 4);
-      ctx.lineTo(ox + 5, tipY + 4);
-      ctx.closePath();
-      ctx.fill();
+      drawVector(ctx, ox, oy, ox, tipY, {
+        color: c.timeColor,
+        lineWidth: 3.5,
+        mode: 'velocity'
+      });
 
       // Label for Observer Vector (placed to the right of the vector to avoid Y-axis label overlap)
       drawLabelPill(ctx, 'V_Observer (100% of V)', ox + 12, tipY - 16, {
@@ -757,7 +720,6 @@
     var panels = container.querySelectorAll('canvas.motion-panel');
     if (!panels || panels.length === 0) return;
 
-    var MAX_T = 3.0;
     var MAX_DIST = 30.0;
     var SPEED = 8.0; // 8 meters per second
 
@@ -1169,22 +1131,12 @@
 
       // Right-Triangle Decomposition Dashed Lines
       if (speedFraction > 0.02 && speedFraction < 0.98) {
-        ctx.strokeStyle = c.spaceColor;
-        ctx.lineWidth = 1.5;
-        ctx.setLineDash([4, 4]);
-
-        // Horizontal line from tip to vertical Time axis
-        ctx.beginPath();
-        ctx.moveTo(tipX, tipY);
-        ctx.lineTo(ox, tipY);
-        ctx.stroke();
-
-        // Vertical line from tip down to Space axis
-        ctx.beginPath();
-        ctx.moveTo(tipX, tipY);
-        ctx.lineTo(tipX, oy);
-        ctx.stroke();
-        ctx.setLineDash([]);
+        drawDropLines(ctx, ox, oy, tipX, tipY, {
+          spaceColor: c.spaceColor,
+          timeColor: c.spaceColor,
+          lineWidth: 1.5,
+          lineDash: [4, 4]
+        });
 
         // Small square for right angle
         var sq = 8;
@@ -1216,22 +1168,11 @@
       }
 
       // Invariant total speed vector
-      ctx.strokeStyle = c.invariantColor;
-      ctx.lineWidth = 3.5;
-      ctx.beginPath();
-      ctx.moveTo(ox, oy);
-      ctx.lineTo(tipX, tipY);
-      ctx.stroke();
-
-      // Arrowhead for Invariant Vector
-      var arrowAng = Math.atan2(tipY - oy, tipX - ox);
-      ctx.fillStyle = c.invariantColor;
-      ctx.beginPath();
-      ctx.moveTo(tipX + 5 * Math.cos(arrowAng), tipY + 5 * Math.sin(arrowAng));
-      ctx.lineTo(tipX - 6 * Math.cos(arrowAng - 0.5), tipY - 6 * Math.sin(arrowAng - 0.5));
-      ctx.lineTo(tipX - 6 * Math.cos(arrowAng + 0.5), tipY - 6 * Math.sin(arrowAng + 0.5));
-      ctx.closePath();
-      ctx.fill();
+      drawVector(ctx, ox, oy, tipX, tipY, {
+        color: c.invariantColor,
+        lineWidth: 3.5,
+        mode: 'velocity'
+      });
 
       // Label for Vector
       var vectorPillX = tipX + (speedFraction > 0.7 ? -15 : 30);
@@ -1528,39 +1469,18 @@
       }
 
       // Earth Velocity Vector (constant length c straight up)
-      ctx.strokeStyle = c.timeColor;
-      ctx.lineWidth = 3.5;
-      ctx.beginPath();
-      ctx.moveTo(ox, oy);
-      ctx.lineTo(eTipX, eTipY);
-      ctx.stroke();
-
-      // Earth Arrowhead
-      ctx.fillStyle = c.timeColor;
-      ctx.beginPath();
-      ctx.moveTo(eTipX, eTipY - 6);
-      ctx.lineTo(eTipX - 5, eTipY + 4);
-      ctx.lineTo(eTipX + 5, eTipY + 4);
-      ctx.closePath();
-      ctx.fill();
+      drawVector(ctx, ox, oy, eTipX, eTipY, {
+        color: c.timeColor,
+        lineWidth: 3.5,
+        mode: 'velocity'
+      });
 
       // Rocket Velocity Vector (constant length c tilted)
-      ctx.strokeStyle = c.spaceColor;
-      ctx.lineWidth = 3.5;
-      ctx.beginPath();
-      ctx.moveTo(ox, oy);
-      ctx.lineTo(rTipX, rTipY);
-      ctx.stroke();
-
-      // Rocket Arrowhead
-      var arrowAng = Math.atan2(rTipY - oy, rTipX - ox);
-      ctx.fillStyle = c.spaceColor;
-      ctx.beginPath();
-      ctx.moveTo(rTipX + 5 * Math.cos(arrowAng), rTipY + 5 * Math.sin(arrowAng));
-      ctx.lineTo(rTipX - 6 * Math.cos(arrowAng - 0.5), rTipY - 6 * Math.sin(arrowAng - 0.5));
-      ctx.lineTo(rTipX - 6 * Math.cos(arrowAng + 0.5), rTipY - 6 * Math.sin(arrowAng + 0.5));
-      ctx.closePath();
-      ctx.fill();
+      drawVector(ctx, ox, oy, rTipX, rTipY, {
+        color: c.spaceColor,
+        lineWidth: 3.5,
+        mode: 'velocity'
+      });
 
       // Twin Clock Rate Badges
       var earthPillText = 'Earth Stopwatch: 100% Rate (v = 0)';
@@ -1781,22 +1701,11 @@
         ctx.setLineDash([]);
       }
 
-      ctx.strokeStyle = color;
-      ctx.lineWidth = 3.5;
-      ctx.beginPath();
-      ctx.moveTo(ox, oy);
-      ctx.lineTo(tipX, tipY);
-      ctx.stroke();
-
-      // Arrowhead for active vector
-      var arrowAng = Math.atan2(tipY - oy, tipX - ox);
-      ctx.fillStyle = color;
-      ctx.beginPath();
-      ctx.moveTo(tipX + 5 * Math.cos(arrowAng), tipY + 5 * Math.sin(arrowAng));
-      ctx.lineTo(tipX - 6 * Math.cos(arrowAng - 0.5), tipY - 6 * Math.sin(arrowAng - 0.5));
-      ctx.lineTo(tipX - 6 * Math.cos(arrowAng + 0.5), tipY - 6 * Math.sin(arrowAng + 0.5));
-      ctx.closePath();
-      ctx.fill();
+      drawVector(ctx, ox, oy, tipX, tipY, {
+        color: color,
+        lineWidth: 3.5,
+        mode: 'velocity'
+      });
 
       if (mode === 'photon') {
         var photonLabelText = width < 420 ? 'Photon (v = c)' : 'Photon (v_space = c, v_time = 0)';
@@ -2354,97 +2263,24 @@
     var valHeadingLabel = container.querySelector('.val-heading-label');
     var readoutVtime = container.querySelector('.readout-vtime');
     var readoutGamma = container.querySelector('.readout-gamma');
-    var speedPresetChips = container.querySelectorAll('.chip-speed');
-    var headingPresetChips = container.querySelectorAll('.chip-heading');
 
     var vSpaceFraction = 0.80; // 0.80 c
     var headingDeg = 35;       // 35 degrees East of North
     var azimuth = -0.65;       // Camera azimuth radians (-37 deg)
     var elevation = 0.45;      // Camera elevation radians (26 deg)
 
-    // Mouse drag orbit controls on canvas
-    var isDragging = false;
-    var lastMouseX = 0;
-    var lastMouseY = 0;
-
-    canvas.style.cursor = 'grab';
-
-    canvas.addEventListener('mousedown', function (e) {
-      isDragging = true;
-      lastMouseX = e.clientX;
-      lastMouseY = e.clientY;
-      canvas.style.cursor = 'grabbing';
-    });
-
-    window.addEventListener('mousemove', function (e) {
-      if (!isDragging) return;
-      var dx = e.clientX - lastMouseX;
-      var dy = e.clientY - lastMouseY;
-      lastMouseX = e.clientX;
-      lastMouseY = e.clientY;
-
-      azimuth += dx * 0.01;
-      elevation += dy * 0.01;
-      elevation = Math.max(0.1, Math.min(1.4, elevation));
-
-      if (sliderOrbit) {
-        var deg = Math.round((azimuth * 180 / Math.PI) % 360);
-        if (deg > 180) deg -= 360;
-        if (deg < -180) deg += 360;
-        sliderOrbit.value = deg;
-      }
-      draw();
-    });
-
-    window.addEventListener('mouseup', function () {
-      if (isDragging) {
-        isDragging = false;
-        canvas.style.cursor = 'grab';
-      }
-    });
-
-    // Touch orbit controls (non-passive to prevent page scrolling while dragging 3D model)
-    canvas.addEventListener('touchstart', function (e) {
-      if (e.touches.length === 1) {
-        isDragging = true;
-        lastMouseX = e.touches[0].clientX;
-        lastMouseY = e.touches[0].clientY;
-        canvas.style.cursor = 'grabbing';
-      }
-    }, { passive: true });
-
-    window.addEventListener('touchmove', function (e) {
-      if (!isDragging || e.touches.length !== 1) return;
-      if (e.cancelable) e.preventDefault();
-      var dx = e.touches[0].clientX - lastMouseX;
-      var dy = e.touches[0].clientY - lastMouseY;
-      lastMouseX = e.touches[0].clientX;
-      lastMouseY = e.touches[0].clientY;
-
-      azimuth += dx * 0.01;
-      elevation += dy * 0.01;
-      elevation = Math.max(0.1, Math.min(1.4, elevation));
-
-      if (sliderOrbit) {
-        var deg = Math.round((azimuth * 180 / Math.PI) % 360);
-        if (deg > 180) deg -= 360;
-        if (deg < -180) deg += 360;
-        sliderOrbit.value = deg;
-      }
-      draw();
-    }, { passive: false });
-
-    window.addEventListener('touchend', function () {
-      if (isDragging) {
-        isDragging = false;
-        canvas.style.cursor = 'grab';
+    attachOrbitControls(canvas, {
+      azimuth: azimuth,
+      elevation: elevation,
+      sliderOrbit: sliderOrbit,
+      onChange: function (st) {
+        azimuth = st.azimuth;
+        elevation = st.elevation;
+        draw();
       }
     });
 
     function update() {
-      var rad = headingDeg * Math.PI / 180;
-      var vx1 = vSpaceFraction * Math.cos(rad);
-      var vx2 = vSpaceFraction * Math.sin(rad);
       var vt = Math.sqrt(Math.max(0, 1 - vSpaceFraction * vSpaceFraction));
       var gamma = vSpaceFraction >= 0.999 ? 22.36 : 1 / Math.sqrt(Math.max(0.001, 1 - vSpaceFraction * vSpaceFraction));
 
@@ -2460,20 +2296,11 @@
     }
 
     function project(x, y, z, cx, cy, scale) {
-      var cosAz = Math.cos(azimuth);
-      var sinAz = Math.sin(azimuth);
-      var xRot = x * cosAz - y * sinAz;
-      var yRot = x * sinAz + y * cosAz;
-
-      var cosEl = Math.cos(elevation);
-      var sinEl = Math.sin(elevation);
-      var yFinal = yRot * cosEl - z * sinEl;
-      var zFinal = yRot * sinEl + z * cosEl;
-
+      var p = project3D(x, y, z, cx, cy, scale, azimuth, elevation);
       return {
-        x: cx + xRot * scale,
-        y: cy - zFinal * scale,
-        depth: yFinal
+        x: p.x,
+        y: cy - p.zDepth * scale,
+        depth: p.yFinal
       };
     }
 
@@ -2715,24 +2542,22 @@
       });
     }
 
-    speedPresetChips.forEach(function (chip) {
-      chip.addEventListener('click', function () {
-        speedPresetChips.forEach(function (c) { c.classList.remove('active'); });
-        chip.classList.add('active');
-        vSpaceFraction = parseFloat(chip.getAttribute('data-speed'));
+    bindChipGroup(container, '.chip-speed', {
+      dataAttr: 'speed',
+      onSelect: function (val) {
+        vSpaceFraction = val;
         if (sliderSpeed) sliderSpeed.value = vSpaceFraction * 1000;
         update();
-      });
+      }
     });
 
-    headingPresetChips.forEach(function (chip) {
-      chip.addEventListener('click', function () {
-        headingPresetChips.forEach(function (c) { c.classList.remove('active'); });
-        chip.classList.add('active');
-        headingDeg = parseFloat(chip.getAttribute('data-heading'));
-        if (sliderHeading) sliderHeading.value = headingDeg;
+    bindChipGroup(container, '.chip-heading', {
+      dataAttr: 'heading',
+      slider: sliderHeading,
+      onSelect: function (val) {
+        headingDeg = val;
         update();
-      });
+      }
     });
 
     update();

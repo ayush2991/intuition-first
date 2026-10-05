@@ -14,6 +14,12 @@
   var drawLabelPill = function (ctx, txt, x, y, opts) { sim.drawLabelPill(ctx, txt, x, y, opts); };
   var drawGlowingDot = function (ctx, x, y, c, r) { sim.drawGlowingDot(ctx, x, y, c, r); };
   var drawConstraintArc = function (ctx, ox, oy, r, c) { sim.drawConstraintArc(ctx, ox, oy, r, c); };
+  var drawVector = function (ctx, ox, oy, tx, ty, o) { return sim.drawVector(ctx, ox, oy, tx, ty, o); };
+  var drawDropLines = function (ctx, ox, oy, tx, ty, o) { return sim.drawDropLines(ctx, ox, oy, tx, ty, o); };
+  var drawDimensionLine = function (ctx, x1, y1, x2, y2, l, o) { return sim.drawDimensionLine(ctx, x1, y1, x2, y2, l, o); };
+  var project3D = function (x, y, z, cx, cy, s, az, el) { return sim.project3D(x, y, z, cx, cy, s, az, el); };
+  var attachOrbitControls = function (c, o) { return sim.attachOrbitControls(c, o); };
+  var bindChipGroup = function (c, s, o) { return sim.bindChipGroup(c, s, o); };
   var observeSimulationVisibility = function (c, onIn, onOut) {
     return sim.observeSimulationVisibility ? sim.observeSimulationVisibility(c, onIn, onOut) : null;
   };
@@ -136,20 +142,12 @@
       var tipX = ox + vx * radius;
       var tipY = oy - vt * radius;
 
-      ctx.strokeStyle = colors.spaceColor;
-      ctx.lineWidth = 1.5;
-      ctx.setLineDash([3, 3]);
-      ctx.beginPath();
-      ctx.moveTo(tipX, tipY);
-      ctx.lineTo(tipX, oy);
-      ctx.stroke();
-
-      ctx.strokeStyle = colors.timeColor;
-      ctx.beginPath();
-      ctx.moveTo(tipX, tipY);
-      ctx.lineTo(ox, tipY);
-      ctx.stroke();
-      ctx.setLineDash([]);
+      drawDropLines(ctx, ox, oy, tipX, tipY, {
+        spaceColor: colors.spaceColor,
+        timeColor: colors.timeColor,
+        lineWidth: 1.5,
+        lineDash: [3, 3]
+      });
 
       if (thetaDeg > 1) {
         ctx.strokeStyle = colors.photonColor;
@@ -166,22 +164,11 @@
         ctx.fillText('θ=' + thetaDeg.toFixed(0) + '°', lx - 10, ly + 4);
       }
 
-      ctx.strokeStyle = colors.photonColor;
-      ctx.lineWidth = 3.5;
-      ctx.beginPath();
-      ctx.moveTo(ox, oy);
-      ctx.lineTo(tipX, tipY);
-      ctx.stroke();
-
-      // Filled triangular arrowhead for Velocity Space vector (Rule 4.8)
-      var arrowAng = Math.atan2(tipY - oy, tipX - ox);
-      ctx.fillStyle = colors.photonColor;
-      ctx.beginPath();
-      ctx.moveTo(tipX + 6 * Math.cos(arrowAng), tipY + 6 * Math.sin(arrowAng));
-      ctx.lineTo(tipX - 7 * Math.cos(arrowAng - 0.48), tipY - 7 * Math.sin(arrowAng - 0.48));
-      ctx.lineTo(tipX - 7 * Math.cos(arrowAng + 0.48), tipY - 7 * Math.sin(arrowAng + 0.48));
-      ctx.closePath();
-      ctx.fill();
+      drawVector(ctx, ox, oy, tipX, tipY, {
+        color: colors.photonColor,
+        lineWidth: 3.5,
+        mode: 'velocity'
+      });
 
       ctx.fillStyle = colors.pillBg;
       ctx.strokeStyle = colors.pillBorder;
@@ -445,18 +432,15 @@
       });
     }
 
-    for (var p = 0; p < presetBtns.length; p++) {
-      (function (btn) {
-        btn.addEventListener('click', function () {
-          var val = parseFloat(btn.getAttribute('data-theta'));
-          if (!isNaN(val)) {
-            thetaDeg = val;
-            if (isPlaying) stopPlay();
-            renderAll();
-          }
-        });
-      })(presetBtns[p]);
-    }
+    bindChipGroup(container, '.preset-btn', {
+      dataAttr: 'theta',
+      slider: sliderTheta,
+      onSelect: function (val) {
+        thetaDeg = val;
+        if (isPlaying) stopPlay();
+        renderAll();
+      }
+    });
 
     function stopPlay() {
       isPlaying = false;
@@ -817,22 +801,12 @@
       }
 
       // 4-Velocity Vector
-      ctx.strokeStyle = c.photonColor;
-      ctx.lineWidth = 2.25;
-      ctx.beginPath();
-      ctx.moveTo(lOx, lOy);
-      ctx.lineTo(tipX, tipY);
-      ctx.stroke();
-
-      // Filled triangular arrowhead for Velocity Space vector (Rule 4.8)
-      var lArrowAng = Math.atan2(tipY - lOy, tipX - lOx);
-      ctx.fillStyle = c.photonColor;
-      ctx.beginPath();
-      ctx.moveTo(tipX + 4.5 * Math.cos(lArrowAng), tipY + 4.5 * Math.sin(lArrowAng));
-      ctx.lineTo(tipX - 5.5 * Math.cos(lArrowAng - 0.5), tipY - 5.5 * Math.sin(lArrowAng - 0.5));
-      ctx.lineTo(tipX - 5.5 * Math.cos(lArrowAng + 0.5), tipY - 5.5 * Math.sin(lArrowAng + 0.5));
-      ctx.closePath();
-      ctx.fill();
+      drawVector(ctx, lOx, lOy, tipX, tipY, {
+        color: c.photonColor,
+        lineWidth: 2.25,
+        mode: 'velocity',
+        arrowLength: 5.5
+      });
 
       // Mini Header Left
       ctx.font = '700 8px "JetBrains Mono", monospace';
@@ -982,25 +956,21 @@
     var elevation = parseFloat(sliderElevation ? sliderElevation.value : 0.05) || 0.05;
     var sliceT = parseFloat(sliderTime ? sliderTime.value : 0.4) || 0.4;
 
-    var isDragging = false;
-    var lastMouseX = 0;
-    var lastMouseY = 0;
+    var btnPlay3D = container.querySelector('.btn-play-3d');
+    var elValSliceBadge = container.querySelector('.val-slice-badge');
+    var sliceBtns = container.querySelectorAll('.preset-slice-btn');
+    var viewBtns = container.querySelectorAll('.preset-view-btn');
+
+    var isPlaying3D = false;
+    var playAnimId3D = null;
+    var playDirection3D = 1;
 
     function project3DLocal(x, y, z, cx, cy, scale, az, el) {
-      var cosAz = Math.cos(az);
-      var sinAz = Math.sin(az);
-      var xRot = x * cosAz - y * sinAz;
-      var yRot = x * sinAz + y * cosAz;
-
-      var cosEl = Math.cos(el);
-      var sinEl = Math.sin(el);
-      var yFinal = yRot * cosEl - z * sinEl;
-      var zFinal = yRot * sinEl + z * cosEl;
-
+      var p = project3D(x, y, z, cx, cy, scale, az, el);
       return {
-        x: cx + xRot * scale,
-        y: cy - zFinal * scale,
-        depth: yFinal
+        x: p.x,
+        y: cy - p.zDepth * scale,
+        depth: p.yFinal
       };
     }
 
@@ -1148,16 +1118,7 @@
       ctx.fillStyle = emerald;
       ctx.fillText('YOU: HERE & NOW (t=0)', origin.x + 12, origin.y + 4);
 
-    var btnPlay3D = container.querySelector('.btn-play-3d');
-    var elValSliceBadge = container.querySelector('.val-slice-badge');
-    var sliceBtns = container.querySelectorAll('.preset-slice-btn');
-    var viewBtns = container.querySelectorAll('.preset-view-btn');
-
-    var isPlaying3D = false;
-    var playAnimId3D = null;
-    var playDirection3D = 1;
-
-    if (elSliceTime) elSliceTime.textContent = (sliceT >= 0 ? '+' : '') + sliceT.toFixed(2) + ' c·t';
+      if (elSliceTime) elSliceTime.textContent = (sliceT >= 0 ? '+' : '') + sliceT.toFixed(2) + ' c·t';
     if (elWaveRadius) elWaveRadius.textContent = waveR.toFixed(2);
     if (elValSliceBadge) elValSliceBadge.textContent = (sliceT >= 0 ? '+' : '') + sliceT.toFixed(2);
 
@@ -1259,56 +1220,18 @@
     });
   });
 
-  canvas.addEventListener('mousedown', function (e) {
-    isDragging = true;
-    lastMouseX = e.clientX;
-    lastMouseY = e.clientY;
-  });
-
-  window.addEventListener('mousemove', function (e) {
-    if (!isDragging) return;
-    var dx = e.clientX - lastMouseX;
-    var dy = e.clientY - lastMouseY;
-    lastMouseX = e.clientX;
-    lastMouseY = e.clientY;
-
-    azimuth += dx * 0.01;
-    elevation = Math.max(-0.6, Math.min(1.2, elevation + dy * 0.01));
-
-    if (sliderAzimuth) sliderAzimuth.value = azimuth.toFixed(2);
-    if (sliderElevation) sliderElevation.value = elevation.toFixed(2);
-    draw();
-  });
-
-  window.addEventListener('mouseup', function () {
-    isDragging = false;
-  });
-
-  canvas.addEventListener('touchstart', function (e) {
-    if (e.touches.length === 1) {
-      isDragging = true;
-      lastMouseX = e.touches[0].clientX;
-      lastMouseY = e.touches[0].clientY;
+  attachOrbitControls(canvas, {
+    azimuth: azimuth,
+    elevation: elevation,
+    minElevation: -0.6,
+    maxElevation: 1.2,
+    sliderElevation: sliderElevation,
+    onChange: function (st) {
+      azimuth = st.azimuth;
+      elevation = st.elevation;
+      if (sliderAzimuth) sliderAzimuth.value = azimuth.toFixed(2);
+      draw();
     }
-  }, { passive: true });
-
-  window.addEventListener('touchmove', function (e) {
-    if (!isDragging || e.touches.length !== 1) return;
-    var dx = e.touches[0].clientX - lastMouseX;
-    var dy = e.touches[0].clientY - lastMouseY;
-    lastMouseX = e.touches[0].clientX;
-    lastMouseY = e.touches[0].clientY;
-
-    azimuth += dx * 0.01;
-    elevation = Math.max(-0.6, Math.min(1.2, elevation + dy * 0.01));
-
-    if (sliderAzimuth) sliderAzimuth.value = azimuth.toFixed(2);
-    if (sliderElevation) sliderElevation.value = elevation.toFixed(2);
-    draw();
-  }, { passive: true });
-
-  window.addEventListener('touchend', function () {
-    isDragging = false;
   });
 
   if (sliderTime) {
@@ -2445,17 +2368,18 @@
 
       // Double-arrow lag connector between photon dot and Earth dot (when in Elsewhere)
       if (isElsewhere && currentTime >= 40 && earthPlotX - photonCurrX > 35) {
-        ctx.strokeStyle = colors.isLight ? 'rgba(234, 88, 12, 0.65)' : 'rgba(251, 146, 60, 0.75)';
-        ctx.lineWidth = 1;
-        ctx.beginPath();
-        ctx.moveTo(photonCurrX + 6, currY);
-        ctx.lineTo(earthPlotX - 6, currY);
-        ctx.stroke();
-
-        ctx.font = '500 7px "JetBrains Mono", monospace';
-        ctx.fillStyle = colors.spaceColor;
-        ctx.textAlign = 'center';
-        ctx.fillText('Lag: ' + Math.round(500 - currentTime) + 's', (photonCurrX + earthPlotX) / 2, currY - 5);
+        drawDimensionLine(ctx, photonCurrX + 6, currY, earthPlotX - 6, currY, 'Lag: ' + Math.round(500 - currentTime) + 's', {
+          color: colors.isLight ? 'rgba(234, 88, 12, 0.85)' : 'rgba(251, 146, 60, 0.85)',
+          lineWidth: 1,
+          arrows: true,
+          labelOffsetY: -6,
+          labelOptions: {
+            textColor: colors.spaceColor,
+            font: 'bold 8px "JetBrains Mono", monospace',
+            paddingX: 4,
+            paddingY: 1.5
+          }
+        });
       }
     }
 
@@ -2473,15 +2397,14 @@
       });
     }
 
-    presetBtns.forEach(function (btn) {
-      btn.addEventListener('click', function () {
-        var t = parseFloat(btn.getAttribute('data-time'));
-        if (!isNaN(t)) {
-          currentTime = t;
-          if (isPlaying) stopPlay();
-          renderAll();
-        }
-      });
+    bindChipGroup(container, '.preset-sun-time', {
+      dataAttr: 'time',
+      slider: sliderTime,
+      onSelect: function (val) {
+        currentTime = val;
+        if (isPlaying) stopPlay();
+        renderAll();
+      }
     });
 
     function stopPlay() {
@@ -2567,7 +2490,6 @@
     var elPastTime = container.querySelector('.val-past-time');
     var elStarName = container.querySelector('.val-past-star-name');
     var badgeStatus = container.querySelector('.badge-past-status');
-    var clockCard = container.querySelector('.clock-past-status-card');
     var btnPlay = container.querySelector('.btn-play-past');
     var presetBtns = container.querySelectorAll('.preset-past-star');
 
@@ -2640,8 +2562,6 @@
       var ctx = ret.ctx, w = ret.width, h = ret.height;
       ctx.clearRect(0, 0, w, h);
 
-      var emerald = colors.isLight ? '#059669' : '#10b981';
-      var danger = colors.isLight ? '#dc2626' : '#f87171';
       var photonCol = colors.photonColor || (colors.isLight ? '#b45309' : '#fbbf24');
 
       var padLeft = 55;
@@ -2764,7 +2684,6 @@
       var ctx = ret.ctx, w = ret.width, h = ret.height;
       ctx.clearRect(0, 0, w, h);
 
-      var emerald = colors.isLight ? '#059669' : '#10b981';
       var danger = colors.isLight ? '#dc2626' : '#f87171';
       var photonCol = colors.photonColor || (colors.isLight ? '#b45309' : '#fbbf24');
 
