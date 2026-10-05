@@ -160,6 +160,30 @@
       justify-content: space-between;
       color: var(--text-secondary);
     }
+    /* 3D Spacetime Loaf view switcher & controls */
+    .view-mode-toggle {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+    .view-mode-toggle .chip-btn {
+      padding: 0.28rem 0.65rem;
+      font-size: 0.72rem;
+    }
+    .canvas-viewport.is-3d canvas {
+      cursor: grab;
+    }
+    .canvas-viewport.is-3d.is-dragging canvas {
+      cursor: grabbing;
+    }
+    .orbit-controls-container {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      padding-top: 0.5rem;
+      border-top: 1px solid var(--border-subtle);
+      transition: opacity 0.2s ease, max-height 0.2s ease;
+    }
   </style>
 </head>
 
@@ -459,30 +483,40 @@
       <!-- =================================================================== -->
       <h2>3. Straight Ahead into a Curved Future: The Falling Apple</h2>
       <p>
-        Now we bring both elements together in the exact geometry from Simulation 02: the Earth's massive worldtube in the center
-        (occupying <span class="math-badge">x = 5.7 → 9.3</span>), and an apple placed at rest on the grid line at <span class="math-badge">x = 4.0</span>.
+        In <a href="03-spacetime-loaf.html" style="color:var(--color-time); font-weight:600; text-decoration:underline;">Part 3</a>,
+        we discovered that stacking chronological snapshots of physical space vertically produces a continuous three-dimensional block:
+        the <strong>Spacetime Loaf</strong>. In flat spacetime, an object at rest traces a vertical worldtube stretching straight upward through time,
+        and its experience of the present instant is a flat, horizontal <strong>Slice of "Now"</strong> (<span class="math-badge">ct = const</span>).
       </p>
       <p>
-        In flat spacetime (Simulation 01), an object at rest moves <strong>strictly straight up</strong> through time along a vertical line (<span class="math-badge">x = const</span>).
-        Watch what happens in Earth's curved fabric:
+        Now, let us examine how mass reshapes this geometry in three dimensions. We place the Earth in the center of the loaf. Stacking its spherical cross-section through
+        time creates a massive <strong>cylindrical worldtube</strong> of radius <span class="math-badge">R = 1.8 m</span> (centered at <span class="math-badge">x = 7.5 m</span>).
+        An apple is placed at rest outside the Earth's surface at <span class="math-badge">x = 4.0 m</span> (an initial spatial gap of <span class="math-badge">1.70 m</span>).
+      </p>
+      <p>
+        Watch how the falling apple unfolds through the three-dimensional loaf:
       </p>
       <ul>
-        <li><strong>At Release (t = 0), the Apple Points Straight Up:</strong> Because the apple is released from rest (<span class="math-badge">v = 0</span>), its local heading initially points straight up into the future, exactly tangent to the flat path.</li>
-        <li><strong>Riding the Fabric's Curved Track:</strong> As time unfolds, the space grid line at <span class="math-badge">x = 4.0</span> bows inward toward Earth. The apple simply moves straight ahead along this curved grid line.</li>
-        <li><strong>Impact at 2.48 Seconds:</strong> At exactly <span class="math-badge">t = 2.48 s</span>, the apple's curved worldline crashes into the Earth's left worldtube boundary (<span class="math-badge">x = 5.7</span>).</li>
-        <li><strong>Weightlessness vs. Surface Push:</strong> Throughout the fall, an accelerometer on the apple reads <span class="math-badge">0.00 m/s²</span>—true weightlessness. Only at <span class="math-badge">t = 2.48 s</span>, when the Earth's surface interrupts its geodesic, does the accelerometer jump to <span class="math-badge">+9.80 m/s²</span>.</li>
+        <li><strong>Released Tangent to the Flat Ghost Path:</strong> At <span class="math-badge">t = 0</span>, the apple is released from rest (<span class="math-badge">v = 0</span>). Its local four-velocity heading points <strong>strictly straight up</strong> into the future, parallel to the flat baseline ghost path.</li>
+        <li><strong>Curvature of the Loaf Guides the Geodesic:</strong> Earth's mass distorts the surrounding fabric—spatial grid lines bow inward toward the cylinder, and time sags downward. The apple simply moves straight ahead along its local geodesic, but in this warped geometry, "straight ahead" curves inward toward the Earth's cylinder wall.</li>
+        <li><strong>The Rising Slice of "Now":</strong> As you scrub time <span class="math-badge">t</span> forward, the horizontal slicing plane moves upward through the loaf, displaying the physical cross-section of the Earth and the shrinking spatial gap to the falling apple at each successive instant.</li>
+        <li><strong>Surface Impact at 2.48 Seconds:</strong> At <span class="math-badge">t = 2.48 s</span>, the apple's worldline impacts the Earth's cylindrical boundary (<span class="math-badge">x = 5.7 m</span>). Throughout its free fall, its accelerometer reads <span class="math-badge">0.00 m/s²</span> (pure weightlessness). Only when the rigid surface interrupts its geodesic does the accelerometer jump to <span class="math-badge">+9.80 m/s²</span>, continuously pushing it upward into the future.</li>
       </ul>
 
-      <!-- WIDGET 3: APPLE IN CURVED SPACETIME -->
+      <!-- WIDGET 3: APPLE IN CURVED SPACETIME (3D SPACETIME LOAF) -->
       <div id="widget-apple-curved-future" class="interactive-artifact artifact-wide">
         <div class="artifact-header">
           <div>
             <div class="artifact-badge">SIMULATION 03 · THE FALLING APPLE: STRAIGHT MOTION INTO A CURVED FUTURE</div>
           </div>
+          <div class="view-mode-toggle">
+            <button class="chip-btn btn-view-mode active" data-view="3d">3D Spacetime Loaf</button>
+            <button class="chip-btn btn-view-mode" data-view="2d">2D Coordinate Slice</button>
+          </div>
         </div>
 
-        <div class="canvas-viewport">
-          <canvas style="height: 460px;"></canvas>
+        <div class="canvas-viewport is-3d">
+          <canvas style="height: 480px;"></canvas>
         </div>
 
         <!-- Telemetry -->
@@ -535,6 +569,56 @@
               <button class="chip preset-apple-chip" data-time="3.0">t = 3.0 s (Resting)</button>
             </div>
             <span class="controls-preset-tag">Deflection from Straight Up: <strong class="readout-deflection" style="color:var(--color-invariant);">0.00 m</strong></span>
+          </div>
+
+          <!-- Row 3: 3D Camera Controls Deck (Orbit & Tilt) -->
+          <div class="orbit-controls-container">
+            <div class="orbit-sliders-grid" style="padding-top: 0.25rem;">
+              <div class="control-item">
+                <div class="control-header">
+                  <span class="control-label">Azimuth (Orbit)</span>
+                  <span class="control-value readout-cam-az">-35°</span>
+                </div>
+                <input type="range" class="range-slider slider-azimuth" min="-3.14" max="3.14" step="0.05" value="-0.61">
+              </div>
+              <div class="control-item">
+                <div class="control-header">
+                  <span class="control-label">Elevation (Tilt)</span>
+                  <span class="control-value readout-cam-el">25°</span>
+                </div>
+                <input type="range" class="range-slider slider-elevation" min="-0.35" max="1.30" step="0.05" value="0.44">
+              </div>
+            </div>
+            <div class="controls-preset-row">
+              <div class="preset-chips">
+                <span style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-muted); align-self: center; margin-right: 0.25rem;">Camera Views:</span>
+                <button class="chip-btn chip-cam-preset active" data-preset="default" data-az="-0.61" data-el="0.44">3D Loaf View</button>
+                <button class="chip-btn chip-cam-preset" data-az="0" data-el="0">Side (Space–Time)</button>
+                <button class="chip-btn chip-cam-preset" data-az="0" data-el="1.30">Top (Space)</button>
+                <button class="btn-secondary btn-reset-view" style="padding: 0.25rem 0.65rem; font-size: 0.75rem;">↺ Reset View</button>
+              </div>
+              <span class="controls-preset-tag">Slice of "Now": <strong class="readout-slice-tag" style="color:var(--color-time);">ct = const (Δt = 0)</strong></span>
+            </div>
+          </div>
+
+          <!-- Row 4: Feature Toggles -->
+          <div class="toggle-row" style="margin-top: 0.25rem;">
+            <label class="toggle-label">
+              <input type="checkbox" class="toggle-slice" checked>
+              <span>Slice of "Now"</span>
+            </label>
+            <label class="toggle-label">
+              <input type="checkbox" class="toggle-ghost" checked>
+              <span>Flat Ghost Baseline</span>
+            </label>
+            <label class="toggle-label">
+              <input type="checkbox" class="toggle-vector" checked>
+              <span>Future Heading Vector</span>
+            </label>
+            <label class="toggle-label">
+              <input type="checkbox" class="toggle-fabric" checked>
+              <span>Curved Spacetime Fabric</span>
+            </label>
           </div>
         </div>
       </div>

@@ -655,7 +655,135 @@
   }
 
   // ==========================================================================
-  // 3. WIDGET 3: THE FALLING APPLE (STRAIGHT MOTION INTO A CURVED FUTURE)
+  // Universal 3D Camera Controller for Spacetime Loaf Visualizations
+  // ==========================================================================
+  function setup3DCameraController(container, canvas, initialAz, initialEl, onUpdate) {
+    var defAz = initialAz !== undefined ? initialAz : -35 * Math.PI / 180;
+    var defEl = initialEl !== undefined ? initialEl : 25 * Math.PI / 180;
+
+    var cam = {
+      azimuth: defAz,
+      elevation: defEl,
+      defaultAz: defAz,
+      defaultEl: defEl
+    };
+
+    var sliderAz = container.querySelector('.slider-azimuth');
+    var sliderEl = container.querySelector('.slider-elevation');
+    var readoutAz = container.querySelector('.readout-cam-az');
+    var readoutEl = container.querySelector('.readout-cam-el');
+    var btnReset = container.querySelector('.btn-reset-view');
+    var chipPresets = container.querySelectorAll('.chip-cam-preset');
+
+    function syncControls() {
+      if (sliderAz) sliderAz.value = cam.azimuth.toFixed(2);
+      if (sliderEl) sliderEl.value = cam.elevation.toFixed(2);
+      if (readoutAz) readoutAz.textContent = Math.round((cam.azimuth * 180) / Math.PI) + '°';
+      if (readoutEl) readoutEl.textContent = Math.round((cam.elevation * 180) / Math.PI) + '°';
+    }
+
+    function setAngles(az, el) {
+      cam.azimuth = az;
+      cam.elevation = Math.max(-0.35, Math.min(1.30, el));
+      while (cam.azimuth > Math.PI) cam.azimuth -= Math.PI * 2;
+      while (cam.azimuth < -Math.PI) cam.azimuth += Math.PI * 2;
+      syncControls();
+      if (onUpdate) onUpdate();
+    }
+
+    if (sliderAz) {
+      sliderAz.addEventListener('input', function (e) {
+        cam.azimuth = parseFloat(e.target.value);
+        if (readoutAz) readoutAz.textContent = Math.round((cam.azimuth * 180) / Math.PI) + '°';
+        if (onUpdate) onUpdate();
+      });
+    }
+
+    if (sliderEl) {
+      sliderEl.addEventListener('input', function (e) {
+        cam.elevation = parseFloat(e.target.value);
+        if (readoutEl) readoutEl.textContent = Math.round((cam.elevation * 180) / Math.PI) + '°';
+        if (onUpdate) onUpdate();
+      });
+    }
+
+    if (btnReset) {
+      btnReset.addEventListener('click', function () {
+        setAngles(cam.defaultAz, cam.defaultEl);
+        for (var i = 0; i < chipPresets.length; i++) {
+          chipPresets[i].classList.remove('active');
+          if (chipPresets[i].getAttribute('data-preset') === 'default' || i === 0) {
+            chipPresets[i].classList.add('active');
+          }
+        }
+      });
+    }
+
+    for (var p = 0; p < chipPresets.length; p++) {
+      (function (btn) {
+        btn.addEventListener('click', function () {
+          for (var j = 0; j < chipPresets.length; j++) chipPresets[j].classList.remove('active');
+          btn.classList.add('active');
+          var az = parseFloat(btn.getAttribute('data-az'));
+          var el = parseFloat(btn.getAttribute('data-el'));
+          setAngles(az, el);
+        });
+      })(chipPresets[p]);
+    }
+
+    // Direct canvas mouse & touch drag
+    var isDragging = false;
+    var lastX = 0, lastY = 0;
+    var viewportEl = canvas.closest('.canvas-viewport') || container;
+
+    canvas.addEventListener('mousedown', function (e) {
+      isDragging = true;
+      lastX = e.clientX;
+      lastY = e.clientY;
+      if (viewportEl) viewportEl.classList.add('is-dragging');
+    });
+
+    window.addEventListener('mousemove', function (e) {
+      if (!isDragging) return;
+      var dx = e.clientX - lastX;
+      var dy = e.clientY - lastY;
+      lastX = e.clientX;
+      lastY = e.clientY;
+      setAngles(cam.azimuth + dx * 0.008, cam.elevation + dy * 0.008);
+    });
+
+    window.addEventListener('mouseup', function () {
+      if (isDragging) {
+        isDragging = false;
+        if (viewportEl) viewportEl.classList.remove('is-dragging');
+      }
+    });
+
+    canvas.addEventListener('touchstart', function (e) {
+      if (e.touches.length === 1) {
+        isDragging = true;
+        lastX = e.touches[0].clientX;
+        lastY = e.touches[0].clientY;
+      }
+    }, { passive: true });
+
+    window.addEventListener('touchmove', function (e) {
+      if (!isDragging || e.touches.length !== 1) return;
+      var dx = e.touches[0].clientX - lastX;
+      var dy = e.touches[0].clientY - lastY;
+      lastX = e.touches[0].clientX;
+      lastY = e.touches[0].clientY;
+      setAngles(cam.azimuth + dx * 0.008, cam.elevation + dy * 0.008);
+    }, { passive: true });
+
+    window.addEventListener('touchend', function () { isDragging = false; });
+
+    syncControls();
+    return cam;
+  }
+
+  // ==========================================================================
+  // 3. WIDGET 3: THE FALLING APPLE (3D SPACETIME LOAF & CURVED GEODESIC)
   // ==========================================================================
   function initWidgetAppleCurvedFuture(containerId) {
     var container = document.getElementById(containerId);
@@ -673,8 +801,19 @@
     var elVelocity = container.querySelector('.readout-velocity');
     var elAccel = container.querySelector('.readout-accel');
     var elDeflection = container.querySelector('.readout-deflection');
+    var readoutSliceTag = container.querySelector('.readout-slice-tag');
+
+    // View switcher & feature toggle elements
+    var btnViewModes = container.querySelectorAll('.btn-view-mode');
+    var orbitControlsContainer = container.querySelector('.orbit-controls-container');
+    var chkSlice = container.querySelector('.toggle-slice');
+    var chkGhost = container.querySelector('.toggle-ghost');
+    var chkVector = container.querySelector('.toggle-vector');
+    var chkFabric = container.querySelector('.toggle-fabric');
+    var viewportEl = container.querySelector('.canvas-viewport');
 
     var state = {
+      viewMode: '3d',          // '3d' (Spacetime Loaf) or '2d' (Coordinate slice)
       t: parseFloat(sliderTime ? sliderTime.value : 1.2) || 1.2,
       maxT: 3.0,
       earthX: 7.5,
@@ -684,12 +823,18 @@
       initialX: 4.0,           // Apple placed at line x = 4.0
       crashTime: 2.48,         // Crashes into earth worldtube at exactly 2.48s
       mass: 1.0,               // Earth weight (calibrated to 9.25 x 10^24 kg)
-      showVector: true,        // Always enabled
-      showGhost: true,         // Always enabled
-      showGrid: true,          // Always enabled
+      showSlice: true,
+      showGhost: true,
+      showVector: true,
+      showFabric: true,
       isPlaying: false,
       isVisible: true
     };
+
+    // 3D Camera Controller for Spacetime Loaf
+    var cam = setup3DCameraController(container, canvas, -35 * Math.PI / 180, 25 * Math.PI / 180, function () {
+      if (state.viewMode === '3d') draw();
+    });
 
     /**
      * Apple position and telemetry at coordinate time tVal.
@@ -753,6 +898,10 @@
         }
       }
 
+      if (readoutSliceTag) {
+        readoutSliceTag.textContent = 'ct = ' + (state.t * 3.0).toFixed(1) + ' m (t = ' + state.t.toFixed(2) + ' s)';
+      }
+
       btnPresetChips.forEach(function (chip) {
         var chipT = parseFloat(chip.getAttribute('data-time'));
         if (Math.abs(chipT - state.t) < 0.06) {
@@ -763,14 +912,495 @@
       });
     }
 
-    function draw() {
-      if (!canvas) return;
-      var ret = setupRetinaCanvas(canvas);
-      var ctx = ret.ctx, width = ret.width, height = ret.height;
-      var c = getThemeColors();
+    // ========================================================================
+    // 3D SPACETIME LOAF RENDERING
+    // ========================================================================
+    function draw3DLoaf(ctx, width, height, c) {
+      var cx = width * 0.50;
+      var cy = height * 0.65;
+      var scale = Math.min(width * 0.082, height * 0.16);
 
-      ctx.clearRect(0, 0, width, height);
+      function p3(x, y, z) {
+        var cosAz = Math.cos(cam.azimuth);
+        var sinAz = Math.sin(cam.azimuth);
+        var xRot = x * cosAz - y * sinAz;
+        var yRot = x * sinAz + y * cosAz;
 
+        var cosEl = Math.cos(cam.elevation);
+        var sinEl = Math.sin(cam.elevation);
+        var yFinal = yRot * cosEl - z * sinEl;
+        var zFinal = yRot * sinEl + z * cosEl;
+
+        return {
+          x: cx + xRot * scale,
+          y: cy - zFinal * scale,
+          depth: yFinal
+        };
+      }
+
+      var H_loaf = 2.7; // Loaf vertical height
+      var zNow = (state.t / state.maxT) * H_loaf;
+      var xRange = 5.5;
+      var yRange = 4.0;
+      var curAp = getAppleState(state.t);
+
+      // 1. Spacetime Loaf Ground Grid & Curvature (z = 0)
+      ctx.save();
+      ctx.strokeStyle = c.gridLine;
+      ctx.lineWidth = 1.0;
+
+      // Concentric circles on the ground
+      if (state.showFabric) {
+        var radii = [1.8, 3.0, 4.3];
+        radii.forEach(function (rad) {
+          ctx.beginPath();
+          var segs = 36;
+          for (var si = 0; si <= segs; si++) {
+            var ang = (si / segs) * Math.PI * 2;
+            var pt = p3(rad * Math.cos(ang), rad * Math.sin(ang), 0);
+            if (si === 0) ctx.moveTo(pt.x, pt.y);
+            else ctx.lineTo(pt.x, pt.y);
+          }
+          ctx.stroke();
+        });
+      }
+
+      // X grid lines across space with optional curved sagging funnel
+      for (var gx = -5.0; gx <= 5.01; gx += 1.0) {
+        ctx.beginPath();
+        var ySteps = 20;
+        for (var sy = 0; sy <= ySteps; sy++) {
+          var gyVal = -yRange + (sy / ySteps) * (2 * yRange);
+          var warpX = gx;
+          var warpZ = 0;
+          if (state.showFabric) {
+            var distR = Math.sqrt(gx * gx + gyVal * gyVal);
+            var falloff = 1.0 / (1.0 + Math.pow(distR / 2.2, 2.0));
+            var signX = gx > 0 ? 1 : (gx < 0 ? -1 : 0);
+            warpX = gx - signX * 0.35 * falloff;
+            warpZ = -0.32 * falloff;
+          }
+          var ptL = p3(warpX, gyVal, warpZ);
+          if (sy === 0) ctx.moveTo(ptL.x, ptL.y);
+          else ctx.lineTo(ptL.x, ptL.y);
+        }
+        ctx.stroke();
+      }
+
+      // Y grid lines across space
+      for (var gy = -3.5; gy <= 3.51; gy += 1.0) {
+        ctx.beginPath();
+        var xSteps = 24;
+        for (var sx = 0; sx <= xSteps; sx++) {
+          var gxVal = -xRange + (sx / xSteps) * (2 * xRange);
+          var warpY = gy;
+          var warpZ_y = 0;
+          if (state.showFabric) {
+            var distR_y = Math.sqrt(gxVal * gxVal + gy * gy);
+            var falloff_y = 1.0 / (1.0 + Math.pow(distR_y / 2.2, 2.0));
+            var signY = gy > 0 ? 1 : (gy < 0 ? -1 : 0);
+            warpY = gy - signY * 0.35 * falloff_y;
+            warpZ_y = -0.32 * falloff_y;
+          }
+          var ptLy = p3(gxVal, warpY, warpZ_y);
+          if (sx === 0) ctx.moveTo(ptLy.x, ptLy.y);
+          else ctx.lineTo(ptLy.x, ptLy.y);
+        }
+        ctx.stroke();
+      }
+      ctx.restore();
+
+      // 2. Corner Pillars & Top Frame of the Spacetime Loaf block
+      ctx.save();
+      ctx.strokeStyle = c.borderMedium;
+      ctx.lineWidth = 1.2;
+      ctx.setLineDash([3, 4]);
+      var corners = [
+        { x: -xRange, y: -yRange },
+        { x: xRange, y: -yRange },
+        { x: xRange, y: yRange },
+        { x: -xRange, y: yRange }
+      ];
+      corners.forEach(function (cn) {
+        var pBot = p3(cn.x, cn.y, 0);
+        var pTop = p3(cn.x, cn.y, H_loaf);
+        ctx.beginPath();
+        ctx.moveTo(pBot.x, pBot.y);
+        ctx.lineTo(pTop.x, pTop.y);
+        ctx.stroke();
+      });
+      ctx.beginPath();
+      for (var ci = 0; ci <= corners.length; ci++) {
+        var cnP = corners[ci % corners.length];
+        var ptTop = p3(cnP.x, cnP.y, H_loaf);
+        if (ci === 0) ctx.moveTo(ptTop.x, ptTop.y);
+        else ctx.lineTo(ptTop.x, ptTop.y);
+      }
+      ctx.stroke();
+      ctx.restore();
+
+      // 3. Axes
+      var pOrigin = p3(-xRange, -yRange, 0);
+      var pX1 = p3(-xRange + 3.2, -yRange, 0);
+      var pX2 = p3(-xRange, -yRange + 2.8, 0);
+      var pTime = p3(-xRange, -yRange, H_loaf + 0.35);
+
+      drawVector(ctx, pOrigin.x, pOrigin.y, pX1.x, pX1.y, { color: c.axisLine, lineWidth: 1.8, arrowLength: 7 });
+      drawVector(ctx, pOrigin.x, pOrigin.y, pX2.x, pX2.y, { color: c.axisLine, lineWidth: 1.8, arrowLength: 7 });
+      drawVector(ctx, pOrigin.x, pOrigin.y, pTime.x, pTime.y, { color: c.timeColor, lineWidth: 2.2, arrowLength: 8 });
+
+      drawLabelPill(ctx, 'Space x₁', pX1.x + 24, pX1.y, { textColor: c.axisLabel, font: '10px "JetBrains Mono"' });
+      drawLabelPill(ctx, 'Space x₂', pX2.x, pX2.y + 14, { textColor: c.axisLabel, font: '10px "JetBrains Mono"' });
+      drawLabelPill(ctx, 'Time ct', pTime.x, pTime.y - 12, { textColor: c.timeColor, font: 'bold 10px "JetBrains Mono"' });
+
+      // 4. Earth's Cylindrical Worldtube (Radius R = 1.8)
+      var R_earth = state.earthRadius; // 1.8
+      var numTubeSides = 24;
+
+      ctx.save();
+      var tubeFill = c.isLight ? 'rgba(29, 78, 216, 0.12)' : 'rgba(56, 189, 248, 0.16)';
+      var tubeStroke = c.isLight ? 'rgba(29, 78, 216, 0.28)' : 'rgba(56, 189, 248, 0.32)';
+
+      var quads = [];
+      for (var ti = 0; ti < numTubeSides; ti++) {
+        var a1 = (ti / numTubeSides) * Math.PI * 2;
+        var a2 = ((ti + 1) / numTubeSides) * Math.PI * 2;
+        var b1 = p3(R_earth * Math.cos(a1), R_earth * Math.sin(a1), 0);
+        var b2 = p3(R_earth * Math.cos(a2), R_earth * Math.sin(a2), 0);
+        var t1 = p3(R_earth * Math.cos(a1), R_earth * Math.sin(a1), H_loaf);
+        var t2 = p3(R_earth * Math.cos(a2), R_earth * Math.sin(a2), H_loaf);
+        var midDepth = (b1.depth + b2.depth) / 2;
+        quads.push({ b1: b1, b2: b2, t1: t1, t2: t2, depth: midDepth });
+      }
+
+      quads.sort(function (qa, qb) { return qb.depth - qa.depth; });
+
+      quads.forEach(function (qd) {
+        ctx.fillStyle = tubeFill;
+        ctx.strokeStyle = tubeStroke;
+        ctx.lineWidth = 1.0;
+        ctx.beginPath();
+        ctx.moveTo(qd.b1.x, qd.b1.y);
+        ctx.lineTo(qd.b2.x, qd.b2.y);
+        ctx.lineTo(qd.t2.x, qd.t2.y);
+        ctx.lineTo(qd.t1.x, qd.t1.y);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+      });
+
+      // Earth center worldline spine
+      var pCenterBot = p3(0, 0, 0);
+      var pCenterTop = p3(0, 0, H_loaf);
+      ctx.strokeStyle = c.timeColor;
+      ctx.lineWidth = 1.2;
+      ctx.setLineDash([3, 4]);
+      ctx.beginPath();
+      ctx.moveTo(pCenterBot.x, pCenterBot.y);
+      ctx.lineTo(pCenterTop.x, pCenterTop.y);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      // Latitude rings on cylinder at t = 0, 1, 2, 3
+      [0, 1.0, 2.0, 3.0].forEach(function (tMark) {
+        var zMark = (tMark / 3.0) * H_loaf;
+        ctx.strokeStyle = c.timeColor;
+        ctx.lineWidth = tMark === 0 ? 1.5 : 0.9;
+        ctx.globalAlpha = 0.45;
+        ctx.beginPath();
+        for (var mi = 0; mi <= numTubeSides; mi++) {
+          var ma = (mi / numTubeSides) * Math.PI * 2;
+          var mp = p3(R_earth * Math.cos(ma), R_earth * Math.sin(ma), zMark);
+          if (mi === 0) ctx.moveTo(mp.x, mp.y);
+          else ctx.lineTo(mp.x, mp.y);
+        }
+        ctx.stroke();
+      });
+      ctx.globalAlpha = 1.0;
+
+      // Surface Boundary Silhouette Lines at x = -1.8 and x = +1.8
+      var pSurfLeftBot = p3(-R_earth, 0, 0);
+      var pSurfLeftTop = p3(-R_earth, 0, H_loaf);
+      var pSurfRightBot = p3(R_earth, 0, 0);
+      var pSurfRightTop = p3(R_earth, 0, H_loaf);
+
+      ctx.strokeStyle = c.timeColor;
+      ctx.lineWidth = 2.4;
+      ctx.beginPath();
+      ctx.moveTo(pSurfLeftBot.x, pSurfLeftBot.y);
+      ctx.lineTo(pSurfLeftTop.x, pSurfLeftTop.y);
+      ctx.moveTo(pSurfRightBot.x, pSurfRightBot.y);
+      ctx.lineTo(pSurfRightTop.x, pSurfRightTop.y);
+      ctx.stroke();
+      ctx.restore();
+
+      // Earth worldtube label
+      var pEarthLabel = p3(0, 0, H_loaf + 0.12);
+      drawLabelPill(ctx, 'Earth Worldtube (R = 1.8m)', pEarthLabel.x, pEarthLabel.y - 12, {
+        textColor: c.timeColor,
+        bgColor: c.pillBg,
+        borderColor: c.timeColor
+      });
+
+      // 5. Flat Spacetime Baseline (Ghost Straight Path straight up from x = -3.5)
+      var appleStartX = -3.5; // (4.0 - 7.5)
+      if (state.showGhost) {
+        ctx.save();
+        ctx.strokeStyle = c.axisLine;
+        ctx.globalAlpha = 0.55;
+        ctx.setLineDash([4, 4]);
+        ctx.lineWidth = 2.0;
+
+        var pGhostBot = p3(appleStartX, 0, 0);
+        var pGhostTop = p3(appleStartX, 0, H_loaf);
+        ctx.beginPath();
+        ctx.moveTo(pGhostBot.x, pGhostBot.y);
+        ctx.lineTo(pGhostTop.x, pGhostTop.y);
+        ctx.stroke();
+
+        var pGhostNow = p3(appleStartX, 0, zNow);
+        ctx.beginPath();
+        ctx.arc(pGhostNow.x, pGhostNow.y, 4, 0, Math.PI * 2);
+        ctx.fillStyle = c.subtleText;
+        ctx.fill();
+        ctx.stroke();
+        ctx.restore();
+
+        drawLabelPill(ctx, 'Flat Path: Straight Up (x = 4.0m)', pGhostTop.x - 30, pGhostTop.y - 12, {
+          textColor: c.subtleText,
+          bgColor: c.pillBg,
+          borderColor: c.pillBorder
+        });
+      }
+
+      // 6. Slicing Plane of "Now" (t = const)
+      if (state.showSlice) {
+        ctx.save();
+        var s1 = p3(-xRange, -yRange, zNow);
+        var s2 = p3(xRange, -yRange, zNow);
+        var s3 = p3(xRange, yRange, zNow);
+        var s4 = p3(-xRange, yRange, zNow);
+
+        ctx.fillStyle = c.isLight ? 'rgba(29, 78, 216, 0.10)' : 'rgba(56, 189, 248, 0.14)';
+        ctx.strokeStyle = c.timeColor;
+        ctx.lineWidth = 1.8;
+        ctx.beginPath();
+        ctx.moveTo(s1.x, s1.y);
+        ctx.lineTo(s2.x, s2.y);
+        ctx.lineTo(s3.x, s3.y);
+        ctx.lineTo(s4.x, s4.y);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+
+        // Earth's Circular Cross-Section Disk on Slice of "Now"
+        ctx.fillStyle = c.isLight ? 'rgba(29, 78, 216, 0.32)' : 'rgba(56, 189, 248, 0.38)';
+        ctx.strokeStyle = c.timeColor;
+        ctx.lineWidth = 2.0;
+        ctx.beginPath();
+        var sliceDiskSegs = 36;
+        for (var di = 0; di <= sliceDiskSegs; di++) {
+          var dang = (di / sliceDiskSegs) * Math.PI * 2;
+          var dpt = p3(R_earth * Math.cos(dang), R_earth * Math.sin(dang), zNow);
+          if (di === 0) ctx.moveTo(dpt.x, dpt.y);
+          else ctx.lineTo(dpt.x, dpt.y);
+        }
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+
+        // Disk center dot
+        var pDiskCenter = p3(0, 0, zNow);
+        ctx.beginPath();
+        ctx.arc(pDiskCenter.x, pDiskCenter.y, 3, 0, Math.PI * 2);
+        ctx.fillStyle = c.timeColor;
+        ctx.fill();
+
+        // Slice title label pill
+        drawLabelPill(ctx, 'Slice of "Now" (t = ' + state.t.toFixed(2) + 's)', s1.x + 36, s1.y - 12, {
+          textColor: c.timeColor,
+          bgColor: c.pillBg,
+          borderColor: c.timeColor
+        });
+
+        // Spatial Distance Gap line on the slice
+        var cur3DX = appleStartX + curAp.deflection;
+        var pCurAppleSlice = p3(cur3DX, 0, zNow);
+        var pSurfLeftSlice = p3(-R_earth, 0, zNow);
+
+        if (!curAp.hasLanded) {
+          ctx.strokeStyle = c.spaceColor;
+          ctx.lineWidth = 1.8;
+          ctx.beginPath();
+          ctx.moveTo(pCurAppleSlice.x, pCurAppleSlice.y);
+          ctx.lineTo(pSurfLeftSlice.x, pSurfLeftSlice.y);
+          ctx.stroke();
+
+          ctx.beginPath();
+          ctx.moveTo(pCurAppleSlice.x, pCurAppleSlice.y - 4);
+          ctx.lineTo(pCurAppleSlice.x, pCurAppleSlice.y + 4);
+          ctx.moveTo(pSurfLeftSlice.x, pSurfLeftSlice.y - 4);
+          ctx.lineTo(pSurfLeftSlice.x, pSurfLeftSlice.y + 4);
+          ctx.stroke();
+
+          var midGapX = (pCurAppleSlice.x + pSurfLeftSlice.x) / 2;
+          var midGapY = (pCurAppleSlice.y + pSurfLeftSlice.y) / 2;
+          drawLabelPill(ctx, 'Gap: ' + curAp.altitude.toFixed(2) + 'm', midGapX, midGapY - 14, {
+            textColor: c.spaceColor,
+            bgColor: c.pillBg,
+            borderColor: c.spaceColor,
+            font: 'bold 10px "JetBrains Mono"'
+          });
+        }
+        ctx.restore();
+      }
+
+      // 7. Deflection from Straight Up
+      if (state.showGhost && curAp.deflection > 0.08) {
+        var pGhostCurrent = p3(appleStartX, 0, zNow);
+        var pAppleCurrent = p3(appleStartX + curAp.deflection, 0, zNow);
+        ctx.save();
+        ctx.strokeStyle = c.invariantColor;
+        ctx.lineWidth = 1.6;
+        ctx.beginPath();
+        ctx.moveTo(pGhostCurrent.x, pGhostCurrent.y);
+        ctx.lineTo(pAppleCurrent.x, pAppleCurrent.y);
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.moveTo(pGhostCurrent.x, pGhostCurrent.y - 4);
+        ctx.lineTo(pGhostCurrent.x, pGhostCurrent.y + 4);
+        ctx.moveTo(pAppleCurrent.x, pAppleCurrent.y - 4);
+        ctx.lineTo(pAppleCurrent.x, pAppleCurrent.y + 4);
+        ctx.stroke();
+        ctx.restore();
+
+        var midDefX = (pGhostCurrent.x + pAppleCurrent.x) / 2;
+        var midDefY = (pGhostCurrent.y + pAppleCurrent.y) / 2;
+        drawLabelPill(ctx, 'Δx = ' + curAp.deflection.toFixed(2) + 'm', midDefX, midDefY + 16, {
+          textColor: c.invariantColor,
+          bgColor: c.pillBg,
+          borderColor: c.invariantColor,
+          font: 'bold 10px "JetBrains Mono"'
+        });
+      }
+
+      // 8. Apple's Curved Geodesic Worldline in 3D
+      var numTrackPts = 80;
+      ctx.save();
+      ctx.strokeStyle = c.spaceColor;
+      ctx.globalAlpha = 0.32;
+      ctx.setLineDash([3, 3]);
+      ctx.lineWidth = 2.0;
+      ctx.beginPath();
+      for (var fpi = 0; fpi <= numTrackPts; fpi++) {
+        var tTrack = (fpi / numTrackPts) * state.maxT;
+        var apTrack = getAppleState(tTrack);
+        var xTrack = appleStartX + apTrack.deflection;
+        var zTrack = (tTrack / state.maxT) * H_loaf;
+        var ptTrack = p3(xTrack, 0, zTrack);
+        if (fpi === 0) ctx.moveTo(ptTrack.x, ptTrack.y);
+        else ctx.lineTo(ptTrack.x, ptTrack.y);
+      }
+      ctx.stroke();
+      ctx.restore();
+
+      ctx.save();
+      ctx.strokeStyle = c.spaceColor;
+      ctx.lineWidth = 3.6;
+      ctx.lineCap = 'round';
+      ctx.beginPath();
+      var travPts = Math.max(4, Math.round(numTrackPts * (state.t / state.maxT)));
+      for (var tpi = 0; tpi <= travPts; tpi++) {
+        var tTrav = (tpi / travPts) * state.t;
+        var apTrav = getAppleState(tTrav);
+        var xTrav = appleStartX + apTrav.deflection;
+        var zTrav = (tTrav / state.maxT) * H_loaf;
+        var ptTrav = p3(xTrav, 0, zTrav);
+        if (tpi === 0) ctx.moveTo(ptTrav.x, ptTrav.y);
+        else ctx.lineTo(ptTrav.x, ptTrav.y);
+      }
+      ctx.stroke();
+      ctx.restore();
+
+      // Impact Marker at t = 2.48s
+      if (state.t >= state.crashTime) {
+        var zCrash = (state.crashTime / state.maxT) * H_loaf;
+        var pCrash = p3(-R_earth, 0, zCrash);
+
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(pCrash.x, pCrash.y, 11, 0, Math.PI * 2);
+        ctx.strokeStyle = c.photonColor;
+        ctx.lineWidth = 2.4;
+        ctx.stroke();
+        ctx.restore();
+
+        drawLabelPill(ctx, 'CRASH: Surface Impact (t = 2.48s)', pCrash.x - 76, pCrash.y, {
+          textColor: c.photonColor,
+          bgColor: c.pillBg,
+          borderColor: c.photonColor
+        });
+      }
+
+      // Apple Current Position Dot
+      var cur3DAppleX = appleStartX + curAp.deflection;
+      var pAppleNow = p3(cur3DAppleX, 0, zNow);
+      drawGlowingDot(ctx, pAppleNow.x, pAppleNow.y, c.spaceColor, 7);
+
+      var appleLabelText = curAp.hasLanded ? 'Apple on Ground (Resting)' : 'Apple (Free Fall, a = 0.00 m/s²)';
+      drawLabelPill(ctx, appleLabelText, pAppleNow.x - 30, pAppleNow.y + 18, {
+        textColor: c.spaceColor,
+        bgColor: c.pillBg,
+        borderColor: c.pillBorder
+      });
+
+      // 9. Future Tangent Heading Vector (4-Velocity Heading)
+      if (state.showVector) {
+        var v3DX, v3DZ;
+        if (!curAp.hasLanded) {
+          v3DX = curAp.v * 0.45;
+          v3DZ = 0.45;
+        } else {
+          v3DX = 0;
+          v3DZ = 0.45;
+        }
+
+        var pVecTip = p3(cur3DAppleX + v3DX, 0, zNow + v3DZ);
+        drawVector(ctx, pAppleNow.x, pAppleNow.y, pVecTip.x, pVecTip.y, {
+          color: c.photonColor,
+          lineWidth: 2.8,
+          arrowLength: 9
+        });
+
+        var vecLabel;
+        if (state.t < 0.05) {
+          vecLabel = 'Initial Heading Points Strictly Straight Up (v = 0)';
+        } else if (!curAp.hasLanded) {
+          vecLabel = 'Future Vector Tilts Into Curved Geometry';
+        } else {
+          vecLabel = 'At Rest on Surface (Surface Push: +9.80 m/s²)';
+        }
+
+        drawLabelPill(ctx, vecLabel, pVecTip.x + 18, pVecTip.y - 10, {
+          textColor: c.photonColor,
+          bgColor: c.pillBg,
+          borderColor: c.photonColor
+        });
+      }
+
+      // Top Header pill
+      drawLabelPill(ctx, '3D Spacetime Loaf · Drag canvas or adjust sliders to orbit camera', width / 2, 22, {
+        textColor: c.subtleText,
+        bgColor: c.pillBg,
+        borderColor: c.pillBorder
+      });
+    }
+
+    // ========================================================================
+    // 2D COORDINATE SPACETIME RENDERING (CROSS-SECTION THROUGH LOAF)
+    // ========================================================================
+    function draw2DCoordinate(ctx, width, height, c) {
       var padLeft = 55, padRight = 35, padBottom = 45, padTop = 35;
       var plotW = width - padLeft - padRight;
       var plotH = height - padBottom - padTop;
@@ -785,13 +1415,10 @@
         };
       }
 
-      // Curvature evolves smoothly across the loaf progression from t = 0 to t = 3.0
       var effectiveMass = state.mass * (0.25 + 0.75 * (state.t / state.maxT));
 
-      // ======================================================================
-      // 1. WARPED SPACETIME GRID (Reproducing Simulation 02)
-      // ======================================================================
-      if (state.showGrid) {
+      // 1. Warped 2D Grid
+      if (state.showFabric) {
         ctx.save();
         ctx.beginPath();
         ctx.rect(padLeft, padTop, plotW, plotH);
@@ -806,7 +1433,7 @@
         var stepT = (tMax - tMin) / numT;
         var samples = 45;
 
-        // Space Lines: bow inward toward Earth's worldtube continuously
+        // Space Lines bow inward toward Earth's worldtube
         for (var ix = 0; ix <= numX; ix++) {
           var startX = xMin + ix * stepX;
           var dx0 = startX - state.earthX;
@@ -817,11 +1444,9 @@
           for (var s = 0; s <= samples; s++) {
             var tVal = tMin + (s / samples) * (tMax - tMin);
             var falloff = 1.0 / (1.0 + Math.pow(dist / 3.0, 2.0));
-            // Inward pull increases continuously with t^2 without any t=1s cap
             var pull = 0.5 * effectiveMass * falloff * 1.3052 * Math.pow(tVal, 2.0);
             var warpedX = startX - sign * pull;
 
-            // Clamped at Earth's worldtube boundaries (x = 5.7 and x = 9.3)
             if (sign > 0) warpedX = Math.max(state.earthSurfaceRightX, warpedX);
             if (sign < 0) warpedX = Math.min(state.earthSurfaceLeftX, warpedX);
 
@@ -832,7 +1457,7 @@
           ctx.stroke();
         }
 
-        // Time Lines: sag downward near Earth (with extended range for sagging lines)
+        // Time Lines sag downward near Earth
         var minOrigT = tMin - 0.6;
         var maxOrigT = tMax + 2.5;
 
@@ -870,7 +1495,6 @@
       // 3. Axes
       drawAxes(ctx, padLeft, height - padBottom, width - padRight, padTop, 'Space x', 'Time ct');
 
-      // Axis ticks
       ctx.save();
       ctx.font = '10px "JetBrains Mono", monospace';
       ctx.fillStyle = c.subtleText;
@@ -886,9 +1510,7 @@
       }
       ctx.restore();
 
-      // ======================================================================
-      // 4. EARTH'S WORLDTUBE (Reproducing Simulation 02)
-      // ======================================================================
+      // 4. Earth's Worldtube
       var earthLeftX = state.earthSurfaceLeftX;
       var earthRightX = state.earthSurfaceRightX;
 
@@ -897,7 +1519,6 @@
       var ptTL = toScreen(earthLeftX, state.t);
       var ptTR = toScreen(earthRightX, state.t);
 
-      // Shaded Earth Worldtube Interior
       ctx.save();
       var tubeGrad = ctx.createLinearGradient(ptBL.x, 0, ptBR.x, 0);
       tubeGrad.addColorStop(0, 'rgba(29, 78, 216, 0.18)');
@@ -906,7 +1527,6 @@
       ctx.fillStyle = tubeGrad;
       ctx.fillRect(ptTL.x, ptTL.y, ptTR.x - ptTL.x, ptBL.y - ptTL.y);
 
-      // Worldtube boundaries
       ctx.strokeStyle = c.timeColor;
       ctx.lineWidth = 2.2;
       ctx.beginPath();
@@ -916,7 +1536,6 @@
       ctx.lineTo(ptTR.x, ptTR.y);
       ctx.stroke();
 
-      // Earth Center Worldline (spine)
       var ptCenterBottom = toScreen(state.earthX, 0);
       var ptCenterTop = toScreen(state.earthX, state.t);
       ctx.setLineDash([3, 3]);
@@ -927,7 +1546,6 @@
       ctx.stroke();
       ctx.restore();
 
-      // Future ghost worldtube
       if (state.t < tMax) {
         var ptFutureTL = toScreen(earthLeftX, tMax);
         var ptFutureTR = toScreen(earthRightX, tMax);
@@ -951,9 +1569,7 @@
         borderColor: c.timeColor
       });
 
-      // ======================================================================
-      // 5. THE "STRAIGHT UP" PATH (FLAT SPACETIME BASELINE: x = 4.0)
-      // ======================================================================
+      // 5. Flat baseline straight up (x = 4.0)
       if (state.showGhost) {
         var ghost0 = toScreen(state.initialX, 0);
         var ghostMax = toScreen(state.initialX, state.maxT);
@@ -975,9 +1591,7 @@
         });
       }
 
-      // ======================================================================
-      // 6. THE APPLE'S CURVED GEODESIC TRACK
-      // ======================================================================
+      // 6. Apple's curved geodesic track
       var numPathSamples = 80;
       ctx.save();
       ctx.strokeStyle = c.spaceColor;
@@ -995,9 +1609,9 @@
       ctx.stroke();
       ctx.restore();
 
-      // Traversed worldline (solid bold curve)
-      var curAp = getAppleState(state.t);
-      var curScreen = toScreen(curAp.x, state.t);
+      // Traversed worldline
+      var curAp2D = getAppleState(state.t);
+      var curScreen = toScreen(curAp2D.x, state.t);
 
       ctx.save();
       ctx.strokeStyle = c.spaceColor;
@@ -1015,10 +1629,8 @@
       ctx.stroke();
       ctx.restore();
 
-      // ======================================================================
-      // 7. DEFLECTION ARROW FROM "STRAIGHT UP" (x = 4.0)
-      // ======================================================================
-      if (state.showGhost && curAp.deflection > 0.08) {
+      // Deflection arrow
+      if (state.showGhost && curAp2D.deflection > 0.08) {
         var ghostScreenNow = toScreen(state.initialX, state.t);
         ctx.save();
         ctx.strokeStyle = c.invariantColor;
@@ -1037,7 +1649,7 @@
         ctx.restore();
 
         var midDeflectX = (ghostScreenNow.x + curScreen.x) / 2;
-        drawLabelPill(ctx, 'Δx = ' + curAp.deflection.toFixed(2) + 'm', midDeflectX, curScreen.y - 14, {
+        drawLabelPill(ctx, 'Δx = ' + curAp2D.deflection.toFixed(2) + 'm', midDeflectX, curScreen.y - 14, {
           font: 'bold 10px "JetBrains Mono", monospace',
           textColor: c.invariantColor,
           bgColor: c.pillBg,
@@ -1045,9 +1657,7 @@
         });
       }
 
-      // ======================================================================
-      // 9. IMPACT EVENT MARKER AT t = 2.48s
-      // ======================================================================
+      // Impact Event Marker
       if (state.t >= state.crashTime) {
         var impactPt = toScreen(state.earthSurfaceLeftX, state.crashTime);
         ctx.save();
@@ -1065,15 +1675,13 @@
         });
       }
 
-      // ======================================================================
-      // 10. LOCAL FUTURE TANGENT VECTOR (4-VELOCITY HEADING)
-      // ======================================================================
+      // Local Future Tangent Vector
       if (state.showVector) {
         var vecScale = 32;
         var dirX, dirY;
 
-        if (!curAp.hasLanded) {
-          var vx = curAp.v; // positive toward Earth
+        if (!curAp2D.hasLanded) {
+          var vx = curAp2D.v;
           var vt = 1.0;
           var norm = Math.sqrt(vx * vx + vt * vt);
           dirX = vx / norm;
@@ -1096,7 +1704,7 @@
         var vectorLabel;
         if (state.t < 0.05) {
           vectorLabel = 'Heading Points Strictly Straight Up (v = 0)';
-        } else if (!curAp.hasLanded) {
+        } else if (!curAp2D.hasLanded) {
           vectorLabel = 'Future Vector Tilts Toward Earth';
         } else {
           vectorLabel = 'At Rest on Ground (Pointing Up)';
@@ -1112,20 +1720,36 @@
       // Apple Dot
       drawGlowingDot(ctx, curScreen.x, curScreen.y, c.spaceColor, 7);
 
-      // Apple Label
-      var labelText = curAp.hasLanded ? 'Apple on Ground (Resting)' : 'Apple (Released at x = 4.0)';
+      var labelText = curAp2D.hasLanded ? 'Apple on Ground (Resting)' : 'Apple (Released at x = 4.0)';
       drawLabelPill(ctx, labelText, curScreen.x - 24, curScreen.y + 18, {
         textColor: c.spaceColor,
         bgColor: c.pillBg,
         borderColor: c.pillBorder
       });
 
-      // Top explanatory pill
-      drawLabelPill(ctx, 'Apple placed at x = 4.0 crashes into Earth worldtube at t = 2.48s', width / 2, padTop + 8, {
+      drawLabelPill(ctx, '2D Coordinate Slice (x vs ct) · Side view through Spacetime Loaf', width / 2, padTop + 8, {
         textColor: c.subtleText,
         bgColor: c.pillBg,
         borderColor: c.pillBorder
       });
+    }
+
+    // ========================================================================
+    // MAIN DRAW DISPATCHER
+    // ========================================================================
+    function draw() {
+      if (!canvas) return;
+      var ret = setupRetinaCanvas(canvas);
+      var ctx = ret.ctx, width = ret.width, height = ret.height;
+      var c = getThemeColors();
+
+      ctx.clearRect(0, 0, width, height);
+
+      if (state.viewMode === '3d') {
+        draw3DLoaf(ctx, width, height, c);
+      } else {
+        draw2DCoordinate(ctx, width, height, c);
+      }
     }
 
     function stepAnimation() {
@@ -1139,6 +1763,7 @@
       requestAnimationFrame(stepAnimation);
     }
 
+    // Scrubbers & Buttons Event Listeners
     if (sliderTime) {
       sliderTime.addEventListener('input', function () {
         state.t = parseFloat(sliderTime.value);
@@ -1178,6 +1803,52 @@
       });
     });
 
+    // View Mode Switcher
+    btnViewModes.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        btnViewModes.forEach(function (b) { b.classList.remove('active'); });
+        btn.classList.add('active');
+        state.viewMode = btn.getAttribute('data-view');
+
+        if (orbitControlsContainer) {
+          orbitControlsContainer.style.display = state.viewMode === '3d' ? 'flex' : 'none';
+        }
+        if (viewportEl) {
+          if (state.viewMode === '3d') viewportEl.classList.add('is-3d');
+          else viewportEl.classList.remove('is-3d');
+        }
+        draw();
+      });
+    });
+
+    // Feature Toggles
+    if (chkSlice) {
+      chkSlice.addEventListener('change', function () {
+        state.showSlice = chkSlice.checked;
+        draw();
+      });
+    }
+
+    if (chkGhost) {
+      chkGhost.addEventListener('change', function () {
+        state.showGhost = chkGhost.checked;
+        draw();
+      });
+    }
+
+    if (chkVector) {
+      chkVector.addEventListener('change', function () {
+        state.showVector = chkVector.checked;
+        draw();
+      });
+    }
+
+    if (chkFabric) {
+      chkFabric.addEventListener('change', function () {
+        state.showFabric = chkFabric.checked;
+        draw();
+      });
+    }
 
     observeSimulationVisibility(container, function () {
       state.isVisible = true;
