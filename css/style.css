@@ -2891,3 +2891,119 @@ body.drawer-open-lock {
     font-size: 0.7rem;
   }
 }
+
+/* ==========================================================================
+   Part 05: Cross-Entropy & ML Loss Interactive Widgets
+   ========================================================================== */
+
+.ce-scenario-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.ce-scenario-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.55rem 0.85rem;
+  border-radius: 0.5rem;
+  background: var(--bg-card-subtle);
+  border: 1px solid var(--border-subtle);
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.ce-scenario-item:hover {
+  border-color: var(--border-medium);
+  background: var(--bg-surface-elevated);
+}
+
+.ce-scenario-item.active {
+  border-color: var(--color-time);
+  background: var(--color-time-glow);
+}
+
+.ce-scenario-title {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.ce-scenario-val {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--color-time);
+}
+
+.ce-token-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.ce-token-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.45rem 0.65rem;
+  border-radius: 0.5rem;
+  background: var(--bg-card-subtle);
+  border: 1px solid var(--border-subtle);
+}
+
+.ce-token-label {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 600;
+  width: 130px;
+  flex-shrink: 0;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ce-token-bar-wrap {
+  flex: 1;
+  height: 8px;
+  background: var(--slider-track);
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+}
+
+.ce-token-bar-fill {
+  height: 100%;
+  background: var(--color-time);
+  border-radius: 4px;
+  transition: width 0.15s ease;
+}
+
+.ce-token-val {
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  font-weight: 700;
+  width: 52px;
+  flex-shrink: 0;
+  text-align: right;
+  color: var(--color-time);
+  font-variant-numeric: tabular-nums;
+}
+
+.ce-token-loss {
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  width: 60px;
+  flex-shrink: 0;
+  text-align: right;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
