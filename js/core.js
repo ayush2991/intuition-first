@@ -76,13 +76,26 @@
 
   function setupRetinaCanvas(canvas) {
     var rect = canvas._cachedRect;
-    if (!rect) {
+    if (!rect || rect.width === 0 || rect.height === 0) {
       rect = canvas.getBoundingClientRect();
-      canvas._cachedRect = rect;
+      if (rect.width > 0 && rect.height > 0) {
+        canvas._cachedRect = rect;
+      }
     }
+    var w = rect.width;
+    var h = rect.height;
+    if ((!w || !h) && canvas.parentElement) {
+      var pRect = canvas.parentElement.getBoundingClientRect();
+      if (pRect.width > 0 && pRect.height > 0) {
+        w = pRect.width;
+        h = pRect.height;
+      }
+    }
+    w = w || 300;
+    h = h || 200;
     var dpr = window.devicePixelRatio || 1;
-    var targetWidth = Math.round(rect.width * dpr);
-    var targetHeight = Math.round(rect.height * dpr);
+    var targetWidth = Math.round(w * dpr);
+    var targetHeight = Math.round(h * dpr);
 
     if (canvas.width !== targetWidth || canvas.height !== targetHeight) {
       canvas.width = targetWidth;
@@ -90,7 +103,7 @@
     }
     var ctx = canvas.getContext('2d');
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    return { ctx: ctx, width: rect.width, height: rect.height, dpr: dpr };
+    return { ctx: ctx, width: w, height: h, dpr: dpr };
   }
 
   function drawLabelPill(ctx, text, x, y, options) {

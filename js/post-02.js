@@ -1717,15 +1717,17 @@
       });
     });
 
-    observeSimulationVisibility(container, function () {
-      isVisible = true;
-      if (isPlaying) runAnimation();
-    }, function () {
-      isVisible = false;
-      if (animFrameId) {
-        cancelAnimationFrame(animFrameId);
-        animFrameId = null;
-      }
+    containers.forEach(function (c) {
+      observeSimulationVisibility(c, function () {
+        isVisible = true;
+        if (isPlaying) runAnimation();
+      }, function () {
+        isVisible = false;
+        if (animFrameId) {
+          cancelAnimationFrame(animFrameId);
+          animFrameId = null;
+        }
+      });
     });
 
     registerDraw(renderAll);
@@ -1733,14 +1735,12 @@
     renderAll();
   }
 
-
-
   function initAllPost02() {
-    initWidgetDualSpeedSpacetime('widget-dual-bridge');
-    initWidgetExpandingCircles('widget-expanding-circles');
-    initWidget3DLightConeExplorer('widget-3d-light-cone');
-    initWidgetCosmicHorizon('widget-cosmic-horizon');
-    initWidgetSynthesisGrid('widget-synthesis-grid');
+    try { initWidgetDualSpeedSpacetime('widget-dual-bridge'); } catch (e) { console.error('Error in initWidgetDualSpeedSpacetime:', e); }
+    try { initWidgetExpandingCircles('widget-expanding-circles'); } catch (e) { console.error('Error in initWidgetExpandingCircles:', e); }
+    try { initWidget3DLightConeExplorer('widget-3d-light-cone'); } catch (e) { console.error('Error in initWidget3DLightConeExplorer:', e); }
+    try { initWidgetCosmicHorizon('widget-cosmic-horizon'); } catch (e) { console.error('Error in initWidgetCosmicHorizon:', e); }
+    try { initWidgetSynthesisGrid('widget-synthesis-grid'); } catch (e) { console.error('Error in initWidgetSynthesisGrid:', e); }
   }
 
   sim.initWidgetDualSpeedSpacetime = initWidgetDualSpeedSpacetime;
