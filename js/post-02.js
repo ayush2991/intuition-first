@@ -27,6 +27,8 @@
     var sliderTheta = container.querySelector('.slider-theta');
     var btnPlay = container.querySelector('.btn-play');
     var valThetaLabel = container.querySelector('.val-theta-label');
+    var elThetaReading = container.querySelector('.val-theta-reading');
+    var elBadgeThetaStatus = container.querySelector('.badge-theta-status');
 
     var presetBtns = container.querySelectorAll('.preset-btn');
 
@@ -37,8 +39,28 @@
     var playDirection = 1;
 
     function updateReadouts() {
+      var thetaRad = (thetaDeg * Math.PI) / 180;
+      var vx = Math.sin(thetaRad);
+      var phiRad = Math.atan(vx);
+      var phiDeg = (phiRad * 180) / Math.PI;
+
       if (sliderTheta) sliderTheta.value = thetaDeg.toFixed(1);
-      if (valThetaLabel) valThetaLabel.textContent = thetaDeg.toFixed(1) + '°';
+      if (valThetaLabel) valThetaLabel.textContent = 'Tilt φ: ' + phiDeg.toFixed(1) + '°';
+      if (elThetaReading) elThetaReading.innerHTML = thetaDeg.toFixed(1) + '<span>°</span>';
+      if (elBadgeThetaStatus) {
+        if (thetaDeg === 0) elBadgeThetaStatus.textContent = 'AT REST (v = 0)';
+        else if (thetaDeg >= 89.9) elBadgeThetaStatus.textContent = 'PURE LIGHT (v = c)';
+        else elBadgeThetaStatus.textContent = 'v = ' + vx.toFixed(2) + 'c';
+      }
+
+      for (var p = 0; p < presetBtns.length; p++) {
+        var pTheta = parseFloat(presetBtns[p].getAttribute('data-theta'));
+        if (Math.abs(pTheta - thetaDeg) < 1.0) {
+          presetBtns[p].classList.add('active');
+        } else {
+          presetBtns[p].classList.remove('active');
+        }
+      }
     }
 
     function drawSpeedSpace() {
@@ -165,22 +187,34 @@
       ctx.strokeStyle = colors.pillBorder;
       ctx.lineWidth = 1;
       ctx.beginPath();
+      var pillPad = 12;
+      var pillW = width - pillPad * 2;
       if (ctx.roundRect) {
-        ctx.roundRect(14, 14, width - 28, 28, 6);
+        ctx.roundRect(pillPad, 12, pillW, 26, 6);
       } else {
-        ctx.rect(14, 14, width - 28, 28);
+        ctx.rect(pillPad, 12, pillW, 26);
       }
       ctx.fill();
       ctx.stroke();
 
-      ctx.font = '600 10.5px "JetBrains Mono", monospace';
+      ctx.font = '600 ' + (width < 440 ? '9px' : '10.5px') + ' "JetBrains Mono", monospace';
       ctx.fillStyle = colors.pillText;
-      if (thetaDeg === 0) {
-        ctx.fillText('θ = 0° : 100% Motion in Time (Sitting at Rest)', 24, 32);
-      } else if (thetaDeg >= 89.9) {
-        ctx.fillText('θ = 90° : 100% Motion in Space (Speed of Light, v = c)', 24, 32);
+      if (width < 440) {
+        if (thetaDeg === 0) {
+          ctx.fillText('θ = 0° : 100% in Time (At Rest)', pillPad + 8, 28);
+        } else if (thetaDeg >= 89.9) {
+          ctx.fillText('θ = 90° : Pure Space (v = c)', pillPad + 8, 28);
+        } else {
+          ctx.fillText('θ = ' + thetaDeg.toFixed(0) + '° : v_space=' + (vx * 100).toFixed(0) + '%c, v_time=' + (vt * 100).toFixed(0) + '%c', pillPad + 8, 28);
+        }
       } else {
-        ctx.fillText('θ = ' + thetaDeg.toFixed(1) + '° : v_space = ' + (vx * 100).toFixed(1) + '%c, v_time = ' + (vt * 100).toFixed(1) + '%c', 24, 32);
+        if (thetaDeg === 0) {
+          ctx.fillText('θ = 0° : 100% Motion in Time (Sitting at Rest)', pillPad + 10, 29);
+        } else if (thetaDeg >= 89.9) {
+          ctx.fillText('θ = 90° : 100% Motion in Space (Speed of Light, v = c)', pillPad + 10, 29);
+        } else {
+          ctx.fillText('θ = ' + thetaDeg.toFixed(1) + '° : v_space = ' + (vx * 100).toFixed(1) + '%c, v_time = ' + (vt * 100).toFixed(1) + '%c', pillPad + 10, 29);
+        }
       }
     }
 
@@ -366,22 +400,34 @@
       ctx.strokeStyle = colors.pillBorder;
       ctx.lineWidth = 1;
       ctx.beginPath();
+      var pillPad = 12;
+      var pillW = width - pillPad * 2;
       if (ctx.roundRect) {
-        ctx.roundRect(14, 14, width - 28, 28, 6);
+        ctx.roundRect(pillPad, 12, pillW, 26, 6);
       } else {
-        ctx.rect(14, 14, width - 28, 28);
+        ctx.rect(pillPad, 12, pillW, 26);
       }
       ctx.fill();
       ctx.stroke();
 
-      ctx.font = '600 10.5px "JetBrains Mono", monospace';
+      ctx.font = '600 ' + (width < 440 ? '9px' : '10.5px') + ' "JetBrains Mono", monospace';
       ctx.fillStyle = colors.pillText;
-      if (thetaDeg === 0) {
-        ctx.fillText('Bob Worldline: φ = 0° (Vertical, Standing Beside Alice)', 24, 32);
-      } else if (thetaDeg >= 89.9) {
-        ctx.fillText('Bob Worldline: φ = 45.0° (Lying on Light Cone! τ = 0.00s Frozen)', 24, 32);
+      if (width < 440) {
+        if (thetaDeg === 0) {
+          ctx.fillText('Bob: φ = 0° (At Rest, τ = 100%)', pillPad + 8, 28);
+        } else if (thetaDeg >= 89.9) {
+          ctx.fillText('Bob: φ = 45° (On Light Cone, τ = 0s)', pillPad + 8, 28);
+        } else {
+          ctx.fillText('Bob: φ = ' + phiDeg.toFixed(1) + '° · Watch rate: ' + (vt * 100).toFixed(0) + '%', pillPad + 8, 28);
+        }
       } else {
-        ctx.fillText('Bob Worldline: φ = ' + phiDeg.toFixed(1) + '° · Proper time ticks run at ' + (vt * 100).toFixed(0) + '% rate', 24, 32);
+        if (thetaDeg === 0) {
+          ctx.fillText('Bob Worldline: φ = 0° (Vertical, Standing Beside Alice)', pillPad + 10, 29);
+        } else if (thetaDeg >= 89.9) {
+          ctx.fillText('Bob Worldline: φ = 45.0° (Lying on Light Cone! τ = 0.00s Frozen)', pillPad + 10, 29);
+        } else {
+          ctx.fillText('Bob Worldline: φ = ' + phiDeg.toFixed(1) + '° · Proper time ticks run at ' + (vt * 100).toFixed(0) + '% rate', pillPad + 10, 29);
+        }
       }
     }
 
@@ -804,10 +850,10 @@
       // 2. RIGHT SIDE: COORDINATE SPACETIME (PART 2)
       // ==========================================
       var rightW = w - dividerX;
-      var rPad = Math.max(16, Math.min(24, rightW * 0.12));
-      var rOx = dividerX + rPad + (rightW - rPad * 2) * 0.28;
+      var rPad = Math.max(14, Math.min(22, rightW * 0.12));
+      var rOx = dividerX + rPad + (rightW - rPad * 2) * (w < 380 ? 0.32 : 0.28);
       var rOy = h - rPad - 16;
-      var rScale = Math.min((rightW - rPad * 2) * 0.72, (h - rPad * 2 - 28));
+      var rScale = Math.min((rightW - rPad * 2) * 0.70, (h - rPad * 2 - 28));
 
       // 45° Light cone reference line
       var coneX = rOx + rScale;
@@ -890,16 +936,16 @@
       }
 
       // Mini Header Right
-      ctx.font = '700 8px "JetBrains Mono", monospace';
+      ctx.font = '700 ' + (w < 380 ? '7.5px' : '8px') + ' "JetBrains Mono", monospace';
       ctx.fillStyle = c.subtleText;
-      ctx.fillText('SPACETIME: φ = ' + data.phiDeg.toFixed(1) + '°', dividerX + 12, 16);
+      ctx.fillText('SPACETIME: φ = ' + data.phiDeg.toFixed(1) + '°', dividerX + 8, 16);
 
       // Readouts Right
-      ctx.font = '600 7.5px "JetBrains Mono", monospace';
+      ctx.font = '600 ' + (w < 380 ? '7px' : '7.5px') + ' "JetBrains Mono", monospace';
       ctx.fillStyle = c.spaceColor;
-      ctx.fillText('tan φ = ' + data.vx.toFixed(2), dividerX + 12, 28);
+      ctx.fillText('tan φ = ' + data.vx.toFixed(2), dividerX + 8, 28);
       ctx.fillStyle = c.timeColor;
-      ctx.fillText('dτ = ' + (data.properRate * 100).toFixed(0) + '% dt', dividerX + 12, 40);
+      ctx.fillText('dτ = ' + (data.properRate * 100).toFixed(0) + '% dt', dividerX + 8, 39);
     }
 
     function renderAll() {
@@ -967,7 +1013,7 @@
 
       var cx = width / 2;
       var cy = height / 2;
-      var scale = Math.min(width, height) * 0.38;
+      var scale = Math.min(width, height) * (height <= 300 ? 0.31 : 0.38);
 
       var gridStep = 0.25;
       ctx.strokeStyle = colors.gridLine;
@@ -1102,109 +1148,214 @@
       ctx.fillStyle = emerald;
       ctx.fillText('YOU: HERE & NOW (t=0)', origin.x + 12, origin.y + 4);
 
-      if (elSliceTime) elSliceTime.textContent = (sliceT >= 0 ? '+' : '') + sliceT.toFixed(2) + ' c·t';
-      if (elWaveRadius) elWaveRadius.textContent = waveR.toFixed(2) + ' light-dist';
+    var btnPlay3D = container.querySelector('.btn-play-3d');
+    var elValSliceBadge = container.querySelector('.val-slice-badge');
+    var sliceBtns = container.querySelectorAll('.preset-slice-btn');
+    var viewBtns = container.querySelectorAll('.preset-view-btn');
 
-      if (elRegionBadge) {
-        if (Math.abs(sliceT) < 0.05) {
-          elRegionBadge.textContent = 'THE PRESENT: HERE & NOW';
-          elRegionBadge.style.color = emerald;
-        } else if (sliceT > 0) {
-          elRegionBadge.textContent = 'CAUSAL FUTURE (Expanding Light Ripple: r = ct)';
-          elRegionBadge.style.color = colors.timeColor;
-        } else {
-          elRegionBadge.textContent = 'CAUSAL PAST (Converging Light: r = c|t|)';
-          elRegionBadge.style.color = colors.photonColor;
-        }
-      }
+    var isPlaying3D = false;
+    var playAnimId3D = null;
+    var playDirection3D = 1;
+
+    if (elSliceTime) elSliceTime.textContent = (sliceT >= 0 ? '+' : '') + sliceT.toFixed(2) + ' c·t';
+    if (elWaveRadius) elWaveRadius.textContent = waveR.toFixed(2);
+    if (elValSliceBadge) elValSliceBadge.textContent = (sliceT >= 0 ? '+' : '') + sliceT.toFixed(2);
+
+    if (sliderTime && !isPlaying3D && document.activeElement !== sliderTime) {
+      sliderTime.value = sliceT.toFixed(2);
     }
 
-    canvas.addEventListener('mousedown', function (e) {
-      isDragging = true;
-      lastMouseX = e.clientX;
-      lastMouseY = e.clientY;
-    });
-
-    window.addEventListener('mousemove', function (e) {
-      if (!isDragging) return;
-      var dx = e.clientX - lastMouseX;
-      var dy = e.clientY - lastMouseY;
-      lastMouseX = e.clientX;
-      lastMouseY = e.clientY;
-
-      azimuth += dx * 0.01;
-      elevation = Math.max(-0.6, Math.min(1.2, elevation + dy * 0.01));
-
-      if (sliderAzimuth) sliderAzimuth.value = azimuth.toFixed(2);
-      if (sliderElevation) sliderElevation.value = elevation.toFixed(2);
-      draw();
-    });
-
-    window.addEventListener('mouseup', function () {
-      isDragging = false;
-    });
-
-    canvas.addEventListener('touchstart', function (e) {
-      if (e.touches.length === 1) {
-        isDragging = true;
-        lastMouseX = e.touches[0].clientX;
-        lastMouseY = e.touches[0].clientY;
+    sliceBtns.forEach(function (btn) {
+      var sVal = parseFloat(btn.getAttribute('data-slice'));
+      if (Math.abs(sVal - sliceT) < 0.12) {
+        btn.classList.add('active');
+      } else {
+        btn.classList.remove('active');
       }
-    }, { passive: true });
+    });
 
-    window.addEventListener('touchmove', function (e) {
-      if (!isDragging || e.touches.length !== 1) return;
-      var dx = e.touches[0].clientX - lastMouseX;
-      var dy = e.touches[0].clientY - lastMouseY;
+    if (elRegionBadge) {
+      if (Math.abs(sliceT) < 0.05) {
+        elRegionBadge.textContent = 'THE PRESENT: HERE & NOW';
+        elRegionBadge.style.color = emerald;
+      } else if (sliceT > 0) {
+        elRegionBadge.textContent = 'CAUSAL FUTURE (Expanding Wave: r = ct)';
+        elRegionBadge.style.color = colors.timeColor;
+      } else {
+        elRegionBadge.textContent = 'CAUSAL PAST (Converging Wave: r = c|t|)';
+        elRegionBadge.style.color = colors.photonColor;
+      }
+    }
+  }
+
+  function stopPlay3D() {
+    isPlaying3D = false;
+    if (playAnimId3D) {
+      cancelAnimationFrame(playAnimId3D);
+      playAnimId3D = null;
+    }
+    if (btnPlay3D) {
+      btnPlay3D.innerHTML = '<span>▶</span><span>Auto Sweep</span>';
+    }
+  }
+
+  function startPlay3D() {
+    isPlaying3D = true;
+    if (btnPlay3D) {
+      btnPlay3D.innerHTML = '<span>⏸</span><span>Pause</span>';
+    }
+    var lastTime = performance.now();
+    function step(now) {
+      if (!isPlaying3D) return;
+      var dt = (now - lastTime) / 1000;
+      lastTime = now;
+      if (dt > 0.1) dt = 0.1;
+
+      sliceT += playDirection3D * dt * 0.45;
+      if (sliceT >= 0.95) {
+        sliceT = 0.95;
+        playDirection3D = -1;
+      } else if (sliceT <= -0.95) {
+        sliceT = -0.95;
+        playDirection3D = 1;
+      }
+      if (sliderTime) sliderTime.value = sliceT.toFixed(2);
+      draw();
+      playAnimId3D = requestAnimationFrame(step);
+    }
+    playAnimId3D = requestAnimationFrame(step);
+  }
+
+  if (btnPlay3D) {
+    btnPlay3D.addEventListener('click', function () {
+      if (isPlaying3D) stopPlay3D();
+      else startPlay3D();
+    });
+  }
+
+  sliceBtns.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var sVal = parseFloat(btn.getAttribute('data-slice'));
+      if (!isNaN(sVal)) {
+        sliceT = sVal;
+        if (sliderTime) sliderTime.value = sliceT.toFixed(2);
+        if (isPlaying3D) stopPlay3D();
+        draw();
+      }
+    });
+  });
+
+  viewBtns.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var azVal = parseFloat(btn.getAttribute('data-az'));
+      var elVal = parseFloat(btn.getAttribute('data-el'));
+      if (!isNaN(azVal) && !isNaN(elVal)) {
+        azimuth = azVal;
+        elevation = elVal;
+        if (sliderAzimuth) sliderAzimuth.value = azimuth.toFixed(2);
+        if (sliderElevation) sliderElevation.value = elevation.toFixed(2);
+        draw();
+      }
+    });
+  });
+
+  canvas.addEventListener('mousedown', function (e) {
+    isDragging = true;
+    lastMouseX = e.clientX;
+    lastMouseY = e.clientY;
+  });
+
+  window.addEventListener('mousemove', function (e) {
+    if (!isDragging) return;
+    var dx = e.clientX - lastMouseX;
+    var dy = e.clientY - lastMouseY;
+    lastMouseX = e.clientX;
+    lastMouseY = e.clientY;
+
+    azimuth += dx * 0.01;
+    elevation = Math.max(-0.6, Math.min(1.2, elevation + dy * 0.01));
+
+    if (sliderAzimuth) sliderAzimuth.value = azimuth.toFixed(2);
+    if (sliderElevation) sliderElevation.value = elevation.toFixed(2);
+    draw();
+  });
+
+  window.addEventListener('mouseup', function () {
+    isDragging = false;
+  });
+
+  canvas.addEventListener('touchstart', function (e) {
+    if (e.touches.length === 1) {
+      isDragging = true;
       lastMouseX = e.touches[0].clientX;
       lastMouseY = e.touches[0].clientY;
-
-      azimuth += dx * 0.01;
-      elevation = Math.max(-0.6, Math.min(1.2, elevation + dy * 0.01));
-      draw();
-    }, { passive: true });
-
-    window.addEventListener('touchend', function () {
-      isDragging = false;
-    });
-
-    if (sliderTime) {
-      sliderTime.addEventListener('input', function (e) {
-        sliceT = parseFloat(e.target.value);
-        draw();
-      });
     }
+  }, { passive: true });
 
-    if (sliderAzimuth) {
-      sliderAzimuth.addEventListener('input', function (e) {
-        azimuth = parseFloat(e.target.value);
-        draw();
-      });
-    }
+  window.addEventListener('touchmove', function (e) {
+    if (!isDragging || e.touches.length !== 1) return;
+    var dx = e.touches[0].clientX - lastMouseX;
+    var dy = e.touches[0].clientY - lastMouseY;
+    lastMouseX = e.touches[0].clientX;
+    lastMouseY = e.touches[0].clientY;
 
-    if (sliderElevation) {
-      sliderElevation.addEventListener('input', function (e) {
-        elevation = parseFloat(e.target.value);
-        draw();
-      });
-    }
+    azimuth += dx * 0.01;
+    elevation = Math.max(-0.6, Math.min(1.2, elevation + dy * 0.01));
 
-    if (btnReset) {
-      btnReset.addEventListener('click', function () {
-        azimuth = 0.65;
-        elevation = 0.05;
-        sliceT = 0.4;
-        if (sliderTime) sliderTime.value = 0.4;
-        if (sliderAzimuth) sliderAzimuth.value = 0.65;
-        if (sliderElevation) sliderElevation.value = 0.05;
-        draw();
-      });
-    }
-
-    registerDraw(draw);
-    window.addEventListener('resize', draw);
+    if (sliderAzimuth) sliderAzimuth.value = azimuth.toFixed(2);
+    if (sliderElevation) sliderElevation.value = elevation.toFixed(2);
     draw();
+  }, { passive: true });
+
+  window.addEventListener('touchend', function () {
+    isDragging = false;
+  });
+
+  if (sliderTime) {
+    sliderTime.addEventListener('input', function (e) {
+      sliceT = parseFloat(e.target.value);
+      if (isPlaying3D) stopPlay3D();
+      draw();
+    });
   }
+
+  if (sliderAzimuth) {
+    sliderAzimuth.addEventListener('input', function (e) {
+      azimuth = parseFloat(e.target.value);
+      draw();
+    });
+  }
+
+  if (sliderElevation) {
+    sliderElevation.addEventListener('input', function (e) {
+      elevation = parseFloat(e.target.value);
+      draw();
+    });
+  }
+
+  if (btnReset) {
+    btnReset.addEventListener('click', function () {
+      azimuth = 0.65;
+      elevation = 0.05;
+      sliceT = 0.4;
+      if (isPlaying3D) stopPlay3D();
+      if (sliderTime) sliderTime.value = 0.4;
+      if (sliderAzimuth) sliderAzimuth.value = 0.65;
+      if (sliderElevation) sliderElevation.value = 0.05;
+      draw();
+    });
+  }
+
+  observeSimulationVisibility(container, function () {
+    // visible
+  }, function () {
+    if (isPlaying3D) stopPlay3D();
+  });
+
+  registerDraw(draw);
+  window.addEventListener('resize', draw);
+  draw();
+}
 
   // SIMULATION 3: Cosmic Horizon & Human Lifespan Simulator (Split 03A Space & 03B Spacetime)
   function initWidgetCosmicHorizon(containerId) {
@@ -1223,6 +1374,9 @@
     var canvasConeList = [];
     var slidersAge = [];
     var elsAgeNum = [];
+    var elsAgeReading = [];
+    var badgesHorizonStatus = [];
+    var cardsHorizonStatus = [];
     var allPresetBtns = [];
     var btnsAutoAge = [];
 
@@ -1236,6 +1390,12 @@
       if (sa) slidersAge.push(sa);
       var an = c.querySelector('.val-age-num');
       if (an) elsAgeNum.push(an);
+      var ar = c.querySelector('.val-age-reading');
+      if (ar) elsAgeReading.push(ar);
+      var bh = c.querySelector('.badge-horizon-status');
+      if (bh) badgesHorizonStatus.push(bh);
+      var ch = c.querySelector('.clock-horizon-status-card');
+      if (ch) cardsHorizonStatus.push(ch);
       var pb = c.querySelectorAll('.preset-star');
       if (pb && pb.length) pb.forEach(function (btn) { allPresetBtns.push(btn); });
       var ba = c.querySelector('.btn-auto-age');
@@ -1273,6 +1433,33 @@
     function updateTelemetry() {
       slidersAge.forEach(function (sl) { sl.value = currentAge.toFixed(1); });
       elsAgeNum.forEach(function (el) { el.textContent = currentAge.toFixed(1) + ' yrs'; });
+      elsAgeReading.forEach(function (el) { el.innerHTML = currentAge.toFixed(1) + ' <span>yrs</span>'; });
+
+      var hasWitnessed = currentAge >= selectedStar.dist;
+      var isArrivingNow = Math.abs(currentAge - selectedStar.dist) < 1.0;
+
+      badgesHorizonStatus.forEach(function (b) {
+        if (isArrivingNow) {
+          b.textContent = selectedStar.name.toUpperCase() + ' ARRIVING NOW!';
+        } else if (hasWitnessed) {
+          b.textContent = selectedStar.name.toUpperCase() + ' WITNESSED';
+        } else if (selectedStar.dist > maxLifespan) {
+          b.textContent = selectedStar.name.toUpperCase() + ' (ELSEWHERE)';
+        } else {
+          var waitYrs = (selectedStar.dist - currentAge).toFixed(0);
+          b.textContent = selectedStar.name.toUpperCase() + ' (' + waitYrs + 'y AWAY)';
+        }
+      });
+
+      cardsHorizonStatus.forEach(function (card) {
+        if (selectedStar.dist > maxLifespan && !hasWitnessed) {
+          card.className = 'clock-card danger clock-horizon-status-card';
+        } else if (hasWitnessed) {
+          card.className = 'clock-card emerald clock-horizon-status-card';
+        } else {
+          card.className = 'clock-card cyan clock-horizon-status-card';
+        }
+      });
 
       // Update preset chips active state across all containers
       allPresetBtns.forEach(function (btn) {
@@ -1396,12 +1583,17 @@
               ctx.stroke();
               ctx.setLineDash([]);
             }
+            var alignRight = (sx > w - 85);
+            var textX = alignRight ? (sx - 8) : (sx + 8);
+            ctx.textAlign = alignRight ? 'right' : 'left';
+
             ctx.font = '700 9px "JetBrains Mono", monospace';
             ctx.fillStyle = colors.photonColor;
-            ctx.fillText(star.label, sx + 8, sy - 2);
+            ctx.fillText(star.label, textX, sy - 2);
             ctx.font = '500 8px "JetBrains Mono", monospace';
             ctx.fillStyle = emerald;
-            ctx.fillText('✓ Reached at ' + star.dist.toFixed(1) + 'y', sx + 8, sy + 8);
+            ctx.fillText('✓ Reached at ' + star.dist.toFixed(1) + 'y', textX, sy + 8);
+            ctx.textAlign = 'left';
           } else {
             // Not yet reached: dimmed / waiting
             ctx.fillStyle = star.dist > maxLifespan ? danger : (colors.isLight ? '#94a3b8' : '#64748b');
@@ -1417,15 +1609,20 @@
               ctx.stroke();
             }
 
+            var alignRightNotReached = (sx > w - 85);
+            var textXNotReached = alignRightNotReached ? (sx - 8) : (sx + 8);
+            ctx.textAlign = alignRightNotReached ? 'right' : 'left';
+
             ctx.font = (isSelected ? '700' : '600') + ' 8.5px "JetBrains Mono", monospace';
             ctx.fillStyle = isSelected ? (star.dist > maxLifespan ? danger : colors.textPrimary) : colors.subtleText;
-            ctx.fillText(star.label, sx + 8, sy + 3);
+            ctx.fillText(star.label, textXNotReached, sy + 3);
 
             if (star.dist > maxLifespan) {
               ctx.font = '500 7.5px "JetBrains Mono", monospace';
               ctx.fillStyle = danger;
-              ctx.fillText('Elsewhere (Takes ' + star.dist.toFixed(0) + 'y)', sx + 8, sy + 13);
+              ctx.fillText('Elsewhere (' + star.dist.toFixed(0) + 'y)', textXNotReached, sy + 13);
             }
+            ctx.textAlign = 'left';
           }
         }
       });
@@ -1499,7 +1696,7 @@
         // Axis tick marks (Space: ±40, ±80, ±100 ly)
         ctx.font = '500 8px "JetBrains Mono", monospace';
         ctx.fillStyle = colors.subtleText;
-        var spaceTicks = [-100, -80, -40, 40, 80, 100];
+        var spaceTicks = w < 440 ? [-80, -40, 40] : [-100, -80, -40, 40, 80, 100];
         for (var st = 0; st < spaceTicks.length; st++) {
           var tickX = ox + spaceTicks[st] * scaleX;
           ctx.strokeStyle = colors.axisLine;
@@ -1507,7 +1704,7 @@
           ctx.moveTo(tickX, oy - 3);
           ctx.lineTo(tickX, oy + 3);
           ctx.stroke();
-          ctx.fillText(spaceTicks[st], tickX - (Math.abs(spaceTicks[st]) >= 100 ? 12 : 8), oy + 14);
+          ctx.fillText(spaceTicks[st], tickX - (Math.abs(spaceTicks[st]) >= 100 ? 12 : 8), oy + 12);
         }
 
         // Time ticks: 20, 40, 60, 80, 100 yr
@@ -1621,12 +1818,19 @@
             drawGlowingDot(ctx, ox, arrivalY, star.dist > maxLifespan ? danger : emerald, 5);
             ctx.font = '700 8.5px "JetBrains Mono", monospace';
             ctx.fillStyle = star.dist > maxLifespan ? danger : emerald;
-            ctx.fillText('Arrival: t=' + star.dist.toFixed(0) + 'y' + (star.dist > maxLifespan ? ' (After Death)' : ''), ox - (star.dist > maxLifespan ? 140 : 95), arrivalY - 4);
+            var arrTxt = 'Arrival: t=' + star.dist.toFixed(0) + 'y' + (star.dist > maxLifespan ? ' (After Death)' : '');
+            var arrW = ctx.measureText(arrTxt).width;
+            var arrX = Math.max(8, ox - arrW - 8);
+            ctx.fillText(arrTxt, arrX, arrivalY - 4);
           }
 
+          var displayName = star.name === 'Proxima Centauri' ? 'Proxima' : star.name;
           ctx.font = (isSelected ? '700' : '500') + ' 8px "JetBrains Mono", monospace';
           ctx.fillStyle = isSelected ? (star.dist > maxLifespan ? danger : colors.photonColor) : colors.subtleText;
-          ctx.fillText(star.name, starX - 12, oy + 24);
+          var starNameW = ctx.measureText(displayName).width;
+          var starNameX = Math.min(w - padRight - starNameW + 10, Math.max(ox + 4, starX - starNameW / 2));
+          var starNameY = oy + (w < 440 ? (s % 2 === 0 ? 21 : 28) : 24);
+          ctx.fillText(displayName, starNameX, starNameY);
         }
       });
     }
@@ -1821,7 +2025,11 @@
       ctx.stroke();
 
       // Axis ticks and labels
-      var ticks = [
+      var ticks = (w < 440) ? [
+        { frac: 0.0, label: 'Sun (0)', sub: 't=0s' },
+        { frac: 0.5, label: '75M km', sub: '250s' },
+        { frac: 1.0, label: 'Earth (1 AU)', sub: '500s (8m)' }
+      ] : [
         { frac: 0.0, label: '0 km (Sun)', sub: 't = 0s' },
         { frac: 0.5, label: '75M km', sub: 't = 250s' },
         { frac: 1.0, label: '150M km (Earth)', sub: 't = 500s (8m 20s)' }
@@ -1834,11 +2042,11 @@
         ctx.lineTo(tx, cy + 4);
         ctx.stroke();
 
-        ctx.font = '600 8px "JetBrains Mono", monospace';
+        ctx.font = '600 ' + (w < 440 ? '7.5px' : '8px') + ' "JetBrains Mono", monospace';
         ctx.fillStyle = colors.subtleText;
         ctx.textAlign = 'center';
         ctx.fillText(tk.label, tx, cy + 16);
-        ctx.font = '500 7px "JetBrains Mono", monospace';
+        ctx.font = '500 ' + (w < 440 ? '6.5px' : '7px') + ' "JetBrains Mono", monospace';
         ctx.fillText(tk.sub, tx, cy + 26);
       });
 
@@ -2346,11 +2554,587 @@
     renderAll();
   }
 
+  // ILLUSTRATION 02c: Peering Down the Past Light Cone (Dual View)
+  function initWidgetPastLightCone(containerId) {
+    var container = document.getElementById(containerId || 'widget-past-light-cone');
+    if (!container) return;
+
+    var canvasSpace = container.querySelector('.canvas-past-space');
+    var canvasSpacetime = container.querySelector('.canvas-past-spacetime');
+    if (!canvasSpace && !canvasSpacetime) return;
+
+    var sliderDist = container.querySelector('.slider-past-dist');
+    var elPastTime = container.querySelector('.val-past-time');
+    var elStarName = container.querySelector('.val-past-star-name');
+    var badgeStatus = container.querySelector('.badge-past-status');
+    var clockCard = container.querySelector('.clock-past-status-card');
+    var btnPlay = container.querySelector('.btn-play-past');
+    var presetBtns = container.querySelectorAll('.preset-past-star');
+
+    var currentDist = 25.0; // Light-years (0 to 110)
+    var isPlaying = false;
+    var isVisible = true;
+    var animFrameId = null;
+    var starlightPhase = 0;
+    var tourTargets = [4.2, 8.6, 25.0, 79.0, 104.0];
+    var tourIndex = 2; // start at Vega
+    var tourPauseTime = 0;
+
+    var starsData = [
+      { name: 'Proxima Centauri', shortName: 'Proxima', dist: 4.2, color: '#f97316' },
+      { name: 'Sirius', shortName: 'Sirius', dist: 8.6, color: '#38bdf8' },
+      { name: 'Vega', shortName: 'Vega', dist: 25.0, color: '#60a5fa' },
+      { name: 'Regulus', shortName: 'Regulus', dist: 79.0, color: '#a78bfa' },
+      { name: 'Alkaid', shortName: 'Alkaid', dist: 104.0, color: '#c084fc' }
+    ];
+
+    function getClosestStar(d) {
+      var closest = starsData[0];
+      var minDist = 999;
+      starsData.forEach(function (s) {
+        var diff = Math.abs(s.dist - d);
+        if (diff < minDist) {
+          minDist = diff;
+          closest = s;
+        }
+      });
+      return { star: closest, diff: minDist };
+    }
+
+    function updateControls() {
+      if (sliderDist) sliderDist.value = currentDist;
+      if (elPastTime) elPastTime.innerHTML = currentDist.toFixed(1) + ' <span>yrs</span>';
+
+      var match = getClosestStar(currentDist);
+      if (elStarName) {
+        if (match.diff < 1.8) {
+          elStarName.textContent = match.star.shortName + ' · ' + currentDist.toFixed(1) + ' ly';
+        } else {
+          elStarName.textContent = currentDist.toFixed(1) + ' ly · Custom Target';
+        }
+      }
+
+      if (badgeStatus) {
+        if (match.diff < 1.8) {
+          badgeStatus.textContent = match.star.shortName.toUpperCase() + ' DISPATCH';
+        } else {
+          badgeStatus.textContent = 'PAST CONE INTERSECTION';
+        }
+      }
+
+      presetBtns.forEach(function (btn) {
+        var dVal = parseFloat(btn.getAttribute('data-dist'));
+        if (Math.abs(dVal - currentDist) < 1.8) {
+          btn.classList.add('active');
+        } else {
+          btn.classList.remove('active');
+        }
+      });
+    }
+
+    // ── 1. Physical Stellar Track (Left Column) ───────────────────────────
+    function drawSpace() {
+      if (!canvasSpace) return;
+      var colors = getThemeColors();
+      var ret = setupRetinaCanvas(canvasSpace);
+      var ctx = ret.ctx, w = ret.width, h = ret.height;
+      ctx.clearRect(0, 0, w, h);
+
+      var emerald = colors.isLight ? '#059669' : '#10b981';
+      var danger = colors.isLight ? '#dc2626' : '#f87171';
+      var photonCol = colors.photonColor || (colors.isLight ? '#b45309' : '#fbbf24');
+
+      var padLeft = 55;
+      var padRight = 50;
+      var cy = h * 0.48;
+
+      var earthX = padLeft;
+      var endX = w - padRight;
+      var trackDist = endX - earthX;
+      var maxTrackLy = 110.0;
+
+      drawGrid(ctx, earthX, cy, w, h, 34);
+
+      // Main Stellar Distance Track Line
+      ctx.strokeStyle = colors.axisLine;
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(earthX - 25, cy);
+      ctx.lineTo(endX + 30, cy);
+      ctx.stroke();
+
+      // Axis ticks and labels (0, 25, 50, 75, 100 ly)
+      [0, 25, 50, 75, 100].forEach(function (dLy) {
+        var tx = earthX + (dLy / maxTrackLy) * trackDist;
+        ctx.strokeStyle = colors.axisLine;
+        ctx.beginPath();
+        ctx.moveTo(tx, cy - 4);
+        ctx.lineTo(tx, cy + 4);
+        ctx.stroke();
+
+        ctx.font = '600 7.5px "JetBrains Mono", monospace';
+        ctx.fillStyle = colors.subtleText;
+        ctx.textAlign = 'center';
+        ctx.fillText(dLy + (dLy === 0 ? ' (Earth)' : ' ly'), tx, cy + 16);
+      });
+
+      // Target Star Position
+      var targetX = earthX + (currentDist / maxTrackLy) * trackDist;
+      var match = getClosestStar(currentDist);
+
+      // Starlight In Transit (Light in Flight / Lag Region)
+      if (targetX > earthX) {
+        ctx.fillStyle = colors.isLight ? 'rgba(245, 158, 11, 0.08)' : 'rgba(245, 158, 11, 0.12)';
+        ctx.fillRect(earthX, cy - 65, targetX - earthX, 130);
+
+        ctx.strokeStyle = colors.isLight ? 'rgba(245, 158, 11, 0.35)' : 'rgba(245, 158, 11, 0.45)';
+        ctx.lineWidth = 1.2;
+        ctx.setLineDash([4, 4]);
+        var beamOffsets = [-32, -16, 0, 16, 32];
+        beamOffsets.forEach(function (bo) {
+          ctx.beginPath();
+          ctx.moveTo(earthX, cy + bo);
+          ctx.lineTo(targetX, cy + bo);
+          ctx.stroke();
+        });
+        ctx.setLineDash([]);
+
+        if (targetX - earthX > 75) {
+          var midX = (earthX + targetX) / 2;
+          ctx.font = '600 8px "JetBrains Mono", monospace';
+          ctx.fillStyle = colors.isLight ? '#b45309' : '#fbbf24';
+          ctx.textAlign = 'center';
+          ctx.fillText('LIGHT IN FLIGHT (' + currentDist.toFixed(1) + ' YRS EN ROUTE)', midX, cy - 44);
+          ctx.font = '500 7px "JetBrains Mono", monospace';
+          ctx.fillText('The Elsewhere: Star has evolved for ' + currentDist.toFixed(1) + ' yrs unseen', midX, cy - 32);
+        }
+
+        // Animated photon packets traveling inward toward Earth
+        for (var pIdx = 0; pIdx < 3; pIdx++) {
+          var frac = (starlightPhase + pIdx / 3.0) % 1.0;
+          var pX = targetX + (earthX - targetX) * frac;
+          drawGlowingDot(ctx, pX, cy, photonCol, 3.5);
+        }
+      }
+
+      // Incoming Wavefront hitting Earth
+      ctx.strokeStyle = photonCol;
+      ctx.lineWidth = 2.2;
+      ctx.shadowColor = photonCol;
+      ctx.shadowBlur = 6;
+      ctx.beginPath();
+      ctx.arc(earthX, cy, 22, -Math.PI / 3, Math.PI / 3);
+      ctx.stroke();
+      ctx.shadowBlur = 0;
+
+      // Draw all stars as background markers
+      starsData.forEach(function (s) {
+        var sx = earthX + (s.dist / maxTrackLy) * trackDist;
+        var isTarget = Math.abs(s.dist - currentDist) < 1.8;
+
+        drawGlowingDot(ctx, sx, cy, isTarget ? photonCol : s.color, isTarget ? 6.5 : 4);
+
+        ctx.font = (isTarget ? '700 8.5px' : '500 7px') + ' "JetBrains Mono", monospace';
+        ctx.fillStyle = isTarget ? colors.textPrimary : colors.subtleText;
+        ctx.textAlign = 'center';
+        ctx.fillText(s.shortName, sx, cy - (isTarget ? 18 : 12));
+      });
+
+      // Earth Observer
+      drawGlowingDot(ctx, earthX, cy, colors.timeColor, 7);
+      drawLabelPill(ctx, 'Earth Observer (Now)', earthX, cy + 34, {
+        textColor: colors.timeColor,
+        font: 'bold 8.5px "JetBrains Mono", monospace'
+      });
+
+      // Target Pill
+      var targetLabelText = (match.diff < 1.8 ? match.star.shortName : 'Target') + ' (' + currentDist.toFixed(1) + ' ly)';
+      var targetPillY = (targetX - earthX < 90) ? cy + 50 : cy + 34;
+      drawLabelPill(ctx, targetLabelText, targetX, targetPillY, {
+        textColor: photonCol,
+        font: 'bold 8.5px "JetBrains Mono", monospace'
+      });
+    }
+
+    // ── 2. Coordinate Spacetime Canvas (Right Column, x vs ct) ────────────
+    function drawSpacetime() {
+      if (!canvasSpacetime) return;
+      var colors = getThemeColors();
+      var ret = setupRetinaCanvas(canvasSpacetime);
+      var ctx = ret.ctx, w = ret.width, h = ret.height;
+      ctx.clearRect(0, 0, w, h);
+
+      var emerald = colors.isLight ? '#059669' : '#10b981';
+      var danger = colors.isLight ? '#dc2626' : '#f87171';
+      var photonCol = colors.photonColor || (colors.isLight ? '#b45309' : '#fbbf24');
+
+      var padLeft = 45;
+      var padRight = 30;
+      var padTop = 26;
+      var padBottom = 34;
+
+      var ox = padLeft + 15;
+      var oy = padTop + 24; // Earth at t = 0 (Present / Now)
+      var plotW = w - ox - padRight;
+      var plotH = h - padBottom - oy;
+
+      // Enforce exact 45° slope for light: Δx == Δ(ct)
+      var maxConeDist = 115; // light-years & years
+      var scale = Math.min((plotW * 0.88) / maxConeDist, (plotH * 0.90) / maxConeDist);
+      var scaleX = scale;
+      var scaleY = scale;
+
+      drawGrid(ctx, ox, oy, w, h, 34);
+
+      // ── Axes ──────────────────────────────────────────────────────────
+      ctx.strokeStyle = colors.axisLine;
+      ctx.lineWidth = 1.5;
+
+      // Horizontal space axis (+x) along Present line (t = 0)
+      ctx.beginPath();
+      ctx.moveTo(ox - 10, oy);
+      ctx.lineTo(w - padRight + 10, oy);
+      ctx.stroke();
+
+      // Vertical time axis (+ct / -ct)
+      ctx.beginPath();
+      ctx.moveTo(ox, oy - 14);
+      ctx.lineTo(ox, oy + maxConeDist * scaleY + 12);
+      ctx.stroke();
+
+      // Arrowheads
+      ctx.fillStyle = colors.axisArrow;
+      // Space +x arrow
+      ctx.beginPath();
+      ctx.moveTo(w - padRight + 10, oy - 3);
+      ctx.lineTo(w - padRight + 16, oy);
+      ctx.lineTo(w - padRight + 10, oy + 3);
+      ctx.fill();
+
+      // Time +ct arrow pointing UP
+      ctx.beginPath();
+      ctx.moveTo(ox - 3, oy - 14);
+      ctx.lineTo(ox, oy - 20);
+      ctx.lineTo(ox + 3, oy - 14);
+      ctx.fill();
+
+      // Axis labels
+      ctx.font = '700 9px "JetBrains Mono", monospace';
+      ctx.fillStyle = colors.spaceColor;
+      ctx.fillText('+x (ly)', w - padRight - 8, oy + 16);
+      ctx.fillStyle = colors.timeColor;
+      ctx.fillText('ct (Time · Years)', ox + 8, padTop - 8);
+
+      // Space ticks (25, 50, 75, 100 ly)
+      ctx.font = '500 7.5px "JetBrains Mono", monospace';
+      ctx.fillStyle = colors.subtleText;
+      [25, 50, 75, 100].forEach(function (sx) {
+        var tx = ox + sx * scaleX;
+        ctx.strokeStyle = colors.axisLine;
+        ctx.beginPath();
+        ctx.moveTo(tx, oy - 3);
+        ctx.lineTo(tx, oy + 3);
+        ctx.stroke();
+        ctx.textAlign = 'center';
+        ctx.fillText(sx + ' ly', tx, oy + 14);
+      });
+
+      // Time ticks: Now (0), -25y, -50y, -75y, -100y
+      ctx.textAlign = 'right';
+      ctx.fillText('Now', ox - 6, oy + 3);
+
+      [25, 50, 75, 100].forEach(function (st) {
+        var ty = oy + st * scaleY;
+        ctx.strokeStyle = colors.axisLine;
+        ctx.beginPath();
+        ctx.moveTo(ox - 3, ty);
+        ctx.lineTo(ox + 3, ty);
+        ctx.stroke();
+        ctx.fillText('-' + st + 'y', ox - 6, ty + 3);
+      });
+
+      // ── Shaded Regions ────────────────────────────────────────────────
+      var coneBottomX = ox + maxConeDist * scaleX;
+      var coneBottomY = oy + maxConeDist * scaleY;
+
+      // 1. Shaded Elsewhere (Triangle between t=0, right edge, and 45° diagonal)
+      ctx.fillStyle = colors.isLight ? 'rgba(245, 158, 11, 0.08)' : 'rgba(245, 158, 11, 0.12)';
+      ctx.beginPath();
+      ctx.moveTo(ox, oy);
+      ctx.lineTo(coneBottomX, oy);
+      ctx.lineTo(coneBottomX, coneBottomY);
+      ctx.closePath();
+      ctx.fill();
+
+      // Label inside Elsewhere
+      ctx.font = '600 8px "JetBrains Mono", monospace';
+      ctx.fillStyle = colors.isLight ? '#b45309' : '#fbbf24';
+      ctx.textAlign = 'left';
+      ctx.fillText('THE ELSEWHERE (Causally Severed Today)', ox + 32 * scaleX, oy + 18 * scaleY);
+      ctx.font = '500 7px "JetBrains Mono", monospace';
+      ctx.fillStyle = colors.subtleText;
+      ctx.fillText('Unseen history in transit (cannot affect Earth yet)', ox + 32 * scaleX, oy + 26 * scaleY);
+
+      // 2. Shaded Observable Past (Inside past light cone, x < ct_lookback)
+      ctx.fillStyle = colors.isLight ? 'rgba(2, 132, 199, 0.07)' : 'rgba(56, 189, 248, 0.08)';
+      ctx.beginPath();
+      ctx.moveTo(ox, oy);
+      ctx.lineTo(ox, coneBottomY);
+      ctx.lineTo(coneBottomX, coneBottomY);
+      ctx.closePath();
+      ctx.fill();
+
+      // Label inside Observable Past
+      ctx.font = '600 8px "JetBrains Mono", monospace';
+      ctx.fillStyle = colors.isLight ? 'rgba(2, 132, 199, 0.85)' : 'rgba(56, 189, 248, 0.85)';
+      ctx.fillText('OBSERVABLE PAST', ox + 14 * scaleX, oy + 70 * scaleY);
+      ctx.font = '500 7px "JetBrains Mono", monospace';
+      ctx.fillStyle = colors.subtleText;
+      ctx.fillText('Past signals that have reached Earth', ox + 14 * scaleX, oy + 78 * scaleY);
+
+      // ── 45° Past Light Cone Boundary Line ─────────────────────────────
+      ctx.strokeStyle = photonCol;
+      ctx.lineWidth = 2.2;
+      ctx.beginPath();
+      ctx.moveTo(ox, oy);
+      ctx.lineTo(coneBottomX, coneBottomY);
+      ctx.stroke();
+
+      ctx.font = '600 7.5px "JetBrains Mono", monospace';
+      ctx.fillStyle = photonCol;
+      ctx.textAlign = 'left';
+      ctx.fillText('45° Past Light Cone (v = c)', ox + 52 * scaleX, oy + 52 * scaleY - 6);
+
+      // ── Star Worldlines ───────────────────────────────────────────────
+      starsData.forEach(function (s, sIdx) {
+        var sx = ox + s.dist * scaleX;
+        var sy_emit = oy + s.dist * scaleY;
+        var isTarget = Math.abs(s.dist - currentDist) < 1.8;
+
+        // Past worldline (below cone intersection)
+        ctx.strokeStyle = colors.isLight ? 'rgba(148, 163, 184, 0.4)' : 'rgba(100, 116, 139, 0.35)';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(sx, coneBottomY);
+        ctx.lineTo(sx, sy_emit);
+        ctx.stroke();
+
+        // Elsewhere worldline (between cone intersection and t=0)
+        ctx.strokeStyle = colors.isLight ? 'rgba(234, 88, 12, 0.45)' : 'rgba(251, 146, 60, 0.45)';
+        ctx.lineWidth = 1.25;
+        ctx.setLineDash([3, 3]);
+        ctx.beginPath();
+        ctx.moveTo(sx, sy_emit);
+        ctx.lineTo(sx, oy);
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        // Small node on Present line (t = 0)
+        ctx.fillStyle = colors.subtleText;
+        ctx.beginPath();
+        ctx.arc(sx, oy, 2.5, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Small node on 45° boundary (emission event)
+        drawGlowingDot(ctx, sx, sy_emit, isTarget ? photonCol : s.color, isTarget ? 6.5 : 3.5);
+
+        // Star label at top
+        ctx.font = (isTarget ? '700 8px' : '500 7px') + ' "JetBrains Mono", monospace';
+        ctx.fillStyle = isTarget ? colors.textPrimary : colors.subtleText;
+        ctx.textAlign = 'center';
+        var starLabelY = (w < 440 && sIdx % 2 === 1) ? oy - 16 : oy - 8;
+        ctx.fillText(s.shortName, sx, starLabelY);
+      });
+
+      // ── Target Star Highlights & Incoming Photon Ray ──────────────────
+      var targetPlotX = ox + currentDist * scaleX;
+      var targetEmitY = oy + currentDist * scaleY;
+      var match = getClosestStar(currentDist);
+
+      // Highlighted target worldline (dashed lag line)
+      ctx.strokeStyle = danger;
+      ctx.lineWidth = 2;
+      ctx.setLineDash([4, 3]);
+      ctx.beginPath();
+      ctx.moveTo(targetPlotX, targetEmitY);
+      ctx.lineTo(targetPlotX, oy);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      // Present node (in Elsewhere)
+      drawGlowingDot(ctx, targetPlotX, oy, danger, 5);
+
+      // Incoming Photon Path along 45° boundary (from emission to Earth)
+      ctx.strokeStyle = photonCol;
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(targetPlotX, targetEmitY);
+      ctx.lineTo(ox, oy);
+      ctx.stroke();
+
+      // Arrowhead at Earth pointing inward
+      ctx.fillStyle = photonCol;
+      ctx.beginPath();
+      ctx.moveTo(ox + 8, oy + 8);
+      ctx.lineTo(ox + 1, oy + 7);
+      ctx.lineTo(ox + 7, oy + 1);
+      ctx.closePath();
+      ctx.fill();
+
+      // Animated photons streaming along 45° vector toward Earth
+      for (var aIdx = 0; aIdx < 3; aIdx++) {
+        var fracA = (starlightPhase + aIdx / 3.0) % 1.0;
+        var animX = targetPlotX + (ox - targetPlotX) * fracA;
+        var animY = targetEmitY + (oy - targetEmitY) * fracA;
+        drawGlowingDot(ctx, animX, animY, photonCol, 3.5);
+      }
+
+      // Emission event node on 45° cone
+      drawGlowingDot(ctx, targetPlotX, targetEmitY, photonCol, 7);
+      ctx.strokeStyle = photonCol;
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.arc(targetPlotX, targetEmitY, 11, 0, Math.PI * 2);
+      ctx.stroke();
+
+      // In-Canvas Callout Pills
+      var dispatchPillText = (match.diff < 1.8 ? match.star.shortName : 'Target') + ' Dispatch: ' + currentDist.toFixed(1) + 'y ago';
+      drawLabelPill(ctx, dispatchPillText, targetPlotX - 25, targetEmitY + 16, {
+        textColor: photonCol,
+        font: 'bold 8.5px "JetBrains Mono", monospace'
+      });
+
+      var lagPillText = (match.diff < 1.8 ? match.star.shortName : 'Star') + ' Today (Lag: ' + currentDist.toFixed(1) + 'y)';
+      var lagPillY = (targetPlotX - ox < 90) ? oy - 32 : oy - 22;
+      drawLabelPill(ctx, lagPillText, targetPlotX, lagPillY, {
+        textColor: danger,
+        font: 'bold 8px "JetBrains Mono", monospace'
+      });
+
+      // Earth Observer Node at (ox, oy)
+      drawGlowingDot(ctx, ox, oy, colors.timeColor, 7);
+      drawLabelPill(ctx, 'Earth Observer (Now)', ox + 22, oy - 14, {
+        textColor: colors.timeColor,
+        font: 'bold 8.5px "JetBrains Mono", monospace'
+      });
+
+      // Distance & Lookback Projections
+      ctx.strokeStyle = colors.isLight ? 'rgba(100, 116, 139, 0.4)' : 'rgba(148, 163, 184, 0.4)';
+      ctx.lineWidth = 1;
+      ctx.setLineDash([3, 3]);
+      // Horizontal drop to time axis
+      ctx.beginPath();
+      ctx.moveTo(ox, targetEmitY);
+      ctx.lineTo(targetPlotX, targetEmitY);
+      ctx.stroke();
+      // Vertical drop from space axis
+      ctx.beginPath();
+      ctx.moveTo(targetPlotX, oy);
+      ctx.lineTo(targetPlotX, targetEmitY);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      ctx.font = '500 7px "JetBrains Mono", monospace';
+      ctx.fillStyle = colors.spaceColor;
+      ctx.textAlign = 'center';
+      ctx.fillText('Δx = ' + currentDist.toFixed(1) + ' ly', (ox + targetPlotX) / 2, targetEmitY - 4);
+
+      ctx.fillStyle = colors.timeColor;
+      ctx.textAlign = 'right';
+      ctx.fillText('Δt = ' + currentDist.toFixed(1) + ' y', ox - 6, (oy + targetEmitY) / 2);
+    }
+
+    function renderAll() {
+      updateControls();
+      drawSpace();
+      drawSpacetime();
+    }
+
+    // ── Interaction Listeners ─────────────────────────────────────────────
+    if (sliderDist) {
+      sliderDist.addEventListener('input', function (e) {
+        currentDist = parseFloat(e.target.value);
+        if (isPlaying) stopTour();
+        renderAll();
+      });
+    }
+
+    presetBtns.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var d = parseFloat(btn.getAttribute('data-dist'));
+        if (!isNaN(d)) {
+          currentDist = d;
+          if (isPlaying) stopTour();
+          renderAll();
+        }
+      });
+    });
+
+    function stopTour() {
+      isPlaying = false;
+      if (btnPlay) {
+        btnPlay.innerHTML = '<span>▶</span><span>Auto Tour</span>';
+      }
+    }
+
+    function startTour() {
+      isPlaying = true;
+      tourPauseTime = 0;
+      if (btnPlay) {
+        btnPlay.innerHTML = '<span>⏸</span><span>Pause</span>';
+      }
+    }
+
+    if (btnPlay) {
+      btnPlay.addEventListener('click', function () {
+        if (isPlaying) stopTour();
+        else startTour();
+      });
+    }
+
+    // Continuous animation loop for streaming starlight and smooth tour
+    function animLoop() {
+      if (isVisible) {
+        starlightPhase = (starlightPhase + 0.015) % 1.0;
+
+        if (isPlaying) {
+          var targetVal = tourTargets[tourIndex];
+          var distDiff = targetVal - currentDist;
+
+          if (Math.abs(distDiff) > 0.3) {
+            currentDist += distDiff * 0.045;
+          } else {
+            currentDist = targetVal;
+            tourPauseTime += 1;
+            if (tourPauseTime > 80) { // ~1.3 second pause on each star
+              tourPauseTime = 0;
+              tourIndex = (tourIndex + 1) % tourTargets.length;
+            }
+          }
+        }
+
+        renderAll();
+      }
+      animFrameId = requestAnimationFrame(animLoop);
+    }
+
+    observeSimulationVisibility(container, function () {
+      isVisible = true;
+    }, function () {
+      isVisible = false;
+    });
+
+    registerDraw(renderAll);
+    window.addEventListener('resize', renderAll);
+    animFrameId = requestAnimationFrame(animLoop);
+  }
+
   function initAllPost02() {
     try { initWidgetDualSpeedSpacetime('widget-dual-bridge'); } catch (e) { console.error('Error in initWidgetDualSpeedSpacetime:', e); }
     try { initWidgetExpandingCircles('widget-expanding-circles'); } catch (e) { console.error('Error in initWidgetExpandingCircles:', e); }
     try { initWidget3DLightConeExplorer('widget-3d-light-cone'); } catch (e) { console.error('Error in initWidget3DLightConeExplorer:', e); }
     try { initWidgetSunDelay('widget-sun-delay'); } catch (e) { console.error('Error in initWidgetSunDelay:', e); }
+    try { initWidgetPastLightCone('widget-past-light-cone'); } catch (e) { console.error('Error in initWidgetPastLightCone:', e); }
     try { initWidgetCosmicHorizon('widget-cosmic-horizon'); } catch (e) { console.error('Error in initWidgetCosmicHorizon:', e); }
     try { initWidgetSynthesisGrid('widget-synthesis-grid'); } catch (e) { console.error('Error in initWidgetSynthesisGrid:', e); }
   }
@@ -2359,6 +3143,7 @@
   sim.initWidgetExpandingCircles = initWidgetExpandingCircles;
   sim.initWidget3DLightConeExplorer = initWidget3DLightConeExplorer;
   sim.initWidgetSunDelay = initWidgetSunDelay;
+  sim.initWidgetPastLightCone = initWidgetPastLightCone;
   sim.initWidgetCosmicHorizon = initWidgetCosmicHorizon;
   sim.initWidgetSynthesisGrid = initWidgetSynthesisGrid;
   sim.initAllPost02 = initAllPost02;

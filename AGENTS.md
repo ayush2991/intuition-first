@@ -220,6 +220,7 @@ Every interactive simulation follows a standardized visual hierarchy, tactile co
 | **01c** | `widget-synthesis-grid` | `initWidgetSynthesisGrid` | 2×2 synthesis grid bridging Velocity Space ($v_x, v_t$) to Spacetime ($\phi$) across 4 archetypes |
 | **02** | `widget-3d-light-cone` | `initWidget3DLightConeExplorer` | Full 3D rotatable Light Cone volume ($x_1, x_2, ct$) with dynamic Now-Slice |
 | **02b** | `widget-sun-delay` | `initWidgetSunDelay` | The 8-Minute Sun: 500-second causality lag, expanding wavefront at $c$, Elsewhere vs Causal Future |
+| **02c** | `widget-past-light-cone` | `initWidgetPastLightCone` | Peering down the past light cone: Lookback time, ancient starlight dispatches, Elsewhere lag, and 45° boundary |
 | **03** | `widget-cosmic-horizon` | `initWidgetCosmicHorizon` | Coordinated dual-view: Physical stellar radar bubble vs $(x, ct)$ past light cone |
 
 #### Part 3: The Spacetime Loaf & Length Contraction (`posts/03-spacetime-loaf.html` / `js/post-03.js`)
