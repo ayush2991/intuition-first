@@ -168,33 +168,32 @@
         </div>
         <!-- Controls Deck -->
         <div class="artifact-controls artifact-controls-deck">
-          <div class="controls-strip" style="padding: 0; gap: 0.85rem;">
-            <div class="clock-card amber clock-theta-status-card"
-              style="margin: 0; padding: 0.4rem 0.75rem; display: flex; align-items: center; gap: 0.65rem; white-space: nowrap; flex-shrink: 0;">
-              <span class="clock-label" style="font-size: 0.68rem;">Speed Angle</span>
-              <span class="clock-time val-theta-reading" style="font-size: 1.1rem; line-height: 1;">0.0<span>°</span></span>
+          <div class="controls-strip">
+            <div class="clock-card amber clock-theta-status-card">
+              <span class="clock-label">Speed Angle</span>
+              <span class="clock-time val-theta-reading">0.0<span>°</span></span>
               <span class="clock-badge badge-theta-status">v = 0.00c</span>
             </div>
-            <div class="control-item" style="flex: 1; min-width: 160px;">
+            <div class="control-item">
               <div class="control-header">
                 <span>Speed Angle θ (0° → 90°)</span>
                 <span class="control-val amber val-theta-label">Tilt φ: 0.0°</span>
               </div>
               <input type="range" class="range-slider amber slider-theta" min="0" max="90" step="0.5" value="0">
             </div>
-            <button class="btn-primary btn-play" style="flex-shrink: 0;">
+            <button class="btn-primary btn-play">
               <span>▶</span><span>Auto Sweep</span>
             </button>
           </div>
 
-          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; border-top: 1px solid var(--border-subtle); padding-top: 0.5rem;">
+          <div class="controls-preset-row">
             <div class="preset-chips">
               <button class="chip-btn preset-btn active" data-theta="0">0° (At Rest)</button>
               <button class="chip-btn preset-btn" data-theta="30">30° (v = 0.50c)</button>
               <button class="chip-btn preset-btn" data-theta="60">60° (v = 0.866c)</button>
               <button class="chip-btn preset-btn" data-theta="90">90° (Pure Light c)</button>
             </div>
-            <span style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-muted);">
+            <span class="preset-tag">
               Geometric Bridge: tan φ = sin θ
             </span>
           </div>
@@ -594,31 +593,30 @@
 
         <!-- Controls Deck -->
         <div class="artifact-controls artifact-controls-deck">
-          <div class="controls-strip" style="padding: 0; gap: 0.85rem;">
-            <div class="clock-card cyan clock-status-card"
-              style="margin: 0; padding: 0.4rem 0.75rem; display: flex; align-items: center; gap: 0.65rem; white-space: nowrap; flex-shrink: 0;">
-              <span class="clock-label" style="font-size: 0.68rem;">Elapsed Time</span>
-              <span class="clock-time val-sun-time" style="font-size: 1.1rem; line-height: 1;">250 <span>s</span></span>
+          <div class="controls-strip">
+            <div class="clock-card cyan clock-status-card">
+              <span class="clock-label">Elapsed Time</span>
+              <span class="clock-time val-sun-time">250 <span>s</span></span>
               <span class="clock-badge badge-sun-status">ELSEWHERE</span>
             </div>
-            <div class="control-item" style="flex: 1; min-width: 160px;">
+            <div class="control-item">
               <div class="control-header">
                 <span>Time Since Vanish (0 to 600s)</span>
                 <span class="control-val cyan val-time-clock">4m 10s</span>
               </div>
               <input type="range" class="range-slider slider-sun-time" min="0" max="600" step="2" value="250">
             </div>
-            <button class="btn-primary btn-play-sun" style="flex-shrink: 0;"><span>▶</span><span>Auto Play</span></button>
+            <button class="btn-primary btn-play-sun"><span>▶</span><span>Auto Play</span></button>
           </div>
 
-          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; border-top: 1px solid var(--border-subtle); padding-top: 0.5rem;">
+          <div class="controls-preset-row">
             <div class="preset-chips">
               <button class="chip-btn preset-sun-time" data-time="0">0s: Sun Vanishes</button>
               <button class="chip-btn preset-sun-time active" data-time="250">250s: Mid-Transit</button>
               <button class="chip-btn preset-sun-time" data-time="500">500s: Earth Hit (8m20s)</button>
               <button class="chip-btn preset-sun-time" data-time="600">600s: Causal Future</button>
             </div>
-            <span style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-muted);">
+            <span class="preset-tag">
               Distance to Earth: 1 AU (500 light-seconds)
             </span>
           </div>
@@ -669,24 +667,23 @@
 
         <!-- Controls Deck -->
         <div class="artifact-controls artifact-controls-deck">
-          <div class="controls-strip" style="padding: 0; gap: 0.85rem;">
-            <div class="clock-card cyan clock-past-status-card"
-              style="margin: 0; padding: 0.4rem 0.75rem; display: flex; align-items: center; gap: 0.65rem; white-space: nowrap; flex-shrink: 0;">
-              <span class="clock-label" style="font-size: 0.68rem;">Lookback Delay</span>
-              <span class="clock-time val-past-time" style="font-size: 1.1rem; line-height: 1;">25.0 <span>yrs</span></span>
+          <div class="controls-strip">
+            <div class="clock-card cyan clock-past-status-card">
+              <span class="clock-label">Lookback Delay</span>
+              <span class="clock-time val-past-time">25.0 <span>yrs</span></span>
               <span class="clock-badge badge-past-status">VEGA DISPATCH</span>
             </div>
-            <div class="control-item" style="flex: 1; min-width: 160px;">
+            <div class="control-item">
               <div class="control-header">
                 <span>Target Distance x (0 to 110 ly)</span>
                 <span class="control-val cyan val-past-star-name">Vega · 25.0 ly</span>
               </div>
               <input type="range" class="range-slider slider-past-dist" min="0" max="110" step="0.5" value="25">
             </div>
-            <button class="btn-primary btn-play-past" style="flex-shrink: 0;"><span>▶</span><span>Auto Tour</span></button>
+            <button class="btn-primary btn-play-past"><span>▶</span><span>Auto Tour</span></button>
           </div>
 
-          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; border-top: 1px solid var(--border-subtle); padding-top: 0.5rem;">
+          <div class="controls-preset-row">
             <div class="preset-chips">
               <button class="chip-btn preset-past-star" data-dist="4.2" data-name="Proxima Centauri">Proxima (4.2 ly)</button>
               <button class="chip-btn preset-past-star" data-dist="8.6" data-name="Sirius">Sirius (8.6 ly)</button>
@@ -694,7 +691,7 @@
               <button class="chip-btn preset-past-star" data-dist="79" data-name="Regulus">Regulus (79 ly)</button>
               <button class="chip-btn preset-past-star" data-dist="104" data-name="Alkaid">Alkaid (104 ly)</button>
             </div>
-            <span style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-muted);">
+            <span class="preset-tag">
               Invariant: c = 1 ly / yr (Lookback Time = Spatial Distance)
             </span>
           </div>
@@ -748,24 +745,23 @@
 
         <!-- Controls Deck -->
         <div class="artifact-controls artifact-controls-deck">
-          <div class="controls-strip" style="padding: 0; gap: 0.85rem;">
-            <div class="clock-card cyan clock-horizon-status-card"
-              style="margin: 0; padding: 0.4rem 0.75rem; display: flex; align-items: center; gap: 0.65rem; white-space: nowrap; flex-shrink: 0;">
-              <span class="clock-label" style="font-size: 0.68rem;">Lifespan Age</span>
-              <span class="clock-time val-age-reading" style="font-size: 1.1rem; line-height: 1;">25.0 <span>yrs</span></span>
+          <div class="controls-strip">
+            <div class="clock-card cyan clock-horizon-status-card">
+              <span class="clock-label">Lifespan Age</span>
+              <span class="clock-time val-age-reading">25.0 <span>yrs</span></span>
               <span class="clock-badge badge-horizon-status">VEGA WITNESSED</span>
             </div>
-            <div class="control-item" style="flex: 1; min-width: 160px;">
+            <div class="control-item">
               <div class="control-header">
                 <span>Scrub Your Age (0 to 80 Years)</span>
                 <span class="range-val val-age-num control-val cyan">25.0 yrs</span>
               </div>
               <input type="range" class="range-slider slider-lifespan-age" min="0" max="80" step="0.5" value="25">
             </div>
-            <button class="btn-primary btn-auto-age" style="flex-shrink: 0;"><span>▶</span><span>Simulate Lifespan</span></button>
+            <button class="btn-primary btn-auto-age"><span>▶</span><span>Simulate Lifespan</span></button>
           </div>
 
-          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; border-top: 1px solid var(--border-subtle); padding-top: 0.5rem;">
+          <div class="controls-preset-row">
             <div class="preset-chips">
               <button class="chip-btn preset-star" data-dist="0.000016" data-name="The Sun">Sun (8.3m)</button>
               <button class="chip-btn preset-star" data-dist="4.2" data-name="Proxima Centauri">Proxima (4.2 ly)</button>
@@ -774,7 +770,7 @@
               <button class="chip-btn preset-star" data-dist="79" data-name="Regulus">Regulus (79 ly)</button>
               <button class="chip-btn preset-star" data-dist="104" data-name="Alkaid">Alkaid (104 ly)</button>
             </div>
-            <span style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-muted);">
+            <span class="preset-tag">
               Causal Horizon: Radius r = c · Age (1 ly / yr)
             </span>
           </div>

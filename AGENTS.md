@@ -7,6 +7,7 @@
 ### Core Architectural Invariants
 - **100% Static & Zero Build Step**: No npm, webpack, vite, or bundlers. Every page runs directly via `file://` or GitHub Pages.
 - **Single Source of Truth**:
+  - Design system specification: `DESIGN_SYSTEM.md` (authoritative specification for colors, typography, UI components, and canvas rendering patterns)
   - Global styles: `css/style.css`
   - Universal runtime utilities & theme engine: `js/core.js`
   - Modular essay simulation engines: `js/post-01.js`, `js/post-02.js`, `js/post-03.js`, `js/post-04.js`, etc.
@@ -147,15 +148,23 @@ Every interactive simulation follows a standardized visual hierarchy, tactile co
 8. **Vector Tip Convention — Arrowheads vs Glowing Dots**:
    - **Velocity Space canvases** (`.canvas-vel`): Terminate every vector with a filled triangular **arrowhead**. Do NOT draw a `drawGlowingDot` at the vector tip — the arrowhead is the sole terminator. Draw arrowheads *after* any other elements so they are never painted over.
    - **Position Map canvases** (`.canvas-map`): Use `drawGlowingDot` at the tip to mark the current position of a physical object (car, observer, etc.). Do NOT add arrowheads — position traces are paths, not free vectors.
-9. **Single-Row Controls Strip — Maximum Compactness**: The `.artifact-controls` panel must collapse all interactive elements into **one horizontal line**. Never stack controls into multiple rows when a single row suffices.
-   - **Use the `.controls-strip` modifier class** alongside `.artifact-controls` — do NOT use inline `flex-direction: row` since inline styles have no media query support and will overflow on mobile.
-   - **Desktop (> 640px)**: `.controls-strip` enforces `flex-direction: row; align-items: center; gap: 1rem; padding: 0.65rem 1.25rem` — all items on one line.
-   - **Mobile (≤ 640px)**: `.controls-strip` automatically switches to `flex-direction: column; align-items: stretch` so items stack cleanly without horizontal overflow.
-   - **Clock reading inline**: Label, live time value, and rate badge all on one line inside the clock card — no stacked rows. Use `display: flex; align-items: center; gap: 0.65rem` on the card, `font-size: 1.1rem` for the time value.
-   - **Slider fills remaining space**: `flex: 1; min-width: 160px` so it expands to fill the gap between the clock card and the play button.
-   - **Play button pinned right**: `flex-shrink: 0` keeps it from collapsing.
-   - **Drop redundant text**: Remove `clock-subtext` paragraphs and any math badges that duplicate what is already annotated on the canvas.
-   - **Reference implementation**: `widget-stationary` (`posts/01-motion-and-time.html`, `#widget-stationary`).
+9. **Single-Row Controls Strip — Maximum Compactness**: The primary controls panel must collapse all interactive elements into **one horizontal line**. Never stack controls into multiple rows when a single row suffices.
+   - **Standalone Flex Container**: `.controls-strip` must explicitly define `display: flex; flex-direction: row; align-items: center; gap: 1rem; padding: 0.65rem 1.25rem;` in `css/style.css`. Never rely on `.artifact-controls` to provide `display: flex`, as `.controls-strip` is often nested inside `.artifact-controls-deck` when secondary toolbars are present. Without explicit `display: flex;`, nested divs default to `display: block` and stack vertically into 3 rows.
+   - **Zero Inline Style Pollution**: Standardize child sizing in `css/style.css` rather than writing repetitive inline styles in HTML:
+     - `.controls-strip .clock-card`: `flex-shrink: 0; white-space: nowrap; display: flex; align-items: center; gap: 0.65rem;`
+     - `.controls-strip .control-item`: `flex: 1; min-width: 160px;` (expands to fill the space between clock and play button).
+     - `.controls-strip button[class*="btn-play"], .controls-strip .btn-auto-age, .controls-strip .btn-primary`: `flex-shrink: 0;` (pinned right).
+     - *Bonus*: This allows JS dynamic theme toggles (e.g. `clockCard.className = 'clock-card cyan ...'`) to run cleanly without risking inline style collisions.
+   - **Dual-Tier Controls Architecture (`.artifact-controls-deck` + `.controls-preset-row`)**:
+     - When a simulation includes both continuous scrubbers and milestone preset chips:
+       - **Row 1**: `<div class="controls-strip">` — [ Clock Card ] [ Slider (flex: 1) ] [ ▶ Auto Play ] all on one horizontal line.
+       - **Row 2**: `<div class="controls-preset-row">` — [ Preset Chips ] on left, [ Invariant Tag `.preset-tag` ] on right, separated by a subtle top border (`border-top: 1px solid var(--border-subtle)`).
+     - This keeps the entire controls area under ~85px total height on desktop (saving ~150px of vertical sprawl).
+   - **Desktop (> 640px)**: All primary controls on one line; preset row neatly aligned underneath.
+   - **Mobile (≤ 640px)**: `.controls-strip` automatically switches to `flex-direction: column; align-items: stretch` with 100% width and 40px touch targets; `.controls-preset-row` wraps cleanly without clipping or horizontal overflow.
+   - **Reference implementations**:
+     - Single-row baseline: `widget-stationary` (`posts/01-motion-and-time.html`, `#widget-stationary`).
+     - Dual-tier deck with presets: `widget-sun-delay` (`posts/02-light-cone.html`, `#widget-sun-delay`).
 10. **Dual-View Coordinate Bridging (`.comparison-grid`)**:
     - When introducing an abstract causal structure (such as the *Elsewhere*, past light cones, or signal delays), pair physical intuition and spacetime geometry side by side:
       - **Left Panel (Physical Space Track / Radar)**: Familiar spatial distances (km, AU, light-years), spherical wavefronts propagating outward at speed $c$, and concrete physical observer states (daylight vs. darkness, orbit stability vs. tangential drift).
