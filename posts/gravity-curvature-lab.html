@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Curved Spacetime & Geodesic Fall · Interactive Workbench · Intuition First</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <meta name="description"
+    content="Interactive simulation suite exploring how mass distorts the fabric of spacetime and why an apple falls along a curved future.">
+  <script>
+    (function () {
+      var isDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+    })();
+  </script>
+  <style>
+    /* Workbench-specific styling tweaks */
+    .snapshot-deck {
+      margin-top: 1.25rem;
+    }
+    .snapshot-strip-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.75rem;
+      width: 100%;
+    }
+    @media (max-width: 900px) {
+      .snapshot-strip-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    @media (max-width: 500px) {
+      .snapshot-strip-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .snapshot-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-canvas);
+      border-radius: 0.625rem;
+      padding: 0.6rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .snapshot-card:hover {
+      border-color: var(--color-time);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    .snapshot-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 700;
+    }
+    .snapshot-canvas-wrap {
+      width: 100%;
+      height: 140px;
+      position: relative;
+      background: var(--bg-canvas);
+      border-radius: 0.375rem;
+      overflow: hidden;
+    }
+    .snapshot-canvas-wrap canvas {
+      width: 100% !important;
+      height: 100% !important;
+      display: block;
+    }
+    .snapshot-card-footer {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      color: var(--text-muted);
+      display: flex;
+      justify-content: space-between;
+    }
+    .toggle-row {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+      flex-wrap: wrap;
+      padding: 0.5rem 0.75rem;
+      background: var(--bg-card-subtle);
+      border-radius: 0.5rem;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+    }
+    .toggle-label {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      cursor: pointer;
+      user-select: none;
+      color: var(--text-secondary);
+    }
+    .toggle-label input[type="checkbox"] {
+      cursor: pointer;
+      accent-color: var(--color-time);
+    }
+    /* 2x2 Trajectory Matrix Styles */
+    .trajectory-grid-2x2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+      padding: 1rem;
+    }
+    @media (max-width: 820px) {
+      .trajectory-grid-2x2 {
+        grid-template-columns: 1fr;
+      }
+    }
+    .trajectory-panel-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-canvas);
+      border-radius: 0.75rem;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+    .trajectory-panel-card:hover {
+      border-color: var(--color-time);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    }
+    .trajectory-panel-header {
+      padding: 0.65rem 0.9rem;
+      background: var(--bg-card-subtle);
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+    .trajectory-panel-canvas-wrap {
+      width: 100%;
+      height: 260px;
+      position: relative;
+      background: var(--bg-canvas);
+    }
+    .trajectory-panel-canvas-wrap canvas {
+      width: 100% !important;
+      height: 100% !important;
+      display: block;
+    }
+    .trajectory-panel-footer {
+      padding: 0.55rem 0.85rem;
+      background: var(--bg-card-subtle);
+      border-top: 1px solid var(--border-subtle);
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: var(--text-secondary);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="reading-progress-bar" id="reading-progress"></div>
+
+  <!-- Top Navigation -->
+  <nav class="site-nav">
+    <div class="site-nav-inner">
+      <a href="../index.html" class="brand-link">
+        <div class="brand-badge">IF</div>
+        <div>
+          <span class="brand-title">INTUITION FIRST</span>
+          <span class="brand-tag">SIMULATION LAB</span>
+        </div>
+      </a>
+      <div class="nav-links">
+        <a href="03-spacetime-loaf.html">← Part 3: Spacetime Loaf</a>
+        <a href="../index.html">All Essays</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Article Body -->
+  <main class="wide-reading-container">
+
+    <!-- Header -->
+    <header class="article-header">
+      <div class="category-tag">Simulation Workbench · General Relativity</div>
+      <h1 class="article-title">The Geometry of Curvature: How Mass Warps Spacetime</h1>
+      <p class="article-subtitle">
+        Building directly from the four-dimensional spacetime loaf: visual thought experiments and interactive simulations
+        demonstrating why free fall is straight motion through a bent temporal fabric.
+      </p>
+      <div class="article-meta">
+        <span>By Aayush Agarwal</span>
+        <span>•</span>
+        <span>Interactive Visualization Suite</span>
+        <span>•</span>
+        <span>Interactive Controls</span>
+      </div>
+    </header>
+
+    <article class="editorial-prose">
+      <p>
+        In <a href="03-spacetime-loaf.html" style="color:var(--color-time); font-weight:600; text-decoration:underline;">Part 3: The Angle of “Now”</a>,
+        we visualized the entire universe as a rigid, crystalline four-dimensional loaf. In that pristine geometric block,
+        objects sitting completely still traced straight, vertical lines rising purely through time.
+      </p>
+      <p>
+        Below are the interactive simulations designed to unveil how the introduction of mass bends the spacetime grid,
+        and why an apple dropped next to the Earth falls without feeling any downward force whatsoever.
+      </p>
+
+      <!-- =================================================================== -->
+      <!-- SECTION 1: THE FLAT BASELINE -->
+      <!-- =================================================================== -->
+      <h2>1. The Pristine Fabric: Two Observers at Rest with Zero Mass</h2>
+      <p>
+        Let us begin by imagining two familiar entities: the Earth and an apple hovering ten meters away in a two-dimensional
+        spacetime sheet (one spatial axis <span class="math-badge">x</span> and one temporal axis <span class="math-badge">t</span>).
+        Before introducing gravity, we make a deliberate simplification: <em>we assume both objects have zero mass</em>.
+      </p>
+      <p>
+        Because neither object possesses mass, the spacetime grid remains completely flat and orthogonal. As time unfolds
+        from <span class="math-badge">t = 0</span> to <span class="math-badge">t = 3</span>, neither entity moves across space.
+        Their histories form two perfectly parallel, straight vertical lines through time. Parallel straight lines on a flat
+        grid never converge.
+      </p>
+
+      <!-- WIDGET 1: FLAT BASELINE -->
+      <div id="widget-flat-spacetime-baseline" class="interactive-artifact artifact-wide">
+        <div class="artifact-header">
+          <div>
+            <div class="artifact-badge">SIMULATION 01 · THE PRISTINE FABRIC: ZERO-MASS WORLDLINES</div>
+          </div>
+        </div>
+
+        <div class="canvas-viewport">
+          <canvas style="height: 380px;"></canvas>
+        </div>
+
+        <!-- Telemetry row -->
+        <div class="twin-clocks-panel">
+          <div class="clock-card amber">
+            <div class="clock-meta">
+              <span class="clock-label">Temporal Evolution</span>
+              <span class="clock-badge">Linear Clock</span>
+            </div>
+            <div class="clock-time readout-time">1.20 s</div>
+            <p class="clock-subtext">Both entities advance at the cosmic speed of light through time.</p>
+          </div>
+          <div class="clock-card cyan">
+            <div class="clock-meta">
+              <span class="clock-label">Spatial Gap (Earth to Apple)</span>
+              <span class="clock-badge">Fixed Metric</span>
+            </div>
+            <div class="clock-time readout-separation" style="color:var(--color-invariant);">8.0 m</div>
+            <p class="clock-subtext">Zero mass = zero curvature. Worldlines remain forever parallel.</p>
+          </div>
+        </div>
+
+        <!-- Controls -->
+        <div class="artifact-controls artifact-controls-deck">
+          <div class="controls-strip">
+            <div class="control-item" style="flex: 1;">
+              <div class="control-header">
+                <span class="control-label">Spacetime Slice (Time t)</span>
+                <span class="control-value readout-time">1.20 s</span>
+              </div>
+              <input type="range" class="range-slider slider-time" min="0" max="3" step="0.02" value="1.2">
+            </div>
+            <button class="btn-play" style="flex-shrink: 0;">
+              <span>▶</span><span>Auto Play</span>
+            </button>
+            <button class="btn-secondary btn-reset" style="flex-shrink: 0;">
+              <span>↺</span><span>Reset</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="formula-card">
+        <div class="formula-card-header">
+          <span class="formula-tag">The Flat Invariant</span>
+        </div>
+        <div class="formula-body">
+          <em>dx</em> / <em>dt</em> = 0 &emsp;&implies;&emsp; Δ<em>x</em>(<em>t</em>) = <em>x</em><sub>apple</sub> − <em>x</em><sub>earth</sub> = Constant
+        </div>
+        <div class="formula-note">
+          Without mass, spacetime geometry is Euclidean. Objects at rest remain at rest; their worldlines are parallel straight lines.
+        </div>
+      </div>
+
+      <!-- =================================================================== -->
+      <!-- SECTION 2: MASS WARPS SPACETIME -->
+      <!-- =================================================================== -->
+      <h2>2. The Imprint of Mass: Earth Distorting the Spacetime Fabric</h2>
+      <p>
+        Now, we bestow mass upon the Earth. Einstein’s central breakthrough reveals that mass does not reach across empty space
+        with an invisible tether; rather, <em>mass tells spacetime how to curve</em>.
+      </p>
+      <p>
+        In the simulation below, watch how the two-dimensional spacetime grid deforms around the Earth’s worldtube.
+        Lines of constant space bow inward toward the planet, while lines of constant time sag downward (reflecting gravitational
+        time dilation: clocks tick slightly slower near the planetary surface).
+      </p>
+      <p>
+        Notice how Earth travels along its worldline from <span class="math-badge">t = 0</span> through <span class="math-badge">t = 1, 2, 3</span>.
+        Below the main simulation, the <strong>4-Panel Snapshot Strip</strong> isolates each temporal milestone. Click any
+        snapshot card to immediately jump the spacetime slice to that instant.
+      </p>
+
+      <!-- WIDGET 2: EARTH WARPS SPACETIME -->
+      <div id="widget-earth-warps-spacetime" class="interactive-artifact artifact-wide">
+        <div class="artifact-header">
+          <div>
+            <div class="artifact-badge">SIMULATION 02 · MASS DISTORTS THE FABRIC: EARTH THROUGH TIME</div>
+          </div>
+        </div>
+
+        <div class="canvas-viewport">
+          <canvas class="main-canvas" style="height: 420px;"></canvas>
+        </div>
+
+        <!-- Telemetry -->
+        <div class="twin-clocks-panel">
+          <div class="clock-card amber">
+            <div class="clock-meta">
+              <span class="clock-label">Current Spacetime Instant</span>
+              <span class="clock-badge">Coordinate Time</span>
+            </div>
+            <div class="clock-time readout-time">1.50 s</div>
+            <p class="clock-subtext">The frontier of elapsed time as Earth advances through the block loaf.</p>
+          </div>
+          <div class="clock-card cyan">
+            <div class="clock-meta">
+              <span class="clock-label">Curvature Intensity</span>
+              <span class="clock-badge readout-curvature">100% Curvature</span>
+            </div>
+            <div class="clock-time readout-mass" style="color:var(--color-time);">9.25 × 10²⁴ kg</div>
+            <p class="clock-subtext">Metric deformation strength governing the warp in surrounding spacetime grid lines.</p>
+          </div>
+        </div>
+
+        <!-- Controls Deck -->
+        <div class="artifact-controls artifact-controls-deck">
+          <!-- Row 1: Scrubbers -->
+          <div class="controls-strip">
+            <div class="control-item" style="flex: 1.2;">
+              <div class="control-header">
+                <span class="control-label">Spacetime Slice (t)</span>
+                <span class="control-value readout-time">1.50 s</span>
+              </div>
+              <input type="range" class="range-slider slider-time" min="0" max="3" step="0.02" value="1.5">
+            </div>
+
+            <div class="control-item" style="flex: 1;">
+              <div class="control-header">
+                <span class="control-label">Earth Mass (M)</span>
+                <span class="control-value readout-curvature">100% Curvature</span>
+              </div>
+              <input type="range" class="range-slider slider-mass" min="0" max="2.0" step="0.05" value="1.0">
+            </div>
+
+            <button class="btn-play" style="flex-shrink: 0;">
+              <span>▶</span><span>Auto Play</span>
+            </button>
+          </div>
+
+          <!-- Row 2: Preset Chips -->
+          <div class="controls-preset-row">
+            <div class="controls-preset-chips">
+              <span style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-muted); align-self: center; margin-right: 0.25rem;">Milestone Slices:</span>
+              <button class="chip preset-time-chip" data-time="0.0">t = 0.0 s</button>
+              <button class="chip preset-time-chip" data-time="1.0">t = 1.0 s</button>
+              <button class="chip preset-time-chip" data-time="2.0">t = 2.0 s</button>
+              <button class="chip preset-time-chip" data-time="3.0">t = 3.0 s</button>
+            </div>
+            <span class="controls-preset-tag">Riemannian Metric Warp</span>
+          </div>
+        </div>
+
+        <!-- 4-PANEL SNAPSHOT STRIP -->
+        <div class="snapshot-deck">
+          <div style="font-family: var(--font-mono); font-size: 0.75rem; font-weight: 700; color: var(--text-secondary); margin-bottom: 0.5rem; display: flex; align-items: center; justify-content: space-between;">
+            <span>PROGRESSION SNAPSHOTS (CLICK TO JUMP)</span>
+            <span style="color: var(--text-muted); font-weight: 400;">t = 0 → t = 3</span>
+          </div>
+
+          <div class="snapshot-strip-grid">
+            <!-- Panel 0 -->
+            <div class="snapshot-card" data-time="0.0">
+              <div class="snapshot-card-header">
+                <span style="color: var(--color-time);">SNAPSHOT 1</span>
+                <span>t = 0.0 s</span>
+              </div>
+              <div class="snapshot-canvas-wrap">
+                <canvas></canvas>
+              </div>
+              <div class="snapshot-card-footer">
+                <span>Initial Slice</span>
+                <span>Seed Warp</span>
+              </div>
+            </div>
+
+            <!-- Panel 1 -->
+            <div class="snapshot-card" data-time="1.0">
+              <div class="snapshot-card-header">
+                <span style="color: var(--color-time);">SNAPSHOT 2</span>
+                <span>t = 1.0 s</span>
+              </div>
+              <div class="snapshot-canvas-wrap">
+                <canvas></canvas>
+              </div>
+              <div class="snapshot-card-footer">
+                <span>Worldtube Rises</span>
+                <span>Well Formed</span>
+              </div>
+            </div>
+
+            <!-- Panel 2 -->
+            <div class="snapshot-card" data-time="2.0">
+              <div class="snapshot-card-header">
+                <span style="color: var(--color-time);">SNAPSHOT 3</span>
+                <span>t = 2.0 s</span>
+              </div>
+              <div class="snapshot-canvas-wrap">
+                <canvas></canvas>
+              </div>
+              <div class="snapshot-card-footer">
+                <span>Deep Channel</span>
+                <span>Grid Sag</span>
+              </div>
+            </div>
+
+            <!-- Panel 3 -->
+            <div class="snapshot-card" data-time="3.0">
+              <div class="snapshot-card-header">
+                <span style="color: var(--color-time);">SNAPSHOT 4</span>
+                <span>t = 3.0 s</span>
+              </div>
+              <div class="snapshot-canvas-wrap">
+                <canvas></canvas>
+              </div>
+              <div class="snapshot-card-footer">
+                <span>Continuous Loaf</span>
+                <span>Steady State</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- =================================================================== -->
+      <!-- SECTION 3: THE FALLING APPLE -->
+      <!-- =================================================================== -->
+      <h2>3. Straight Ahead into a Curved Future: The Falling Apple</h2>
+      <p>
+        Now we bring both elements together in the exact geometry from Simulation 02: the Earth's massive worldtube in the center
+        (occupying <span class="math-badge">x = 5.7 → 9.3</span>), and an apple placed at rest on the grid line at <span class="math-badge">x = 4.0</span>.
+      </p>
+      <p>
+        In flat spacetime (Simulation 01), an object at rest moves <strong>strictly straight up</strong> through time along a vertical line (<span class="math-badge">x = const</span>).
+        Watch what happens in Earth's curved fabric:
+      </p>
+      <ul>
+        <li><strong>At Release (t = 0), the Apple Points Straight Up:</strong> Because the apple is released from rest (<span class="math-badge">v = 0</span>), its local heading initially points straight up into the future, exactly tangent to the flat path.</li>
+        <li><strong>Riding the Fabric's Curved Track:</strong> As time unfolds, the space grid line at <span class="math-badge">x = 4.0</span> bows inward toward Earth. The apple simply moves straight ahead along this curved grid line.</li>
+        <li><strong>Impact at 2.48 Seconds:</strong> At exactly <span class="math-badge">t = 2.48 s</span>, the apple's curved worldline crashes into the Earth's left worldtube boundary (<span class="math-badge">x = 5.7</span>).</li>
+        <li><strong>Weightlessness vs. Surface Push:</strong> Throughout the fall, an accelerometer on the apple reads <span class="math-badge">0.00 m/s²</span>—true weightlessness. Only at <span class="math-badge">t = 2.48 s</span>, when the Earth's surface interrupts its geodesic, does the accelerometer jump to <span class="math-badge">+9.80 m/s²</span>.</li>
+      </ul>
+
+      <!-- WIDGET 3: APPLE IN CURVED SPACETIME -->
+      <div id="widget-apple-curved-future" class="interactive-artifact artifact-wide">
+        <div class="artifact-header">
+          <div>
+            <div class="artifact-badge">SIMULATION 03 · THE FALLING APPLE: STRAIGHT MOTION INTO A CURVED FUTURE</div>
+          </div>
+        </div>
+
+        <div class="canvas-viewport">
+          <canvas style="height: 460px;"></canvas>
+        </div>
+
+        <!-- Telemetry -->
+        <div class="twin-clocks-panel">
+          <div class="clock-card amber">
+            <div class="clock-meta">
+              <span class="clock-label">Distance to Earth Worldtube</span>
+              <span class="clock-badge">Spatial Gap</span>
+            </div>
+            <div class="clock-time readout-distance">1.70 m</div>
+            <p class="clock-subtext">Spatial gap to Earth's surface (x = 5.7m). Crashes at t = 2.48s.</p>
+          </div>
+          <div class="clock-card cyan">
+            <div class="clock-meta">
+              <span class="clock-label">Apple's Accelerometer</span>
+              <span class="clock-badge">Proper Acceleration</span>
+            </div>
+            <div class="clock-time readout-accel">0.00 m/s² (Pure Weightless Free Fall)</div>
+            <p class="clock-subtext">Zero force felt while falling! Only jumps when the surface pushes up.</p>
+          </div>
+        </div>
+
+        <!-- Controls Deck -->
+        <div class="artifact-controls artifact-controls-deck">
+          <!-- Row 1: Primary Scrubbers -->
+          <div class="controls-strip">
+            <div class="control-item" style="flex: 1.5;">
+              <div class="control-header">
+                <span class="control-label">Spacetime Slice (t)</span>
+                <span class="control-value readout-time">1.20 s</span>
+              </div>
+              <input type="range" class="range-slider slider-time" min="0" max="3" step="0.02" value="1.2">
+            </div>
+
+            <button class="btn-play" style="flex-shrink: 0;">
+              <span>▶</span><span>Auto Play</span>
+            </button>
+            <button class="btn-secondary btn-reset" style="flex-shrink: 0;">
+              <span>↺</span><span>Reset</span>
+            </button>
+          </div>
+
+          <!-- Row 2: Milestone Preset Chips & Metric Tag -->
+          <div class="controls-preset-row">
+            <div class="controls-preset-chips">
+              <span style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-muted); align-self: center; margin-right: 0.25rem;">Milestone Slices:</span>
+              <button class="chip preset-apple-chip" data-time="0.0">t = 0.0 s (Release)</button>
+              <button class="chip preset-apple-chip" data-time="1.2">t = 1.2 s (Mid-Fall)</button>
+              <button class="chip preset-apple-chip" data-time="2.48">t = 2.48 s (Crash Event)</button>
+              <button class="chip preset-apple-chip" data-time="3.0">t = 3.0 s (Resting)</button>
+            </div>
+            <span class="controls-preset-tag">Deflection from Straight Up: <strong class="readout-deflection" style="color:var(--color-invariant);">0.00 m</strong></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="formula-card">
+        <div class="formula-card-header">
+          <span class="formula-tag">The Geodesic Insight</span>
+        </div>
+        <div class="formula-body">
+          <em>d</em>²<em>x</em> / <em>dτ</em>² + Γ<sup><em>x</em></sup><sub>00</sub> (<em>cdt</em> / <em>dτ</em>)² = 0 &emsp;&implies;&emsp; <em>x</em>(<em>t</em>) = <em>x</em>₀ − ½ <em>g t</em>²
+        </div>
+        <div class="formula-note">
+          The apple does not accelerate because of a pulling force; it accelerates because it travels along the straightest possible path (geodesic) through a fabric where time sags toward mass.
+        </div>
+      </div>
+
+      <!-- =================================================================== -->
+      <!-- SECTION 4: THE SPECTRUM OF MOTION (2x2 SPACETIME MATRIX) -->
+      <!-- =================================================================== -->
+      <h2>4. The Spectrum of Motion: 4 Paths Through the Curved Fabric</h2>
+      <p>
+        The falling apple is merely one single chapter in a grander geometric story. In each scenario below, the Earth's
+        worldtube in the center (<span class="math-badge">x = 5.7 → 9.3</span>) warps the surrounding spacetime fabric in the
+        exact same manner: space lines bow inward, and time lines sag downward.
+      </p>
+      <p>
+        In flat spacetime, an object's speed simply sets the slope of its straight line (<span class="math-badge">tan φ = v/c</span>).
+        In curved spacetime, that initial heading guides the traveler into different regions of the bent fabric:
+      </p>
+
+      <!-- WIDGET 4: 2x2 SPACETIME MATRIX -->
+      <div id="widget-trajectory-matrix" class="interactive-artifact artifact-wide">
+        <div class="artifact-header">
+          <div>
+            <div class="artifact-badge">SIMULATION 04 · THE SPECTRUM OF MOTION: 4 MANIFESTATIONS OF CURVED SPACETIME</div>
+          </div>
+        </div>
+
+        <!-- 2x2 Grid Container -->
+        <div class="trajectory-grid-2x2">
+          <!-- Panel 1: Direct Fall / Crash -->
+          <div class="trajectory-panel-card" data-panel="crash">
+            <div class="trajectory-panel-header">
+              <span style="color: var(--color-danger);">1. THE DIRECT CRASH (THE APPLE)</span>
+              <span class="panel-status-badge" style="color: var(--color-danger); font-size: 0.68rem;">v₀ = 0.0 m/s · At Rest</span>
+            </div>
+            <div class="trajectory-panel-canvas-wrap">
+              <canvas class="canvas-panel-crash"></canvas>
+            </div>
+            <div class="trajectory-panel-footer">
+              <span>Path: <strong>Heads Straight Up into Curved Grid</strong></span>
+              <span class="panel-readout-alt">Crash at t = 2.48s</span>
+            </div>
+          </div>
+
+          <!-- Panel 2: Fast Outward Escape / Flyby -->
+          <div class="trajectory-panel-card" data-panel="flyby">
+            <div class="trajectory-panel-header">
+              <span style="color: var(--color-space);">2. THE FAST ESCAPE (FLYBY)</span>
+              <span class="panel-status-badge" style="color: var(--color-space); font-size: 0.68rem;">v₀ = −2.1 m/s · High Outward Speed</span>
+            </div>
+            <div class="trajectory-panel-canvas-wrap">
+              <canvas class="canvas-panel-flyby"></canvas>
+            </div>
+            <div class="trajectory-panel-footer">
+              <span>Deflection: <strong>Fabric Pull Bends Trajectory</strong></span>
+              <span class="panel-readout-alt">Escapes into Deep Space</span>
+            </div>
+          </div>
+
+          <!-- Panel 3: Free-Return Slingshot (The Spacetime U-Turn) -->
+          <div class="trajectory-panel-card" data-panel="slingshot">
+            <div class="trajectory-panel-header">
+              <span style="color: var(--color-photon);">3. FREE-RETURN (SPACETIME U-TURN)</span>
+              <span class="panel-status-badge" style="color: var(--color-photon); font-size: 0.68rem;">v₀ = −2.3 m/s · Sub-Orbital Launch</span>
+            </div>
+            <div class="trajectory-panel-canvas-wrap">
+              <canvas class="canvas-panel-slingshot"></canvas>
+            </div>
+            <div class="trajectory-panel-footer">
+              <span>Outcome: <strong>Loops at Apex &amp; Returns</strong></span>
+              <span class="panel-readout-alt">Apex at t = 1.40s</span>
+            </div>
+          </div>
+
+          <!-- Panel 4: Distant Infall (Distance Contrast) -->
+          <div class="trajectory-panel-card" data-panel="orbit">
+            <div class="trajectory-panel-header">
+              <span style="color: var(--color-emerald);">4. DISTANT OBSERVER (WEAK CURVATURE)</span>
+              <span class="panel-status-badge" style="color: var(--color-emerald); font-size: 0.68rem;">v₀ = 0.0 m/s · x₀ = 1.5 m (Far Distance)</span>
+            </div>
+            <div class="trajectory-panel-canvas-wrap">
+              <canvas class="canvas-panel-orbit"></canvas>
+            </div>
+            <div class="trajectory-panel-footer">
+              <span>Contrast: <strong>Shallow Warp · Barely Drifts Inward</strong></span>
+              <span class="panel-readout-alt">Δx = 0.34m at t = 2.48s</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Synchronized Telemetry Clocks -->
+        <div class="twin-clocks-panel">
+          <div class="clock-card amber">
+            <div class="clock-meta">
+              <span class="clock-label">Current Spacetime Instant</span>
+              <span class="clock-badge">Coordinate Time</span>
+            </div>
+            <div class="clock-time readout-time">1.20 s</div>
+            <p class="clock-subtext">The horizontal slice of Now scrubbing across all four spacetime diagrams.</p>
+          </div>
+          <div class="clock-card cyan">
+            <div class="clock-meta">
+              <span class="clock-label">The Principle of Equivalence</span>
+              <span class="clock-badge">Zero G Throughout</span>
+            </div>
+            <div class="clock-time" style="color: var(--color-emerald);">0.00 m/s² (Pure Weightless Geodesic)</div>
+            <p class="clock-subtext">In every case, the traveler feels no pulling force—each simply follows the local spacetime fabric.</p>
+          </div>
+        </div>
+
+        <!-- Synchronized Controls Deck -->
+        <div class="artifact-controls artifact-controls-deck">
+          <!-- Row 1: Primary Scrubber -->
+          <div class="controls-strip">
+            <div class="control-item" style="flex: 1.5;">
+              <div class="control-header">
+                <span class="control-label">Spacetime Slice (Time t)</span>
+                <span class="control-value readout-time">1.20 s</span>
+              </div>
+              <input type="range" class="range-slider slider-time" min="0" max="3" step="0.02" value="1.2">
+            </div>
+
+            <button class="btn-play" style="flex-shrink: 0;">
+              <span>▶</span><span>Auto Play</span>
+            </button>
+            <button class="btn-secondary btn-reset" style="flex-shrink: 0;">
+              <span>↺</span><span>Reset</span>
+            </button>
+          </div>
+
+          <!-- Row 2: Milestone Presets -->
+          <div class="controls-preset-row">
+            <div class="controls-preset-chips">
+              <span style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-muted); align-self: center; margin-right: 0.25rem;">Milestone Slices:</span>
+              <button class="chip preset-matrix-chip" data-time="0.0">t = 0.0 s (Release)</button>
+              <button class="chip preset-matrix-chip active" data-time="1.4">t = 1.4 s (U-Turn Apex)</button>
+              <button class="chip preset-matrix-chip" data-time="2.48">t = 2.48 s (Apple Crash)</button>
+              <button class="chip preset-matrix-chip" data-time="3.0">t = 3.0 s (Full Loaf)</button>
+            </div>
+            <span class="controls-preset-tag">Spacetime Geodesic Matrix</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="formula-card">
+        <div class="formula-card-header">
+          <span class="formula-tag">The Geodesic Motion Principle</span>
+        </div>
+        <div class="formula-body">
+          <em>d</em>²<em>x</em> / <em>dτ</em>² + Γ<sup><em>x</em></sup><sub><em>μν</em></sub> <em>u</em><sup><em>μ</em></sup> <em>u</em><sup><em>ν</em></sup> = 0
+        </div>
+        <div class="formula-note">
+          Whether an object plunges into the surface, escapes into deep space, executes a U-turn arc, or hovers in weak outer curvature, each path is a completely unaccelerated straight line through the distorted fabric of spacetime.
+        </div>
+      </div>
+
+      <!-- Food for Thought -->
+      <div class="insight-callout">
+        <h4>Food for Thought: Three Cosmic Puzzles of Spacetime Curvature</h4>
+        <p>Before we construct the full monograph narrative, consider three subtle questions illuminated by this geometry:</p>
+        <p>
+          <strong>1. The Standing Observer's Dilemma (Accelerating While Standing Still):</strong><br>
+          If the freely falling apple feels zero acceleration, what does a person standing still on the surface of the Earth feel? By definition, the ground is continuously pushing them upward, accelerating them away from their natural geodesic at 9.8 meters per second squared.
+        </p>
+        <p>
+          <strong>2. The Bending of Light (Falling Without Mass):</strong><br>
+          If gravity were an attraction between masses, a photon (possessing zero rest mass) should pass Earth undeflected. But if gravity is the curvature of spacetime itself, a photon must follow the bent grid just like the apple.
+        </p>
+        <p>
+          <strong>3. The Vanishing Center (What Happens at the Core?):</strong><br>
+          As we move inside the Earth toward its center, the surrounding mass pulls equally in all directions. How does the spacetime grid flatten back out at the very heart of the planet?
+        </p>
+      </div>
+
+      <!-- Series Pager -->
+      <div class="series-pager">
+        <a href="03-spacetime-loaf.html" class="btn-secondary">← Part 3: The Spacetime Loaf</a>
+        <a href="../index.html" class="btn-primary">Return to Series Hub →</a>
+      </div>
+
+      <!-- Author Bio -->
+      <div class="article-author">
+        <div class="brand-badge">IF</div>
+        <div>
+          <h4>Aayush Agarwal</h4>
+          <p>
+            Exploring physics, mathematics, and machine learning through intuitive visual geometry and explorable
+            interactive simulations.
+          </p>
+        </div>
+      </div>
+    </article>
+  </main>
+
+  <!-- Site Footer -->
+  <footer class="site-footer">
+    <div class="wide-container">
+      <p><strong>Intuition First</strong> · An Explorable Science & Mathematics Series by Aayush Agarwal</p>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="../js/core.js"></script>
+  <script src="../js/gravity-curvature.js"></script>
+</body>
+
+</html>
