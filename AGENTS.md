@@ -12,7 +12,7 @@
   - Shared runtime utilities & theme engine: [`js/core.js`](file:///usr/local/google/home/aayushagarwal/projects/intuition-first/js/core.js)
   - Modular essay simulation engines: `js/post-01.js`, `js/post-02.js`, `js/post-03.js`, `js/post-04.js`, `js/post-05.js`, `js/post-06.js`, etc.
   - Landing hub: [`index.html`](file:///usr/local/google/home/aayushagarwal/projects/intuition-first/index.html)
-  - Longform essays: `posts/01-motion-and-time.html`, `posts/02-light-cone.html`, `posts/03-spacetime-loaf.html`, `posts/04-understanding-entropy.html`, `posts/05-cross-entropy.html`, `posts/06-moving-average.html`
+  - Longform essays: `posts/01-motion-and-time.html`, `posts/02-light-cone.html`, `posts/03-spacetime-loaf.html`, `posts/04-illusion-of-weight.html`, `posts/04-understanding-entropy.html`, `posts/05-cross-entropy.html`, `posts/06-moving-average.html`
 
 ---
 

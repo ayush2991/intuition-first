@@ -311,55 +311,60 @@
         </div>
       </div>
 
-      <!-- Column 2: Reach Out & Email Contact Form -->
+      <!-- Column 2: Reach Out & Connect -->
       <div id="contact" class="bottom-card contact-card">
         <div class="bottom-card-header">
           <span class="bottom-card-tag" style="color: var(--color-space);">Get In Touch</span>
           <span class="bottom-card-divider">/</span>
-          <span class="bottom-card-subtag">Direct Email</span>
+          <span class="bottom-card-subtag">Direct Channels</span>
         </div>
 
         <h3 class="contact-title">Reach Out to the Author</h3>
         <p class="contact-desc">
-          Have feedback on an essay, spotted a bug, or want to explore ideas in physics and ML? Send a message directly.
+          Have a question about an essay, feedback on an interactive simulation, or ideas in physics and machine learning? Feel free to reach out directly through any of these channels.
         </p>
 
-        <form id="contact-form" class="contact-form" onsubmit="handleContactSubmit(event)">
-          <div class="form-row">
-            <div class="form-group">
-              <label for="contact-name" class="form-label">Your Name</label>
-              <input type="text" id="contact-name" class="form-input" placeholder="e.g. Alice" />
-            </div>
-            <div class="form-group">
-              <label for="contact-email" class="form-label">Your Email</label>
-              <input type="email" id="contact-email" class="form-input" placeholder="alice@example.com" />
-            </div>
+        <!-- Direct Email Action Box -->
+        <div class="contact-email-box">
+          <div class="contact-email-header">
+            <span class="contact-email-label">Email Address</span>
+            <span class="contact-email-address">ayush2991@gmail.com</span>
           </div>
 
-          <div class="form-group">
-            <label for="contact-subject" class="form-label">Subject / Topic</label>
-            <input type="text" id="contact-subject" class="form-input" placeholder="e.g. Question on Special Relativity" />
-          </div>
-
-          <div class="form-group">
-            <label for="contact-message" class="form-label">Message <span class="required-mark">*</span></label>
-            <textarea id="contact-message" class="form-textarea" rows="3" required placeholder="What's on your mind?"></textarea>
-          </div>
-
-          <div class="form-actions">
-            <button type="submit" class="btn-primary contact-submit-btn">
-              <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"></rect><path d="m22 6-10 7L2 6"></path></svg>
-              <span>Send via Email</span>
+          <div class="contact-email-actions">
+            <button type="button" class="btn-primary contact-action-btn" id="btn-copy-email" onclick="copyContactEmail()" title="Copy email address to clipboard">
+              <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+              <span id="copy-email-text">Copy Address</span>
             </button>
+            <a href="https://mail.google.com/mail/?view=cm&fs=1&to=ayush2991@gmail.com&su=Note%20on%20Intuition%20First" target="_blank" rel="noopener" class="btn-secondary contact-action-btn" title="Compose note directly in web Gmail">
+              <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+              <span>Open in Gmail</span>
+            </a>
           </div>
-        </form>
 
-        <div class="contact-direct-bar">
-          <span class="direct-label">Or write directly:</span>
-          <a href="mailto:ayush2991@gmail.com" class="direct-email-link">ayush2991@gmail.com</a>
-          <button type="button" class="btn-copy-email" id="btn-copy-email" onclick="copyContactEmail()" title="Copy email address">
-            <span id="copy-email-text">Copy</span>
-          </button>
+          <div class="contact-client-hint">
+            <span>Using a desktop mail app?</span>
+            <a href="mailto:ayush2991@gmail.com?subject=Note%20on%20Intuition%20First" class="contact-mailto-link">Launch mail app &rarr;</a>
+          </div>
+        </div>
+
+        <!-- Social & Professional Channels Deck -->
+        <div class="contact-channels-deck">
+          <span class="socials-label">Connect &amp; Follow:</span>
+          <div class="social-chips">
+            <a href="https://linkedin.com/in/ayush2991" target="_blank" rel="noopener" class="social-chip" title="LinkedIn Profile">
+              <svg class="social-chip-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.86 0-2.15 1.45-2.15 2.94v5.67H9.33V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28ZM5.34 7.43a2.07 2.07 0 1 1 0-4.13 2.07 2.07 0 0 1 0 4.13ZM7.12 20.45H3.56V9h3.56v11.45Z"></path></svg>
+              <span>LinkedIn</span>
+            </a>
+            <a href="https://ayush2991.github.io/" target="_blank" rel="noopener" class="social-chip" title="Personal Website">
+              <svg class="social-chip-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+              <span>Website</span>
+            </a>
+            <a href="https://github.com/ayush2991" target="_blank" rel="noopener" class="social-chip" title="GitHub Profile">
+              <svg class="social-chip-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"></path></svg>
+              <span>GitHub</span>
+            </a>
+          </div>
         </div>
       </div>
     </div>
@@ -376,6 +381,8 @@
         <span>·</span>
         <a href="https://linkedin.com/in/ayush2991" target="_blank" rel="noopener">LinkedIn</a>
         <span>·</span>
+        <a href="https://github.com/ayush2991" target="_blank" rel="noopener">GitHub</a>
+        <span>·</span>
         <a href="#series-index">Essays</a>
         <span>·</span>
         <a href="#contact">Contact</a>
@@ -386,32 +393,15 @@
   <!-- Universal Client-Side Script (100% Static & file:// compatible) -->
   <script src="js/core.js"></script>
 
-  <!-- Client-side Contact Form Script -->
+  <!-- Client-side Contact Script -->
   <script>
-    function handleContactSubmit(e) {
-      e.preventDefault();
-      var name = document.getElementById('contact-name').value.trim();
-      var email = document.getElementById('contact-email').value.trim();
-      var subj = document.getElementById('contact-subject').value.trim() || 'Feedback on Intuition First';
-      var msg = document.getElementById('contact-message').value.trim();
-
-      var body = msg;
-      if (name || email) {
-        body += '\n\n---\nSender: ' + (name || 'Anonymous');
-        if (email) body += ' (' + email + ')';
-      }
-
-      var mailtoUrl = 'mailto:ayush2991@gmail.com?subject=' + encodeURIComponent(subj) + '&body=' + encodeURIComponent(body);
-      window.location.href = mailtoUrl;
-    }
-
     function copyContactEmail() {
       var email = 'ayush2991@gmail.com';
       var btnText = document.getElementById('copy-email-text');
       var handleDone = function () {
         if (btnText) {
           btnText.textContent = 'Copied!';
-          setTimeout(function () { btnText.textContent = 'Copy'; }, 2000);
+          setTimeout(function () { btnText.textContent = 'Copy Address'; }, 2000);
         }
       };
       if (navigator.clipboard && navigator.clipboard.writeText) {

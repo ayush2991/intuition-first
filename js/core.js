@@ -938,8 +938,21 @@
       subtitle: 'There is no universal cosmic clock: how motion tilts your slice through 4D spacetime to reshape simultaneous moments and physical length.',
       tag: 'The Angle of "Now"',
       filename: '03-spacetime-loaf.html',
-      readTime: 'Coming Soon',
-      status: 'coming-soon'
+      readTime: '14 min',
+      status: 'live'
+    },
+    {
+      seriesId: 'relativity',
+      seriesName: 'Series 01: Special Relativity',
+      part: 4,
+      partNumber: '04',
+      title: 'The Illusion of Weight: Why Gravity Is Pure Geometry',
+      shortTitle: 'The Illusion of Weight',
+      subtitle: 'Step inside Einstein’s falling elevator to discover why free fall is true weightlessness, how acceleration mimics gravity, and how mass bends the paths of straight lines.',
+      tag: 'General Relativity',
+      filename: '04-illusion-of-weight.html',
+      readTime: '16 min',
+      status: 'live'
     },
     {
       seriesId: 'entropy',
@@ -988,7 +1001,8 @@
       window.location.pathname.indexOf('/posts/') !== -1 ||
       window.location.pathname.indexOf('01-') !== -1 ||
       window.location.pathname.indexOf('02-') !== -1 ||
-      window.location.pathname.indexOf('03-') !== -1;
+      window.location.pathname.indexOf('03-') !== -1 ||
+      window.location.pathname.indexOf('04-') !== -1;
 
     if (!isArticlePage) return;
 
