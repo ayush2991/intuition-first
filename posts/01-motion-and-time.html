@@ -716,7 +716,7 @@
           >
             <div class="clock-card cyan" style="margin: 0">
               <div class="clock-meta">
-                <span class="clock-label">Earth Stopwatch (At Rest)</span>
+                <span class="clock-label">Earth Stopwatch (t)</span>
                 <span class="clock-badge">100% Rate</span>
               </div>
               <div class="clock-time clock-earth">6.00 <span>s</span></div>
@@ -726,7 +726,7 @@
             </div>
             <div class="clock-card amber" style="margin: 0">
               <div class="clock-meta">
-                <span class="clock-label">Traveler Wristwatch (Moving)</span>
+                <span class="clock-label">Traveler Wristwatch (τ)</span>
                 <span class="clock-badge clock-rocket-rate">50.0% Rate</span>
               </div>
               <div
@@ -736,7 +736,7 @@
                 3.00 <span>s</span>
               </div>
               <p class="clock-subtext clock-rocket-sub">
-                At 0.866c, wristwatch ticks at exactly half normal speed.
+                At 0.866c, proper time (τ) ticks at exactly half normal speed.
               </p>
             </div>
           </div>
@@ -820,12 +820,21 @@
         </div>
 
         <p>
-          At 86.6% speed of light, while six seconds elapse for an observer on
-          Earth, only three seconds elapse on the traveler’s watch. To the
+          At 86.6% speed of light, while six seconds elapse on Earth's stationary
+          stopwatch, only three seconds elapse on the traveler’s watch. To the
           traveler inside the spacecraft, everything appears completely
           normal—their heart beats, their thoughts flow, and their clocks tick
           in perfect rhythm with their body. But when compared to the stationary
           observer, the traveler has aged more slowly.
+        </p>
+        <p>
+          In physics, the time measured by an observer's own carried watch is
+          called their <strong>proper time</strong> (derived from the Latin
+          <em>proprius</em>, meaning "one's own"—the time experienced by your
+          own body, heartbeats, and personal clocks, denoted by the Greek letter
+          <span class="math-badge">τ</span>, tau). In contrast, the time recorded
+          by stationary clocks on the ground as the traveler speeds past is
+          called <strong>coordinate time</strong> (<span class="math-badge">t</span>).
         </p>
         <p>
           <em>A Note on Vantage Point:</em> In this diagram, we are measuring
@@ -835,10 +844,10 @@
           together without contradiction—in Part 3.
         </p>
         <p>
-          This effect is known as <strong>Time Dilation</strong>. It is not a
-          mechanical defect in clocks or an optical trick of delayed signals; it
-          is a direct consequence of how motion is distributed between space and
-          time.
+          This gap between coordinate time and proper time is known as
+          <strong>Time Dilation</strong>. It is not a mechanical defect in clocks
+          or an optical trick of delayed signals; it is a direct consequence of how
+          motion is partitioned between space and time.
         </p>
         <p>
           The factor by which time stretches has a celebrated name in physics:
@@ -846,30 +855,28 @@
           <span class="math-badge">γ</span> (gamma). Because the traveler moves
           through time at rate
           <span class="math-badge">v_time = √(c² - v²)</span> instead of the
-          full speed <span class="math-badge">c</span>, the ratio between
-          Earth’s time and the traveler’s time is:
+          full speed <span class="math-badge">c</span>, the relationship between
+          Earth's coordinate time (<span class="math-badge">Δt</span>) and the
+          traveler's personal proper time (<span class="math-badge">Δτ</span>) is:
         </p>
         <div class="formula-card">
           <div class="formula-card-header">
-            <span class="formula-tag">The Lorentz Factor (Gamma)</span>
+            <span class="formula-tag">Coordinate Time vs. Proper Time</span>
           </div>
           <div class="formula-body">
-            γ = <em>c</em> / <em>v</em>_time = 1 / √( 1 − <em>v</em>² /
-            <em>c</em>² )
+            Δ<em>t</em> = γ · Δ<em>τ</em> &nbsp;⟺&nbsp; Δ<em>τ</em> = Δ<em>t</em> / γ = Δ<em>t</em> · √( 1 − <em>v</em>² / <em>c</em>² )
           </div>
           <div class="formula-note">
-            At <em>v</em> = 0.866<em>c</em>, <em>v</em>_time = 0.50<em>c</em>,
-            which yields γ = 2.00: Earth records exactly 2 seconds for every 1
-            second experienced on board.
+            where γ = <em>c</em> / <em>v</em>_time = 1 / √( 1 − <em>v</em>² / <em>c</em>² ). At <em>v</em> = 0.866<em>c</em> (γ = 2.00), Earth records Δ<em>t</em> = 2 seconds of coordinate time for every Δ<em>τ</em> = 1 second of proper time experienced on board.
           </div>
         </div>
         <p>
           As we saw in the simulation, increasing spatial speed forces
-          <span class="math-badge">v_time</span> to shrink toward zero. In this
-          ratio, as <span class="math-badge">v_time</span> approaches zero,
+          <span class="math-badge">v_time</span> to shrink toward zero. As
+          <span class="math-badge">v</span> approaches <span class="math-badge">c</span>,
           <span class="math-badge">γ</span> soars toward infinity—meaning an
-          infinite amount of Earth time would pass for even a single second
-          experienced at the speed of light.
+          arbitrarily large amount of Earth coordinate time would pass for even a
+          single second of proper time experienced by a fast-moving traveler.
         </p>
 
         <!-- SECTION 5 -->
@@ -996,7 +1003,7 @@
             Its motion through time drops to zero. While light takes coordinate
             time to cross distance in our reference frame, the photon's personal
             onboard clock experiences zero elapsed time across the entire
-            cosmos.
+            cosmos—it experiences zero proper time (<span class="math-badge">Δτ = 0</span>).
           </div>
         </div>
         <p>
@@ -1225,11 +1232,13 @@
           >), they divert almost all of their spacetime motion into space. From
           our vantage point on Earth, their internal clocks tick about 22 times
           slower than normal. While the 10-kilometer journey takes about
-          <span class="math-badge">33.4 microseconds</span> of Earth time, the
-          muon's internal clock advances by only
-          <span class="math-badge">1.49 microseconds</span>—allowing it to
-          safely reach particle detectors on the ground before its
-          2.2-microsecond lifespan expires.
+          <span class="math-badge">33.4 microseconds</span> of Earth coordinate
+          time (<span class="math-badge">t</span>), the muon's internal clock advances by only
+          <span class="math-badge">1.49 microseconds</span> of proper time (<span
+            class="math-badge"
+            >τ</span
+          >)—allowing it to safely reach particle detectors on the ground before its
+          2.2-microsecond proper lifetime (<span class="math-badge">τ₀ = 2.2 µs</span>) expires.
         </p>
 
         <!-- SECTION 7 -->
@@ -1490,8 +1499,10 @@
             ><br />
             A star sits 4 light-years away. At
             <span class="math-badge">0.8c</span>, Earth calculates the journey
-            will take 5 years. But because the traveler's wristwatch ticks
-            slower, only <strong>3 years</strong> elapse for them inside the
+            will take 5 years of coordinate time (<span class="math-badge">t = 5 yr</span>).
+            But because the traveler's wristwatch ticks
+            slower, only <strong>3 years of proper time</strong> (<span class="math-badge">τ = 3 yr</span>)
+            elapse for them inside the
             cabin. To the traveler, they just crossed a 4-light-year gulf in 3
             years of personal time—an apparent speed of
             <span class="math-badge">1.33c</span>. Did they just beat the cosmic

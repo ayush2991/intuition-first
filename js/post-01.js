@@ -1312,7 +1312,7 @@
       if (clockRocketSub) {
         clockRocketSub.innerText = speedFraction === 0
           ? 'At rest, traveler wristwatch ticks in perfect sync with Earth.'
-          : 'At ' + speedFraction.toFixed(3) + 'c, traveler ages at ' + (vt * 100).toFixed(1) + '% of Earth rate.';
+          : 'At ' + speedFraction.toFixed(3) + 'c, proper time (τ) ticks at ' + (vt * 100).toFixed(1) + '% of Earth rate.';
       }
     }
 
@@ -1483,9 +1483,9 @@
       });
 
       // Twin Clock Rate Badges
-      var earthPillText = 'Earth Stopwatch: 100% Rate (v = 0)';
+      var earthPillText = 'Earth Stopwatch (t): 100% Rate (v = 0)';
       var rocketRatePercent = (vt * 100).toFixed(1);
-      var rocketPillText = 'Traveler Wristwatch: ' + rocketRatePercent + '% Rate';
+      var rocketPillText = 'Traveler Wristwatch (τ): ' + rocketRatePercent + '% Rate';
 
       // Earth label pill at top
       drawLabelPill(ctx, earthPillText, eTipX + 80, Math.max(16, eTipY - 14), {
@@ -1738,17 +1738,17 @@
       var activeColor = c.photonColor;
       if (mode === 'photon') {
         activeColor = c.photonColor;
-        if (particleCardLabel) particleCardLabel.innerText = 'Photon Watch';
+        if (particleCardLabel) particleCardLabel.innerText = 'Photon Clock';
         if (clockPhoton) clockPhoton.innerHTML = '0.000 <span>s</span>';
-        if (statusNote) statusNote.innerText = 'Time is completely frozen. 100% of motion is across space.';
+        if (statusNote) statusNote.innerText = 'Time is completely frozen. Zero proper time elapses (Δτ = 0).';
       } else if (mode === 'rocket') {
         activeColor = c.spaceColor;
-        if (particleCardLabel) particleCardLabel.innerText = 'Traveler Wristwatch';
+        if (particleCardLabel) particleCardLabel.innerText = 'Traveler Wristwatch (τ)';
         if (clockPhoton) clockPhoton.innerHTML = '3.000 <span>s</span>';
-        if (statusNote) statusNote.innerText = 'Time moves at 50% normal rate (v_time = 0.500 c).';
+        if (statusNote) statusNote.innerText = 'Proper time ticks at 50% normal rate (v_time = 0.500 c).';
       } else {
         activeColor = c.timeColor;
-        if (particleCardLabel) particleCardLabel.innerText = 'Observer Wristwatch';
+        if (particleCardLabel) particleCardLabel.innerText = 'Observer Wristwatch (τ)';
         if (clockPhoton) clockPhoton.innerHTML = '6.000 <span>s</span>';
         if (statusNote) statusNote.innerText = 'Observer sitting motionless in space moves 100% through time.';
       }

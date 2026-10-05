@@ -1,4 +1,4 @@
-# Intuition First — Agent Guide
+# Intuition First — Agent Guide & Publishing Architecture
 
 ## 1. Project Overview & Architecture
 
@@ -16,84 +16,76 @@
 
 ---
 
-## 2. Editorial Philosophy
+## 2. Editorial Philosophy & Preferred Writing Style
 
-This series teaches physics and mathematics **bottom-up**, not top-down. Every agent working on prose must internalize and consistently apply these 13 core principles.
+This series teaches physics and mathematics **bottom-up**, not top-down. Every article must feel like an unfolding voyage of discovery where mathematical formulas arrive as natural descriptions of geometric relationships that the reader has already experienced visually.
 
-### 1. Build from what the reader already knows — never from what they don't
-Every new concept must grow organically out of direct physical intuition, everyday experience, or knowledge established in a previous section. Never start from the destination (a formula or textbook concept) and work backward to justify it.
-- ✅ *"That picture tells us how velocity is partitioned — but not where anyone actually is. The natural next question is: can we draw a map?"*
-- ❌ *"Textbooks use a spacetime diagram with space on the horizontal axis. This can be confusing because…"*
+### The Monograph Voice & Narrative Tone
+- **Inviting & Intellectually Elevated**: The prose reads like an elegant scholarly monograph (inspired by Feynman, Penrose, and Abbott's *Flatland*), yet remains completely free of academic pretension, gatekeeping, or jargon walls.
+- **Perspective**: We use the shared first-person plural (*"we"*, *"let us"*, *"our"*) when exploring geometry together, paired with direct second-person experiential setups (*"sitting in your chair right now"*, *"your personal wristwatch"*).
+- **Pure Constructive Elevation (Zero Complaining)**: Never disparage standard textbooks, university courses, or other educators. The beauty and geometric inevitability of the universe stands on its own merits without needing a foil.
+- **Cadence Over Fragmentation (The 2–3 Sentence Rule)**: Never write choppy, one-sentence paragraphs (*"Nothing."* / *"Why?"* / *"Because..."*). Group connected thoughts into cohesive, rhythmic paragraphs of 2 to 4 sentences. This sustains dramatic momentum, preserves suspense, and respects reading velocity.
+- **Concrete Physical Instruments Over Abstract Labels**: Always anchor physical frames to tangible everyday instruments:
+  - Use *"Alice's ground stopwatch"* instead of *"the stationary observer's coordinate time"*.
+  - Use *"the traveler's personal wristwatch"* instead of *"proper time $\tau$"*.
+  - Use real physical milestones (e.g., *1 AU = 500 light-seconds to the Sun*, *Vega at 25 ly*, *atmospheric muons created 10 km up*).
+- **Self-Contained Revelation**: The reader needs zero prerequisites beyond basic curiosity and middle-school arithmetic. Never invoke what "physicists know" or appeal to external authority. Derive everything from first principles.
 
-### 2. Never introduce confusion first
-Do not frame a section by announcing what is confusing, contradictory, or commonly misunderstood before the reader encounters it themselves. Approach concepts as discoveries, not fixes for misconceptions.
-- ✅ Pose open questions: *"But what angle does a photon's worldline actually make?"*
-- ❌ Pre-announce answers: *"Watch how 90° in Velocity Space maps directly into a 45° diagonal."*
-- ❌ Contrast with external curricula: *"In traditional textbooks, the photon is at 45°, not 90° — why?"*
+### The 4-Stage Pedagogical Arc ("Pacing of Wonder")
+Every essay and major section follows this rigorous four-step sequence:
+1. **The Familiar Anchor**: Ground the discussion in an everyday, intuitive physical experience (two cars driving on a flat field with locked cruise control, turning on a flashlight in the dark, watching a stopwatch tick).
+2. **The Natural Question**: Push that everyday anchor toward a physical extreme or paradox (*"What happens when you sit completely still?"*, *"What if the Sun vanished this instant?"*, *"Can you travel faster than light?"*). Never spoil the answer or reveal the extreme case before the reader explores it.
+3. **The Geometric Bridge**: Translate the physical scenario into visual coordinate space (Velocity Space circle, Coordinate Spacetime $(x, ct)$, 3D light cone volume, expanding 2D ripple snapshots).
+4. **The Inevitable Insight**: The mathematical formula arrives last, purely as a concise summary of the geometry already drawn and understood.
 
-### 3. Pure Constructive Elevation (Zero Complaining)
-Teach by illuminating the natural beauty and geometric inevitability of ideas. Never disparage other educators, textbooks, or pedagogical approaches. The universe stands on its own merits without needing a foil.
-- ✅ *"Let us follow the geometry to its natural conclusion."*
-- ❌ *"Unlike dry university courses that bog students down in meaningless algebra..."*
-
-### 4. The "Pacing of Wonder": Earned Revelation
-Build tension through tangible setups (two cars on a field, two synchronized clocks, a loaf of film frames) before revealing deep cosmic symmetries.
-- **Narrative Arc**:
-  1. *Familiar Anchor*: Everyday tangible intuition.
-  2. *The Natural Question*: Pushing intuition toward physical extremes.
-  3. *The Geometric Bridge*: Mapping intuition into clean coordinate space.
-  4. *The Inevitable Insight*: The mathematical formulation arrives purely as a description of what was already drawn.
-
-### 5. Let visualizations deliver the insight — prose sets up the question
-Simulations are moments of active discovery, not redundant illustrations of pre-explained facts.
-- **Before the widget**: Establish context, introduce characters, name the open question. **Never spoil the extreme or paradoxical behavior in advance.**
-- **The widget itself**: Delivers the answer through direct interaction.
-- **After the widget**: Explain why the answer occurred and connect it to the broader picture.
-
-### 6. Introduce characters and terms before using them
-Every named entity (Alice, Bob, a photon, a muon) must be introduced with a clear physical situation before being referenced. Every technical term (worldline, proper time, light cone, entropy) must be coined at the exact moment it becomes necessary.
-
-### 7. Self-contained — no assumed external knowledge
-The reader arrives with everyday intuition and curiosity. Do not reference what "physicists know" or what "general relativity states". If a concept matters, derive or motivate it directly from first principles.
-
-### 8. Section headings reflect discovery, not taxonomy
-Headings should sound like steps in an unfolding journey, not chapter titles from an encyclopedia.
-- ✅ *"Drawing the Map: Coordinate Spacetime"*
-- ✅ *"The Angle of 'Now'"*
-- ❌ *"The Side-by-Side Bridge: Speed Space vs Coordinate Spacetime"*
-- ❌ *"Why Spacetime Cannot Have a 90° Worldline"*
-
-### 9. Single Locus of Truth & In-Canvas Direct Annotation
-Minimize cognitive load by placing dynamic labels directly where visual attention lives. If a physical value or state (e.g., angle, position, velocity component) is already drawn on canvas vectors/pills or on interactive slider header badges, do NOT duplicate it into a detached telemetry grid.
-- **In-Canvas Labels & Slider Badges**: Keep the reader's gaze focused on geometric relationships and direct controls without splitting attention.
-- **Adjacent Axis Disambiguation**: When two side-by-side diagrams share a common dimension (e.g., "Time" on both vertical axes), disambiguate them by physical instrument or observer perspective (e.g., `Ground Stopwatch t` vs. `Traveler Watch Rate v_time`), preventing cognitive collisions when one metric varies while the other stays invariant.
-- **Telemetry Grids**: Reserve strictly for derived, higher-level invariant metrics that cannot be rendered in-canvas (e.g., Lorentz factor $\gamma$, bit-depth totals).
-
-### 10. Lean Widget Framing (Zero Redundant Headers)
-Do not clutter widget containers with repetitive titles or explanatory subtitles when the preceding prose and taxonomy badge already establish context. Let the simulation badge identify the module cleanly.
-- ✅ `<div class="artifact-badge">SIMULATION 01 · 2D POSITION MAP &amp; VELOCITY SPACE</div>` (Clean, focused)
-- ❌ Redundant widget title + 2-sentence subtitle repeating the preceding paragraph.
-
-### 11. Concrete Physical Instruments Over Abstract Labels
-Never use formal academic terminology to resolve conceptual ambiguity. When distinguishing between reference frames, coordinates, or mathematical domains, anchor each perspective in a tangible, everyday physical object or character action.
-- ✅ *"Our ground stopwatch"* vs. *"the traveler's personal wristwatch"*
-- ❌ *"The stationary observer's coordinate time"* vs. *"the moving entity's proper time rate"*
-- ✅ *"Counting the ways socks can scatter across the floor"*
-- ❌ *"Evaluating the statistical volume of microstates in configuration space"*
-
-### 12. Launch from the Delta — Zero Baseline Backtracking
-When advancing from section $N$ to section $N+1$, never re-derive or re-explain the baseline that was already established. Summarize the anchor in a single clause and immediately introduce the new physical delta.
-- ✅ *"In Section 2, we saw that sitting still devotes 100% of motion to time. What happens when you spend some of that speed moving across space?"*
-- ❌ Re-explaining the at-rest case with bullet points and full descriptions that repeat the preceding section's widget.
-
-### 13. Cadence Over Fragmentation (Rhythmic Narrative Velocity)
-Avoid choppy, one-sentence paragraphs in thought experiments (e.g., *"Nothing."* / *"Why?"* / *"Because..."*). Consolidate related thought beats into tight, 2–3 sentence rhythmic paragraphs. This preserves suspense and the "pacing of wonder" while maintaining strong narrative momentum without feeling disjointed.
-- ✅ *"If the Sun vanished this instant, Earth would feel nothing for 500 seconds. Solar panels would keep producing power, birds would keep singing, and Earth would continue orbiting peacefully around empty space."*
-- ❌ Stacking 4 separate one-line paragraphs: *"Suppose the Sun vanishes."* / *"What happens on Earth?"* / *"Nothing."* / *"Why?"*
+### Formula & Callout Cards
+- **Formula Cards (`.formula-card`)**: Every core equation is enclosed in a structured card with three parts:
+  ```html
+  <div class="formula-card">
+    <div class="formula-card-header">
+      <span class="formula-tag">The Geometric Bridge</span>
+    </div>
+    <div class="formula-body">
+      tan <em>φ</em> = Δ<em>x</em> / (<em>c</em> · Δ<em>t</em>) = <em>v</em>_x / <em>c</em> = sin <em>θ</em>
+    </div>
+    <div class="formula-note">
+      Spatial speed on the speedometer governs the slope of the worldline: tan <em>φ</em> = sin <em>θ</em>.
+    </div>
+  </div>
+  ```
+- **Inline Math**: Use `<span class="math-badge">v_space = c · sin θ</span>` or clean italicized symbols ($\theta$, $\phi$, $\tau$, $\gamma$, $c$).
+- **Insight Callouts (`.insight-callout`)**: Used for pivotal takeaways and myth-busting explanations (e.g., *"Why 45° Is the Cosmic Speed Boundary"*).
+- **The "Food for Thought" 3-Puzzle Invariant**: Every article MUST conclude with a dedicated callout containing **exactly three named cosmic puzzles**:
+  ```html
+  <div class="insight-callout">
+    <h4>Food for Thought: Three Cosmic Puzzles [of the Topic]</h4>
+    <p>Before we move forward, consider three subtle puzzles that emerge when we push this geometry to its natural extremes:</p>
+    <p><strong>1. [Puzzle Name] ([Evocative Subtitle]):</strong><br>[Deep paradox statement]...</p>
+    <p><strong>2. [Puzzle Name] ([Evocative Subtitle]):</strong><br>[Deep paradox statement]...</p>
+    <p><strong>3. [Puzzle Name] ([Evocative Subtitle]):</strong><br>[Deep paradox statement]...</p>
+  </div>
+  ```
+  These puzzles bridge the current essay to the next frontier, leaving the reader with a powerful sense of mystery and curiosity.
 
 ---
 
-## 3. Semantic Physics & Editorial Color Palette (Monograph Theme)
+## 3. Headings Taxonomy & Best Practices
+
+Headings guide the reader through an unfolding journey of discovery. They should never read like catalog entries or academic textbook chapters.
+
+### Hierarchy & Style Rules
+
+| Level | Role & Formatting | Preferred Pattern | Forbidden Patterns |
+| :--- | :--- | :--- | :--- |
+| **`<h1>`** | **Article Title**<br>Title Case, bold, profound insight or question hook. | *"Why Motion Through Space Affects Time"*<br>*"The Cosmic Light Cone: Mapping Space & Time"* | *"Special Relativity: Part 1"*<br>*"Lorentz Transformations & Time Dilation"* |
+| **`<h2>`** | **Major Discovery Steps**<br>Numbered sequentially (`1. `, `2. `). Title Case. Physical metaphors and action-oriented discoveries. | `1. The Two-Car Trade-Off`<br>`2. Moving While Sitting Still`<br>`3. Borrowing from Time`<br>`4. Nature's Invariant Speed`<br>`5. The 45° Boundary` | `1. Introduction`<br>`2. Time Dilation Theory`<br>`3. Mathematical Derivations`<br>`4. Light Cone Definition` |
+| **Final `<h2>`** | **The Forward Bridge**<br>Explicit launchpad into the next essay in the series. | `8. The Road to the Light Cone`<br>`4. The Angle of "Now"` | `Summary`<br>`Conclusion`<br>`Final Remarks` |
+| **`<h3>`** | **Subsections & Thought Experiments**<br>Evocative setups, open questions, and structured breakdowns. | **Open questions**: *"Why is the Speed of Light an Unbreakable Limit?"*, *"Why Don’t We Notice This in Daily Life?"*<br>**Anchored setups**: *"The 8-Minute Sun"*, *"Peering Down the Past Light Cone"*, *"The Lifespan Horizon"*, *"Atmospheric Muons"*<br>**Structured milestones**: *"The Four Milestones"*, *"The Three Realms"* | Taxonomic headings: *"Section 2.1"*, *"Velocity Space Characteristics"*, *"Properties of Light"* |
+| **`<h4>`** | **Internal Callout & Card Headers**<br>Used inside `.insight-callout` and `.article-author`. | `<h4>Why 45° Is the Cosmic Speed Boundary</h4>`<br>`<h4>Food for Thought: Three Cosmic Puzzles</h4>` | Never use `<h4>` as standalone prose section dividers. |
+
+---
+
+## 4. Semantic Physics & Editorial Color Palette (Monograph Theme)
 
 Colors across the publication represent immutable physical concepts and editorial surfaces under the Monograph theme (Warm Archival Parchment / Scholarly Dark Archive). Always pull colors dynamically from `UniverseSimulations.getThemeColors()` rather than hardcoding static hex codes into canvas scripts.
 
@@ -111,101 +103,483 @@ Colors across the publication represent immutable physical concepts and editoria
 
 ---
 
-## 4. Interactive Simulation Engineering
+## 5. Interactive Widget Design & Engineering Specification
 
 Every interactive simulation follows a standardized visual hierarchy, tactile control interface, and deterministic rendering lifecycle.
 
-### Widget Anatomy
-```
-+-----------------------------------------------------------------------------------+
-|  [SIMULATION 0X · TAXONOMY BADGE]                                                 |
-|  (Lean header: badge identifies module without redundant subtitle boilerplate)    |
-+-----------------------------------------------------------------------------------+
-|  [CANVAS VIEWPORT] (Retina-scaled, crisp geometry, unified physics palette)       |
-|    - High contrast axes with readable tick labels & arrows                        |
-|    - Bounded label pills with viewport edge clamping                              |
-|    - In-canvas dynamic state callouts (Blue: 36.0 mi N, V_East = 52 mph, θ = 60°) |
-|    - Color-coded vectors matching text & sliders (Blue=Time, Orange=Space, etc.)  |
-|    - 3D projections with smooth touch/drag orbit, presets, and reset buttons     |
-+-----------------------------------------------------------------------------------+
-|  [OPTIONAL READOUT DASHBOARD] (Only when derived metrics cannot fit in canvas)    |
-|    [ Gamma: 2.00 ]   [ Delta-t: 0.866 s ]                                         |
-+-----------------------------------------------------------------------------------+
-|  [SINGLE-ROW CONTROLS STRIP]  ← All controls on ONE horizontal line              |
-|    [ Clock Label  3.50s  Badge ]  [ Slider label ··· val ]  [ ▶ Auto Play ]      |
-|                                   [ ══════ slider ══════ ]                        |
-+-----------------------------------------------------------------------------------+
+### 1. Lean Widget Framing (Zero Boilerplate Headers)
+Do not clutter widget containers with repetitive titles or explanatory subtitles when the preceding prose already establishes context. The simulation badge identifies the module cleanly:
+- ✅ `<div class="artifact-badge">SIMULATION 01 · 2D POSITION MAP &amp; VELOCITY SPACE</div>`
+- ❌ Redundant title + 2-sentence subtitle repeating the preceding paragraph.
+
+### 2. The Three Canonical Layout Archetypes
+
+#### Archetype A: Dual-View Comparison Grid (`.comparison-grid`)
+Used when bridging physical intuition with geometric spacetime (e.g., Position Map vs Velocity Space, or Physical Space Track vs Coordinate Spacetime Map).
+```html
+<div id="widget-[id]" class="interactive-artifact artifact-wide">
+  <div class="artifact-header">
+    <div><div class="artifact-badge">SIMULATION 0X · [MODULE TITLE]</div></div>
+  </div>
+  <div class="comparison-grid">
+    <!-- Left Column: Physical / Spatial View -->
+    <div class="canvas-col">
+      <div class="canvas-col-header">
+        <span>PHYSICAL SPACE TRACK</span>
+        <span class="canvas-col-tag">Distance (0 to 1 AU)</span>
+      </div>
+      <canvas class="canvas-space"></canvas>
+    </div>
+    <!-- Right Column: Coordinate Spacetime / Velocity View -->
+    <div class="canvas-col">
+      <div class="canvas-col-header">
+        <span>COORDINATE SPACETIME</span>
+        <span class="canvas-col-tag">Space x vs Time ct</span>
+      </div>
+      <canvas class="canvas-spacetime"></canvas>
+    </div>
+  </div>
+  <!-- Controls Deck -->
+  <div class="artifact-controls artifact-controls-deck">
+    ...
+  </div>
+</div>
 ```
 
-### Core Canvas & State Principles
+#### Archetype B: Split Layout (`.artifact-split`)
+Used for 3D orbital views or focused single-canvas simulations requiring a dedicated side controls-and-telemetry column.
+```html
+<div id="widget-[id]" class="interactive-artifact [artifact-wide]">
+  <div class="artifact-header">
+    <div><div class="artifact-badge">SIMULATION 0X · [MODULE TITLE]</div></div>
+  </div>
+  <div class="artifact-split">
+    <div class="split-canvas-col">
+      <canvas></canvas>
+    </div>
+    <div class="split-controls-col">
+      <!-- Status Cards, Sliders, Preset Chips, Play Button -->
+      ...
+    </div>
+  </div>
+</div>
+```
+
+#### Archetype C: Multi-Panel Synthesis / Snapshot Grid (`.expanding-circles-grid`, `.synthesis-grid`)
+Used for showing side-by-side progression across discrete moments in time ($t = 0, 1, 2, 3$) or across canonical archetype presets (At Rest, Sub-Light, Relativistic, Photon).
+```html
+<div id="widget-[id]" class="interactive-artifact">
+  <div class="artifact-header">
+    <div><div class="artifact-badge">ILLUSTRATION 0X · [MODULE TITLE]</div></div>
+  </div>
+  <div class="canvas-viewport" style="padding: 1rem;">
+    <div class="synthesis-grid">
+      <div class="synthesis-panel-card">
+        <div class="synthesis-panel-header">...</div>
+        <div class="synthesis-canvas-wrap"><canvas data-preset="..."></canvas></div>
+        <div class="synthesis-panel-footer">...</div>
+      </div>
+      ...
+    </div>
+  </div>
+</div>
+```
+
+### 3. Controls Strip Architecture (Single-Row / Dual-Tier Deck)
+The primary controls panel must collapse all interactive elements into **one horizontal line** on desktop to avoid vertical sprawl.
+
+- **Baseline Single-Row (`.controls-strip`)**:
+  - `[ Clock Card (flex-shrink: 0) ]`  `[ Slider (flex: 1) ]`  `[ ▶ Auto Play (flex-shrink: 0) ]`
+  - Encapsulated in `<div class="artifact-controls controls-strip">`.
+- **Dual-Tier Controls Deck (`.artifact-controls-deck` + `.controls-preset-row`)**:
+  - When presets are present:
+    - **Row 1**: `<div class="controls-strip">` — Live clock/status card + primary continuous scrubber + Auto Play button.
+    - **Row 2**: `<div class="controls-preset-row">` — Preset chip buttons (`.preset-chips`) aligned left, invariant tag (`.preset-tag`) aligned right, separated by a subtle top border (`border-top: 1px solid var(--border-subtle)`).
+  - Total vertical footprint is under ~85px on desktop, preventing layout inflation.
+- **Mobile Responsive Behavior (≤ 640px)**:
+  - `.controls-strip` switches cleanly to column direction with 100% width and 40px touch targets.
+  - `.controls-preset-row` wraps chips naturally without horizontal clipping.
+  - Side-by-side clocks (`.twin-clocks-panel`) NEVER collapse into a vertical stack; they remain side-by-side (`1fr 1fr`) to preserve direct visual comparison.
+
+### 4. Canvas Rendering Standards (JavaScript)
 1. **Retina DPI Setup**: Always initialize canvases with `setupRetinaCanvas(canvas)` to ensure crisp line drawing on high-DPI displays.
 2. **Deterministic & Bidirectional**: Scrubbing forward and backward must never accumulate state drift. Speed or parameter adjustments must instantly and synchronously update readouts, sliders, and canvas graphics.
-3. **Auto-Play + Manual Scrubbing**: Pair continuous animations with interactive range sliders (`.slider-speed`, `.slider-time`, `.slider-prob`). Auto-play demonstrates dynamics; scrubbing allows stop-and-inspect contemplation.
+3. **Auto-Play + Manual Scrubbing**: Pair continuous animations with interactive range sliders (`.slider-speed`, `.slider-time`, `.slider-theta`). Auto-play demonstrates dynamics; scrubbing allows stop-and-inspect contemplation.
 4. **Theme & Resize Awareness**: Register draw callbacks via `registerDraw(draw)` and `window.addEventListener('resize', draw)`. Never set inline canvas width/height attributes; dimensions are managed responsively via CSS.
 5. **Edge Clamping for Label Pills**: Always clamp pill coordinates (`Math.min(width - padRight, Math.max(padLeft, x))`) so floating annotations never clip outside viewport boundaries on narrow screens.
 6. **Tabular Numerals**: Numeric metrics and readouts must use monospace fonts with tabular numbers (`JetBrains Mono` / `tnum`) to eliminate layout jitter during live updates.
-7. **Cognitive Ergonomics & Single Locus of Truth**: Keep live annotations directly on the canvas elements and slider headers. Eliminate auxiliary telemetry grids unless tracking non-spatial derived invariants.
-8. **Vector Tip Convention — Arrowheads vs Glowing Dots**:
-   - **Velocity Space canvases** (`.canvas-vel`): Terminate every vector with a filled triangular **arrowhead**. Do NOT draw a `drawGlowingDot` at the vector tip — the arrowhead is the sole terminator. Draw arrowheads *after* any other elements so they are never painted over.
-   - **Position Map canvases** (`.canvas-map`): Use `drawGlowingDot` at the tip to mark the current position of a physical object (car, observer, etc.). Do NOT add arrowheads — position traces are paths, not free vectors.
-9. **Single-Row Controls Strip — Maximum Compactness**: The primary controls panel must collapse all interactive elements into **one horizontal line**. Never stack controls into multiple rows when a single row suffices.
-   - **Standalone Flex Container**: `.controls-strip` must explicitly define `display: flex; flex-direction: row; align-items: center; gap: 1rem; padding: 0.65rem 1.25rem;` in `css/style.css`. Never rely on `.artifact-controls` to provide `display: flex`, as `.controls-strip` is often nested inside `.artifact-controls-deck` when secondary toolbars are present. Without explicit `display: flex;`, nested divs default to `display: block` and stack vertically into 3 rows.
-   - **Zero Inline Style Pollution**: Standardize child sizing in `css/style.css` rather than writing repetitive inline styles in HTML:
-     - `.controls-strip .clock-card`: `flex-shrink: 0; white-space: nowrap; display: flex; align-items: center; gap: 0.65rem;`
-     - `.controls-strip .control-item`: `flex: 1; min-width: 160px;` (expands to fill the space between clock and play button).
-     - `.controls-strip button[class*="btn-play"], .controls-strip .btn-auto-age, .controls-strip .btn-primary`: `flex-shrink: 0;` (pinned right).
-     - *Bonus*: This allows JS dynamic theme toggles (e.g. `clockCard.className = 'clock-card cyan ...'`) to run cleanly without risking inline style collisions.
-   - **Dual-Tier Controls Architecture (`.artifact-controls-deck` + `.controls-preset-row`)**:
-     - When a simulation includes both continuous scrubbers and milestone preset chips:
-       - **Row 1**: `<div class="controls-strip">` — [ Clock Card ] [ Slider (flex: 1) ] [ ▶ Auto Play ] all on one horizontal line.
-       - **Row 2**: `<div class="controls-preset-row">` — [ Preset Chips ] on left, [ Invariant Tag `.preset-tag` ] on right, separated by a subtle top border (`border-top: 1px solid var(--border-subtle)`).
-     - This keeps the entire controls area under ~85px total height on desktop (saving ~150px of vertical sprawl).
-   - **Desktop (> 640px)**: All primary controls on one line; preset row neatly aligned underneath.
-   - **Mobile (≤ 640px)**: `.controls-strip` automatically switches to `flex-direction: column; align-items: stretch` with 100% width and 40px touch targets; `.controls-preset-row` wraps cleanly without clipping or horizontal overflow.
-   - **Reference implementations**:
-     - Single-row baseline: `widget-stationary` (`posts/01-motion-and-time.html`, `#widget-stationary`).
-     - Dual-tier deck with presets: `widget-sun-delay` (`posts/02-light-cone.html`, `#widget-sun-delay`).
-10. **Dual-View Coordinate Bridging (`.comparison-grid`)**:
-    - When introducing an abstract causal structure (such as the *Elsewhere*, past light cones, or signal delays), pair physical intuition and spacetime geometry side by side:
-      - **Left Panel (Physical Space Track / Radar)**: Familiar spatial distances (km, AU, light-years), spherical wavefronts propagating outward at speed $c$, and concrete physical observer states (daylight vs. darkness, orbit stability vs. tangential drift).
-      - **Right Panel (Coordinate Spacetime Map)**: The underlying geometric worldlines ($x$ vs. $ct$, 45° light cone boundaries, and intersection events).
-    - **Exact 45° Scale Invariant**: In coordinate spacetime ($x$ vs $ct$), always calibrate scales so $scaleX = scaleY$ when units match ($1\text{ ls space} \leftrightarrow 1\text{ s time}$). Light rays *must* travel along exact 45° diagonals ($\Delta x = \Delta(ct)$). Distorting the aspect ratio destroys geometric intuition.
-    - **Shared Milestone Architecture**: Both panels and preset chips must share identical milestone landmarks:
-      1. *Emission / Origin* ($t = 0$): Apex of the light cone formed.
-      2. *Transit / Elsewhere Buffer* ($t_{\text{mid}}$): Wavefront in flight; observer worldline climbing strictly through the *Elsewhere*.
-      3. *Intersection Event* ($t_{\text{hit}}$): 45° boundary strikes observer worldline.
-      4. *Causal Future* ($t_{\text{future}}$): Observer enters cone interior, triggering physical consequences.
-    - **Synchronized "Now" Slices**: Render a coordinated horizontal time-slice cursor sweeping upward across both views in lockstep.
-11. **In-Canvas Causality Lag Indicators**:
-    - When an observer is in the *Elsewhere*, draw a direct dimension line or double-headed connector between the photon wavefront and the observer's position/worldline annotated with the remaining causal buffer ($\Delta x = d - ct$). This makes the abstract definition of "Elsewhere" immediately tangible as an untraversed distance buffer.
+7. **Single Locus of Truth**: Keep live annotations directly on the canvas elements and slider headers. Eliminate auxiliary telemetry grids unless tracking non-spatial derived invariants.
+8. **Vector Tip Convention**:
+   - **Velocity Space canvases** (`.canvas-vel`, `.canvas-speed`): Terminate every vector with a filled triangular **arrowhead**. Do NOT draw a glowing dot at the vector tip.
+   - **Position Map canvases** (`.canvas-map`, `.canvas-space`): Use `drawGlowingDot` at the tip to mark the current position of a physical object. Do NOT add arrowheads.
+9. **Coordinate Scale Invariant**: In coordinate spacetime ($x$ vs $ct$), always calibrate scales so $scaleX = scaleY$ when units match ($1\text{ ls space} \leftrightarrow 1\text{ s time}$). Light rays *must* travel along exact 45° diagonals ($\Delta x = \Delta(ct)$). Distorting the aspect ratio destroys geometric intuition.
+10. **In-Canvas Causality Lag Indicators**: When an observer is in the *Elsewhere*, draw a direct dimension line or connector between the photon wavefront and the observer's worldline annotated with the remaining causal buffer ($\Delta x = d - ct$).
 
 ---
 
-## 5. Responsive Layout & Design Standards
+## 6. Complete HTML Document Blueprint
 
-### 1. Dual-Container Discipline
-- **Narrow Prose Flow (`.editorial-prose`, max ~680px–740px)**: Longform reading text stays in a focused column where line length (characters per line) maintains optimal reading ergonomics.
-- **Wide Interactive Viewport (`.wide-reading-container`, `.wide-container`, max ~1100px–1200px)**: Multi-panel comparative matrices, 3D coordinate volumes, and dual-observer views expand horizontally for optimal spatial clarity.
+For any new essay, use this exact production skeleton. It ensures full compatibility with the design system, reading progress tracker, dark/light theme engine, and site navigation.
 
-### 2. Responsive Canvas Heights
-- **Desktop (> 768px)**: `380px` (or `420px` for 3D loaves)
-- **Tablet (<= 768px)**: `300px`
-- **Mobile (<= 640px)**: `240px` (preserves landscape aspect ratio for coordinate systems)
-- **Ultra-compact (<= 380px)**: `220px`
+```html
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>[Article Title] · Intuition First</title>
+    <link rel="stylesheet" href="../css/style.css" />
+    <meta
+      name="description"
+      content="[Compelling 1-2 sentence description summarizing the core physical intuition and question of the essay.]"
+    />
+    <script>
+      (function () {
+        var isDark =
+          window.matchMedia &&
+          window.matchMedia("(prefers-color-scheme: dark)").matches;
+        document.documentElement.setAttribute(
+          "data-theme",
+          isDark ? "dark" : "light",
+        );
+      })();
+    </script>
+  </head>
 
-### 3. Mobile Layout Rules
-- **Side-by-Side Twin Clocks**: **Never collapse twin clocks into a vertical stack on mobile.** Clocks must remain side-by-side (`grid-template-columns: 1fr 1fr; gap: 0.5rem;`) to preserve direct visual comparison.
-- **Multi-Panel & 2×2 Grids**: On screens `<= 720px`, collapse 2×2 comparative grids into a single-column stack (`grid-template-columns: 1fr;`) using standardized classes (`.multi-panel-grid`, `.synthesis-grid`, `.expanding-circles-grid`) to give canvas axes adequate horizontal resolution.
-- **Sticky Navigation Bar**: On mobile, keep navigation clean (`height: 3.25rem; padding: 0 1rem;`). Auxiliary badges (`.brand-tag`) and secondary navigation links (`.nav-link-secondary`) are hidden on small viewports to prevent collisions.
+  <body>
+    <div class="reading-progress-bar" id="reading-progress"></div>
 
-### 4. Home Page & Section Cadence
-- **Brand Identity**: Monogram seal (`IF`) with clean monospaced brand text `INTUITION FIRST` without decorative gimmick ribbons or build bragging.
-- **Zero Gap Stacking**: Avoid multiple stacked paddings. The first series group has `border-top: none; padding-top: 0;` so content flows naturally without empty visual voids.
-- **Structured 2-Column Grid**: `.series-grid` renders as `repeat(2, minmax(0, 1fr))` on desktop, collapsing to `1fr` on mobile.
+    <!-- Top Navigation -->
+    <nav class="site-nav">
+      <div class="site-nav-inner">
+        <a href="../index.html" class="brand-link">
+          <div class="brand-badge">IF</div>
+          <div>
+            <span class="brand-title">INTUITION FIRST</span>
+            <span class="brand-tag">ESSAYS</span>
+          </div>
+        </a>
+        <div class="nav-links">
+          <a href="../index.html">← All Series</a>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Main Article Body -->
+    <main class="wide-reading-container">
+      <!-- Article Header -->
+      <header class="article-header">
+        <div class="category-tag">Part 0X · [Series Name]</div>
+        <h1 class="article-title">[Article Title]</h1>
+        <p class="article-subtitle">
+          [Engaging subtitle stating the core paradox or physical insight.]
+        </p>
+        <div class="article-meta">
+          <span>By Aayush Agarwal</span>
+          <span>•</span>
+          <span>Interactive Explorable</span>
+          <span>•</span>
+          <span>10 min read</span>
+        </div>
+      </header>
+
+      <!-- Editorial Prose Flow -->
+      <article class="editorial-prose">
+        <!-- Opening Hook Paragraphs: Connecting to intuition, raising core question -->
+        <p>...</p>
+
+        <!-- SECTION 1 -->
+        <h2>1. [Familiar Anchor & First Question]</h2>
+        <p>...</p>
+
+        <!-- WIDGET 1 -->
+        <div id="widget-[name]" class="interactive-artifact artifact-wide">
+          ...
+        </div>
+
+        <p>...</p>
+        <div class="formula-card">...</div>
+
+        <!-- SUBSEQUENT SECTIONS (2, 3, 4...) -->
+        <h2>2. [The Geometric Bridge]</h2>
+        ...
+
+        <!-- FINAL SECTION: FORWARD BRIDGE -->
+        <h2>[N]. [The Road to the Next Discovery]</h2>
+        <p>...</p>
+
+        <!-- FOOD FOR THOUGHT CALLOUT (MANDATORY 3 PUZZLES) -->
+        <div class="insight-callout">
+          <h4>Food for Thought: Three Cosmic Puzzles</h4>
+          <p>Before we move forward, consider three subtle puzzles that emerge when we push this geometry to its natural extremes:</p>
+          <p>
+            <strong>1. [Puzzle One Title] ([Subtitle]):</strong><br />
+            [Deep conceptual tension statement]
+          </p>
+          <p>
+            <strong>2. [Puzzle Two Title] ([Subtitle]):</strong><br />
+            [Deep conceptual tension statement]
+          </p>
+          <p>
+            <strong>3. [Puzzle Three Title] ([Subtitle]):</strong><br />
+            [Deep conceptual tension statement]
+          </p>
+        </div>
+
+        <!-- SERIES PAGER -->
+        <div class="series-pager">
+          <a href="[prev-post].html" class="btn-secondary">← Part [X-1]: [Prev Title]</a>
+          <a href="[next-post].html" class="btn-primary">Explore Part [X+1]: [Next Title] →</a>
+        </div>
+
+        <!-- AUTHOR BIO -->
+        <div class="article-author">
+          <div class="brand-badge">IF</div>
+          <div>
+            <h4>Aayush Agarwal</h4>
+            <p>
+              Exploring physics, mathematics, and machine learning through
+              intuitive visual geometry and explorable interactive simulations.
+            </p>
+          </div>
+        </div>
+      </article>
+    </main>
+
+    <!-- Site Footer -->
+    <footer class="site-footer">
+      <div class="wide-container">
+        <p>
+          <strong>Intuition First</strong> · An Explorable Science &amp; Mathematics Series by Aayush Agarwal
+        </p>
+        <p style="margin-top: 0.5rem">
+          <a href="../index.html">Series Home</a> ·
+          <a href="01-motion-and-time.html">Part 1: Motion &amp; Time</a> ·
+          <a href="02-light-cone.html">Part 2: The Cosmic Light Cone</a> ·
+          <a href="03-spacetime-loaf.html">Part 3: The Loaf &amp; Length</a> ·
+          <a href="04-understanding-entropy.html">Part 4: Understanding Entropy</a> ·
+          <a href="https://github.com/ayush2991/intuition-first" target="_blank" rel="noopener">GitHub</a>
+        </p>
+      </div>
+    </footer>
+
+    <!-- Universal Scripts (100% Static) -->
+    <script src="../js/core.js"></script>
+    <script src="../js/post-0X.js"></script>
+  </body>
+</html>
+```
 
 ---
 
-## 6. Live Simulation Catalog
+## 7. Modular Simulation Script Architecture (`js/post-XX.js`)
+
+Every interactive essay is paired with a standalone script named `js/post-XX.js`. All scripts follow this exact module blueprint:
+
+```javascript
+/**
+ * post-XX.js - Part XX Interactive Simulations: [Title]
+ */
+
+(function (window) {
+  'use strict';
+
+  var sim = window.UniverseSimulations || (window.UniverseSimulations = {});
+  var getThemeColors = function () { return sim.getThemeColors(); };
+  var setupRetinaCanvas = function (c) { return sim.setupRetinaCanvas(c); };
+  var registerDraw = function (fn) { sim.registerDraw(fn); };
+  var drawAxes = function (ctx, ox, oy, w, h, xl, yl) { sim.drawAxes(ctx, ox, oy, w, h, xl, yl); };
+  var drawGrid = function (ctx, ox, oy, w, h, s) { sim.drawGrid(ctx, ox, oy, w, h, s); };
+  var drawLabelPill = function (ctx, txt, x, y, opts) { sim.drawLabelPill(ctx, txt, x, y, opts); };
+  var drawGlowingDot = function (ctx, x, y, c, r) { sim.drawGlowingDot(ctx, x, y, c, r); };
+  var drawConstraintArc = function (ctx, ox, oy, r, c) { sim.drawConstraintArc(ctx, ox, oy, r, c); };
+  var drawVector = function (ctx, ox, oy, tx, ty, o) { return sim.drawVector(ctx, ox, oy, tx, ty, o); };
+  var drawDropLines = function (ctx, ox, oy, tx, ty, o) { return sim.drawDropLines(ctx, ox, oy, tx, ty, o); };
+  var drawDimensionLine = function (ctx, x1, y1, x2, y2, l, o) { return sim.drawDimensionLine(ctx, x1, y1, x2, y2, l, o); };
+  var project3D = function (x, y, z, cx, cy, s, az, el) { return sim.project3D(x, y, z, cx, cy, s, az, el); };
+  var attachOrbitControls = function (c, o) { return sim.attachOrbitControls(c, o); };
+  var bindChipGroup = function (c, s, o) { return sim.bindChipGroup(c, s, o); };
+  var observeSimulationVisibility = function (c, onIn, onOut) {
+    return sim.observeSimulationVisibility ? sim.observeSimulationVisibility(c, onIn, onOut) : null;
+  };
+
+  // -------------------------------------------------------------------------
+  // Widget Implementation Pattern
+  // -------------------------------------------------------------------------
+  function initWidgetExample(containerId) {
+    var container = document.getElementById(containerId);
+    if (!container) return;
+
+    var canvas = container.querySelector('canvas');
+    var slider = container.querySelector('.range-slider');
+    var btnPlay = container.querySelector('.btn-play');
+    var readoutVal = container.querySelector('.control-val');
+    var clockCard = container.querySelector('.clock-card');
+    var presetChips = container.querySelectorAll('.chip-btn');
+
+    var state = {
+      val: parseFloat(slider ? slider.value : 0) || 0,
+      isPlaying: false,
+      isVisible: true
+    };
+
+    function updateReadouts() {
+      if (readoutVal) readoutVal.textContent = state.val.toFixed(2);
+      if (slider) slider.value = state.val;
+      // Update preset chip active states
+      for (var i = 0; i < presetChips.length; i++) {
+        var chipVal = parseFloat(presetChips[i].getAttribute('data-val'));
+        if (Math.abs(chipVal - state.val) < 0.01) {
+          presetChips[i].classList.add('active');
+        } else {
+          presetChips[i].classList.remove('active');
+        }
+      }
+    }
+
+    function draw() {
+      if (!canvas) return;
+      var ret = setupRetinaCanvas(canvas);
+      var ctx = ret.ctx, width = ret.width, height = ret.height;
+      var c = getThemeColors();
+
+      ctx.clearRect(0, 0, width, height);
+      // Deterministic geometry rendering using theme colors
+      drawGrid(ctx, 40, height - 40, width, height, 32);
+      drawAxes(ctx, 40, height - 40, width, height, 'Space x', 'Time ct');
+      // In-canvas direct annotations with clamped label pills
+      drawLabelPill(ctx, 'State: ' + state.val.toFixed(1), width / 2, 24, {
+        textColor: c.timeColor
+      });
+    }
+
+    // Input event binding
+    if (slider) {
+      slider.addEventListener('input', function () {
+        state.val = parseFloat(slider.value);
+        state.isPlaying = false;
+        if (btnPlay) btnPlay.innerHTML = '<span>▶</span><span>Auto Play</span>';
+        updateReadouts();
+        draw();
+      });
+    }
+
+    // Chip group binding
+    for (var j = 0; j < presetChips.length; j++) {
+      (function (chip) {
+        chip.addEventListener('click', function () {
+          state.val = parseFloat(chip.getAttribute('data-val'));
+          state.isPlaying = false;
+          if (btnPlay) btnPlay.innerHTML = '<span>▶</span><span>Auto Play</span>';
+          updateReadouts();
+          draw();
+        });
+      })(presetChips[j]);
+    }
+
+    // Auto-play animation loop
+    if (btnPlay) {
+      btnPlay.addEventListener('click', function () {
+        state.isPlaying = !state.isPlaying;
+        btnPlay.innerHTML = state.isPlaying
+          ? '<span>❚❚</span><span>Pause</span>'
+          : '<span>▶</span><span>Auto Play</span>';
+        if (state.isPlaying) requestAnimationFrame(loop);
+      });
+    }
+
+    function loop() {
+      if (!state.isPlaying || !state.isVisible) return;
+      // Increment state deterministically
+      state.val = (state.val + 0.01) % 1.0;
+      updateReadouts();
+      draw();
+      requestAnimationFrame(loop);
+    }
+
+    // Visibility and resize awareness
+    observeSimulationVisibility(container, function () {
+      state.isVisible = true;
+      if (state.isPlaying) requestAnimationFrame(loop);
+    }, function () {
+      state.isVisible = false;
+    });
+
+    registerDraw(draw);
+    window.addEventListener('resize', draw);
+
+    // Initial render
+    updateReadouts();
+    draw();
+  }
+
+  // -------------------------------------------------------------------------
+  // DOMContentLoaded Registration
+  // -------------------------------------------------------------------------
+  document.addEventListener('DOMContentLoaded', function () {
+    initWidgetExample('widget-example');
+    // Initialize all widgets for this post...
+  });
+
+})(window);
+```
+
+---
+
+## 8. Autonomous Article Generation Protocol (From Topic to Published Article)
+
+When the user requests a brand-new article simply by mentioning a topic of interest (e.g., *"Write an article on Gravitational Time Dilation"* or *"Explain the Twin Paradox & Simultaneity"*), follow this rigorous 6-step protocol to generate a publication-ready piece that is 100% consistent with Post 01 and Post 02:
+
+### Step 1: Physical Anchor & Character Selection
+- Identify the tangible everyday anchor (e.g., an accelerating elevator, climbing a tower, synchronized ticking clocks on different floors).
+- Define the two concrete observers and their physical instruments (e.g., Alice on the ground with her ground stopwatch, Bob on the mountain peak with his summit wristwatch).
+- Formulate the central open question without pre-announcing the paradoxical answer.
+
+### Step 2: Headings & Narrative Outline Blueprint
+- **Title (`<h1>`)**: Craft an evocative question or insight title (Title Case).
+- **Subtitle**: Write a compelling 1-to-2 sentence hook.
+- **Section Sequence (`<h2>`)**:
+  - `1. [Familiar Anchor / Everyday Setup]` (Introduce characters, instruments, zero-speed baseline).
+  - `2. [The Geometric Shift / Trade-Off]` (Introduce the physical delta, map to coordinates).
+  - `3. [The Core Invariant / Geometric Bridge]` (Derive the fundamental relation, side-by-side comparative widgets).
+  - `4. [Extreme Limits & Cosmic Manifestation]` (Speed of light, horizon, real-world observational proof).
+  - `5. [Multi-Dimensional / 3D Extension]` (Generalize to full spatial/geometric volume).
+  - `[N]. [The Forward Bridge]` (Launchpad connecting to the next article in the series).
+- **Subsections (`<h3>`)**: Formulate open questions (*"Why...?"*, *"Can you...?"*) and anchored phenomena.
+
+### Step 3: Interactive Simulation Suite Plan
+Plan between **4 to 7 simulations** covering the core archetypes:
+1. *Baseline Exploration* (Archetype A or B: Dual-view or split view establishing the rest case vs moving case).
+2. *Synthesis / Snapshot Grid* (Archetype C: 2×2 snapshot panel or 4-milestone card matrix).
+3. *Core Dynamic Interactive* (Archetype A: Dual-view comparative bridge with synchronized Now-slice cursor and live clocks).
+4. *Observational / Extreme Proof* (Archetype B: Real-world physical testbed, e.g. atmospheric muons, GPS satellites, light horizon).
+5. *3D Volumetric Explorer* (Archetype B: Rotatable 3D projection with orbit touch controls and viewpoint presets).
+
+### Step 4: Prose Composition
+- Maintain the Monograph voice: rhythmic 2–4 sentence paragraphs.
+- Zero external textbook complaining; pure constructive elevation.
+- Never spoil widget discoveries in the introductory text before the simulation.
+- Frame every widget with lean headers (`<div class="artifact-badge">...</div>` only).
+- Insert `.formula-card` callouts with plain-English `.formula-note` explanations.
+- End with the mandatory **Food for Thought: Three Cosmic Puzzles** callout.
+
+### Step 5: JavaScript Engine Implementation (`js/post-XX.js`)
+- Construct the script following the architecture in Section 7.
+- Ensure every canvas uses `setupRetinaCanvas(canvas)` and dynamically retrieves colors via `getThemeColors()`.
+- Use arrowheads for velocity vectors; use glowing dots for position paths.
+- Enforce the 45° scale invariant on spacetime diagrams ($\Delta x = \Delta(ct)$).
+- Clamp all in-canvas label pills (`drawLabelPill`) to screen bounds.
+- Provide both continuous range sliders and tactile preset chips.
+- Hook auto-play and manual scrubbing into deterministic bidirectional state updates.
+
+### Step 6: Navigation, Hub, & Catalog Integration
+- Update `index.html` (if applicable) with the new essay card.
+- Wire top navigation (`← All Series`), pager buttons (`.series-pager`), and footer links.
+- Add the new simulations to the simulation catalog table in this guide.
+
+---
+
+## 9. Live Simulation Catalog
 
 ### Series 01: Special Relativity — The Fabric of Spacetime
 
@@ -258,6 +632,6 @@ Every interactive simulation follows a standardized visual hierarchy, tactile co
 
 ---
 
-## 7. Planning & Workflow Rules
+## 10. Planning & Workflow Rules
 
 - **No Verification Plans**: For this project, the user does NOT want verification. Do not include verification plans, verification steps, or verification plan sections in implementation plans and workflow documents. Keep plans strictly focused on the proposed changes and execution strategy.
